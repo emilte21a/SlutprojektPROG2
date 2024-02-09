@@ -1,5 +1,5 @@
-using Raylib_cs;
-using System.Numerics;
+global using Raylib_cs;
+global using System.Numerics;
 public class Game
 {
     public static int ScreenWidth = 1024;
@@ -8,6 +8,8 @@ public class Game
     Player player;
 
     Camera2D camera;
+
+    Texture2D texture;
 
     public Game()
     {
@@ -20,6 +22,8 @@ public class Game
             Zoom = 0.8f
         };
         player = new Player() { camera = camera };
+
+        texture = Raylib.LoadTexture("Bilder/cool.jpg");
 
     }
 
@@ -37,13 +41,19 @@ public class Game
     private void Update()
     {
         player.Update();
+        camera.Target = Lerp(camera.Target, player.position, 0.1f);
     }
 
     private void Draw()
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.White);
+        Raylib.BeginMode2D(camera);
+        Raylib.DrawTexture(texture, 0, 0, Color.White);
         player.Draw();
+        Raylib.EndMode2D();
+        Raylib.DrawText($"{player.position}", 20, 20, 30, Color.Lime);
+
         Raylib.EndDrawing();
     }
 

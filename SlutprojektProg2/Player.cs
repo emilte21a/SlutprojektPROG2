@@ -1,31 +1,31 @@
-using System.Globalization;
-using System.Numerics;
-using Raylib_cs;
-
 public class Player : Entity
 {
-    public Rectangle rectangle;
+    private Rectangle _rectangle;
 
-    private float speed = 5;
-    
+    private float _speed = 5;
+
     public Camera2D camera { get; init; }
+
+    PhysicsBody physicsBody;
 
     public Vector2 position
     {
-        get => new Vector2(rectangle.X, rectangle.Y);
+        get => new Vector2(_rectangle.X, _rectangle.Y);
         set
         {
-            rectangle.X = value.X;
-            rectangle.Y = value.Y;
+            _rectangle.X = value.X;
+            _rectangle.Y = value.Y;
         }
+
     }
-
-
 
     public Player()
     {
-        rectangle = new Rectangle(0, 0, 50, 50);
+        _rectangle = new Rectangle(0, 0, 50, 50);
+        physicsBody = GetComponent<PhysicsBody>();
     }
+
+
 
     public override void Update()
     {
@@ -34,16 +34,16 @@ public class Player : Entity
 
     public override void Draw()
     {
-        Raylib.DrawRectangleRec(rectangle, Color.Black);
+        Raylib.DrawRectangleRec(_rectangle, Color.Black);
     }
 
     private void MovePlayer()
     {
-        rectangle.X += GetAxisX() * speed;
-        rectangle.Y += GetAxisY() * speed;
+        _rectangle.X += GetAxisX() * _speed;
+        _rectangle.Y += GetAxisY() * _speed;
     }
 
-    private float GetAxisX()
+    public static float GetAxisX()
     {
         if (Raylib.IsKeyDown(KeyboardKey.A) && (!Raylib.IsKeyDown(KeyboardKey.W) || !Raylib.IsKeyDown(KeyboardKey.S)))
             return -1;
@@ -53,7 +53,7 @@ public class Player : Entity
 
         return 0;
     }
-    private float GetAxisY()
+    public static float GetAxisY()
     {
         if (Raylib.IsKeyDown(KeyboardKey.W) && (!Raylib.IsKeyDown(KeyboardKey.A) || !Raylib.IsKeyDown(KeyboardKey.D)))
             return -1;

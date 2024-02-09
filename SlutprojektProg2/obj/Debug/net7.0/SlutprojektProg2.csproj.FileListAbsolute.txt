@@ -27,3 +27,4 @@ C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\obj\Debug\net7.0\r
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\obj\Debug\net7.0\SlutprojektProg2.pdb
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\obj\Debug\net7.0\SlutprojektProg2.genruntimeconfig.cache
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\obj\Debug\net7.0\ref\SlutprojektProg2.dll
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Bilder\cool.jpg
