@@ -22,9 +22,6 @@ public class Game
             Zoom = 0.8f
         };
         player = new Player() { camera = camera };
-
-        texture = Raylib.LoadTexture("Bilder/cool.jpg");
-
     }
 
 
@@ -47,13 +44,11 @@ public class Game
     private void Draw()
     {
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.White);
+        Raylib.ClearBackground(Color.Black);
         Raylib.BeginMode2D(camera);
-        Raylib.DrawTexture(texture, 0, 0, Color.White);
         player.Draw();
         Raylib.EndMode2D();
         Raylib.DrawText($"{player.position}", 20, 20, 30, Color.Lime);
-
         Raylib.EndDrawing();
     }
 

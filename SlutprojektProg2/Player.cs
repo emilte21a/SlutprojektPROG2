@@ -7,6 +7,8 @@ public class Player : Entity
     public Camera2D camera { get; init; }
 
     PhysicsBody physicsBody;
+    Renderer renderer;
+    Collider collider;
 
     public Vector2 position
     {
@@ -22,7 +24,11 @@ public class Player : Entity
     public Player()
     {
         _rectangle = new Rectangle(0, 0, 50, 50);
+        components = new List<Component>();
         physicsBody = GetComponent<PhysicsBody>();
+        collider = GetComponent<Collider>();
+        renderer = GetComponent<Renderer>();
+        renderer.sprite = Raylib.LoadTexture("Bilder/CharacterSprite.png");
     }
 
 
@@ -30,11 +36,12 @@ public class Player : Entity
     public override void Update()
     {
         MovePlayer();
+        System.Console.WriteLine("Players comp: " + components.Count);
     }
 
     public override void Draw()
     {
-        Raylib.DrawRectangleRec(_rectangle, Color.Black);
+        Raylib.DrawTexture(renderer.sprite, (int)_rectangle.X, (int)_rectangle.Y, Color.White);
     }
 
     private void MovePlayer()

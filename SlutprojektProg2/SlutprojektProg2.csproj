@@ -10,7 +10,9 @@
   <ItemGroup>
     <PackageReference Include="Raylib-cs" Version="6.0.0" />
     <PackageReference Include="Raylib-CsLo" Version="4.2.0.9" />
-    <Content Include="Bilder\**\*.*" CopyToOutputDirectory="Always"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Bilder\**\*.*" CopyToOutputDirectory="Always"/>
+  </ItemGroup>
 </Project>
