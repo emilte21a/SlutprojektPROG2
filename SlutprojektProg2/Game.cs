@@ -5,7 +5,9 @@ public class Game
     public static int ScreenWidth = 1024;
     public static int ScreenHeight = 1024;
 
+    //Klass-instanser
     Player player;
+    WorldGeneration worldGeneration;
 
     Camera2D camera;
 
@@ -19,9 +21,12 @@ public class Game
         {
             Target = new Vector2(0, 0),
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2),
-            Zoom = 0.8f
+            Zoom = 0.1f
         };
         player = new Player() { camera = camera };
+        worldGeneration = new WorldGeneration();
+        worldGeneration.GenerateTiles();
+        SpawnEntity.SpawnEntityAt(player, new Vector2(2500, worldGeneration.spawnPoints[500].Y));
     }
 
 
@@ -44,8 +49,9 @@ public class Game
     private void Draw()
     {
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.Black);
+        Raylib.ClearBackground(Color.White);
         Raylib.BeginMode2D(camera);
+        worldGeneration.Draw();
         player.Draw();
         Raylib.EndMode2D();
         Raylib.DrawText($"{player.position}", 20, 20, 30, Color.Lime);
