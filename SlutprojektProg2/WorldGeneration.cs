@@ -4,9 +4,9 @@ public class WorldGeneration
 {
 
     private int worldSize = 100;
-    private int tileSize = 50;
+    private int tileSize = 100;
 
-    public List<Tile> tilesInWorld = new List<Tile>();
+    public static List<Tile> tilesInWorld = new List<Tile>();
 
     private int seed;
     private int caveThreshold = 125;
@@ -25,7 +25,7 @@ public class WorldGeneration
     public void GenerateTiles()
     {
         Image heightImage = Raylib.GenImagePerlinNoise(worldSize * 10, worldSize * 10, seed, seed, 1f);
-        Image noiseImage = Raylib.GenImagePerlinNoise(worldSize * 10, worldSize * 10, seed, seed, 4f);
+        Image noiseImage = Raylib.GenImagePerlinNoise(worldSize * 10, worldSize * 10, seed, seed, 10f);
 
         for (int x = 0; x < noiseImage.Width; x++)
         {
@@ -55,10 +55,9 @@ public class WorldGeneration
             //   RaylibDrawTexture(tile.texture, (int)tile.position.X, (int)tile.position.Y, Color.White);
         }
     }
-
 }
 
-public static class SpawnEntity
+public class SpawnEntity
 {
     public static void SpawnEntityAt(Entity entity, Vector2 position)
     {

@@ -1,6 +1,6 @@
 public class Player : Entity
 {
-    private float _speed = 10;
+    private float _speed = 1000;
 
     public Camera2D camera { get; init; }
 
@@ -11,11 +11,13 @@ public class Player : Entity
     public Player()
     {
         _rectangle = new Rectangle(0, 0, 50, 50);
-        components = new List<Component>();
+        components = new List<IComponent>();
         physicsBody = GetComponent<PhysicsBody>();
         collider = GetComponent<Collider>();
         renderer = GetComponent<Renderer>();
-        renderer.sprite = Raylib.LoadTexture("Bilder/Z.png");
+        renderer.sprite = Raylib.LoadTexture("Bilder/CharacterSprite.png");
+
+        physicsBody.gravity = PhysicsBody.Gravity.enabled;
         _rectangle.X = position.X;
         _rectangle.Y = position.Y;
     }
@@ -25,6 +27,11 @@ public class Player : Entity
     public override void Update()
     {
         MovePlayer();
+        physicsBody.Update(ref _rectangle);
+        collider.Update(ref _rectangle);
+        if (Raylib.IsKeyPressed(KeyboardKey.Space))
+            physicsBody.Jump();
+
     }
 
     public override void Draw()
@@ -35,28 +42,7 @@ public class Player : Entity
 
     private void MovePlayer()
     {
-        _rectangle.X += GetAxisX() * _speed;
-        _rectangle.Y += GetAxisY() * _speed;
-    }
-
-    public static float GetAxisX()
-    {
-        if (Raylib.IsKeyDown(KeyboardKey.A) && (!Raylib.IsKeyDown(KeyboardKey.W) || !Raylib.IsKeyDown(KeyboardKey.S)))
-            return -1;
-
-        else if (Raylib.IsKeyDown(KeyboardKey.D) && (!Raylib.IsKeyDown(KeyboardKey.W) || !Raylib.IsKeyDown(KeyboardKey.S)))
-            return 1;
-
-        return 0;
-    }
-    public static float GetAxisY()
-    {
-        if (Raylib.IsKeyDown(KeyboardKey.W) && (!Raylib.IsKeyDown(KeyboardKey.A) || !Raylib.IsKeyDown(KeyboardKey.D)))
-            return -1;
-
-        else if (Raylib.IsKeyDown(KeyboardKey.S) && (!Raylib.IsKeyDown(KeyboardKey.A) || !Raylib.IsKeyDown(KeyboardKey.D)))
-            return 1;
-
-        return 0;
+        _rectangle.X += InputManager.GetAxisX() * _speed * Raylib.GetFrameTime();
+        //_rectangle.Y += GetAxisY() * _speed;
     }
 }

@@ -26,7 +26,7 @@ public class Game
         player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
         worldGeneration.GenerateTiles();
-        SpawnEntity.SpawnEntityAt(player, new Vector2(2500, worldGeneration.spawnPoints[500].Y));
+        //SpawnEntity.SpawnEntityAt(player, new Vector2(2500, worldGeneration.spawnPoints[500].Y));
     }
 
 
@@ -54,7 +54,8 @@ public class Game
         worldGeneration.Draw();
         player.Draw();
         Raylib.EndMode2D();
-        Raylib.DrawText($"{player.position}", 20, 20, 30, Color.Lime);
+        Raylib.DrawText($"{player.position}", 20, 60, 30, Color.Lime);
+        Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
     }
 
