@@ -44,26 +44,26 @@ public class Collider : IComponent
     List<Tile> collidingTiles;
     public void Update(ref Rectangle rectangle)
     {
-        var rect = rectangle;
-        collidingTiles = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(rect, tile._rectangle)).ToList();
+        // var rect = rectangle;
+        // collidingTiles = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(rect, tile._rectangle)).ToList();
 
-        foreach (Tile tile in collidingTiles)
-        {
-            var collisionRec = Raylib.GetCollisionRec(rectangle, tile._rectangle);
-            if ((int)collisionRec.Height < (int)collisionRec.Width && rectangle.Y > tile._rectangle.Y + tile._rectangle.Height)
-                rectangle.Y += (int)collisionRec.Height;
+        // foreach (Tile tile in collidingTiles)
+        // {
+        //     var collisionRec = Raylib.GetCollisionRec(rectangle, tile._rectangle);
+        //     if ((int)collisionRec.Height < (int)collisionRec.Width && rectangle.Y > tile._rectangle.Y + tile._rectangle.Height)
+        //         rectangle.Y += (int)collisionRec.Height;
 
-            else if ((int)collisionRec.Height < (int)collisionRec.Width && rectangle.Y + rectangle.Height < tile._rectangle.Y)
-                rectangle.Y -= (int)collisionRec.Height;
+        //     else if ((int)collisionRec.Height < (int)collisionRec.Width && rectangle.Y + rectangle.Height < tile._rectangle.Y)
+        //         rectangle.Y -= (int)collisionRec.Height;
 
-            else if ((int)collisionRec.Width < (int)collisionRec.Height && rectangle.X + rectangle.Width < tile._rectangle.X)
-                rectangle.X -= (int)collisionRec.Width;
+        //     else if ((int)collisionRec.Width < (int)collisionRec.Height && rectangle.X + rectangle.Width < tile._rectangle.X)
+        //         rectangle.X -= (int)collisionRec.Width;
 
-            else if ((int)collisionRec.Width < (int)collisionRec.Height && rectangle.X > tile._rectangle.X + tile._rectangle.Width)
-                rectangle.X += (int)collisionRec.Width;
-
-        }
-        System.Console.WriteLine(collidingTiles.Count);
+        //     else if ((int)collisionRec.Width < (int)collisionRec.Height && rectangle.X > tile._rectangle.X + tile._rectangle.Width)
+        //         rectangle.X += (int)collisionRec.Width;
+            
+        // }
+        // System.Console.WriteLine(collidingTiles.Count);
         //System.Console.WriteLine(WorldGeneration.tilesInWorld.Count);
     }
 }

@@ -11,22 +11,33 @@ public class Game
 
     Camera2D camera;
 
-    Texture2D texture;
+    List<IDrawable> drawables;
 
     public Game()
     {
         Raylib.InitWindow(ScreenWidth, ScreenHeight, "game");
         Raylib.SetTargetFPS(60);
+
+        InitializeInstances();
+
+        drawables = new List<IDrawable>();
+        drawables.Add(player);
+        drawables.Add(worldGeneration);
+
+        SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[10]);
+    }
+
+    private void InitializeInstances()
+    {
         camera = new()
         {
             Target = new Vector2(0, 0),
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2),
-            Zoom = 0.1f
+            Zoom = 0.4f
         };
         player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
         worldGeneration.GenerateTiles();
-        //SpawnEntity.SpawnEntityAt(player, new Vector2(2500, worldGeneration.spawnPoints[500].Y));
     }
 
 
@@ -51,8 +62,8 @@ public class Game
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.White);
         Raylib.BeginMode2D(camera);
-        worldGeneration.Draw();
-        player.Draw();
+
+        drawables.ForEach(e => e.Draw());
         Raylib.EndMode2D();
         Raylib.DrawText($"{player.position}", 20, 60, 30, Color.Lime);
         Raylib.DrawFPS(20, 20);

@@ -1,6 +1,6 @@
 public abstract class GameObject
 {
-    public T GetComponent<T>() where T : IComponent, new()
+    public T AddComponent<T>() where T : IComponent, new()
     {
         T t = new();
         components.Add(t);

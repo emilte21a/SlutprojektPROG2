@@ -1,4 +1,4 @@
-public class Player : Entity
+public class Player : Entity, IDrawable
 {
     private float _speed = 1000;
 
@@ -12,9 +12,9 @@ public class Player : Entity
     {
         _rectangle = new Rectangle(0, 0, 50, 50);
         components = new List<IComponent>();
-        physicsBody = GetComponent<PhysicsBody>();
-        collider = GetComponent<Collider>();
-        renderer = GetComponent<Renderer>();
+        physicsBody = AddComponent<PhysicsBody>();
+        collider = AddComponent<Collider>();
+        renderer = AddComponent<Renderer>();
         renderer.sprite = Raylib.LoadTexture("Bilder/CharacterSprite.png");
 
         physicsBody.gravity = PhysicsBody.Gravity.enabled;
@@ -32,6 +32,18 @@ public class Player : Entity
         if (Raylib.IsKeyPressed(KeyboardKey.Space))
             physicsBody.Jump();
 
+        if (IsInsideGrid())
+        {
+            System.Console.WriteLine("pos: " + WorldGeneration.grid[(int)position.X / 100, (int)position.Y - WorldGeneration.grid.GetLength(1) / 100]);
+        }
+    }
+
+    bool IsInsideGrid()
+    {
+        if (position.X / 100 < 0 || position.X / 100 > WorldGeneration.grid.GetLength(0) || position.Y - WorldGeneration.grid.GetLength(1) / 100 < 0 || position.Y - WorldGeneration.grid.GetLength(1) / 100 > WorldGeneration.grid.GetLength(1))
+            return false;
+
+        return true;
     }
 
     public override void Draw()
