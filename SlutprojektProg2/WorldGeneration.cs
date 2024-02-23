@@ -6,12 +6,14 @@ public class WorldGeneration : IDrawable
 
     public List<Tile> tilesInWorld = new List<Tile>();
 
+    public static List<Tile> tilesThatShouldRender = new List<Tile>();
+
     private int seed;
     private int caveThreshold = 160;
     private float surfaceThreshold = 0.5f;
     private int heightMultiplier = 1;
 
-    public static int[,] grid;
+    public static Tile[,] grid;
 
     public Vector2[] spawnPoints;
 
@@ -19,7 +21,7 @@ public class WorldGeneration : IDrawable
     {
         spawnPoints = new Vector2[worldSize];
         seed = Random.Shared.Next(-10000, 10000);
-        grid = new int[worldSize, worldSize];
+        grid = new Tile[worldSize, worldSize];
         System.Console.WriteLine("Width: " + grid.GetLength(0) + " Height: " + grid.GetLength(1));
     }
 
@@ -47,8 +49,7 @@ public class WorldGeneration : IDrawable
     {
         tile.position = position;
         tilesInWorld.Add(tile);
-        grid[(int)position.X / 100, (int)position.Y * -1 / 100] = 1;
-        
+        grid[(int)position.X / 100, (int)position.Y * -1 / 100] = tile;
     }
 
     public void Draw()

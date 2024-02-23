@@ -1,3 +1,5 @@
+using System.Net.Security;
+
 public class Player : Entity, IDrawable
 {
     private float _speed = 1000;
@@ -32,18 +34,68 @@ public class Player : Entity, IDrawable
         if (Raylib.IsKeyPressed(KeyboardKey.Space))
             physicsBody.Jump();
 
-        if (IsInsideGrid())
+        if (IsInsideGrid((int)position.X / 100, (int)position.Y / 100) || IsInsideSurroundingArea(position))
         {
-            System.Console.WriteLine("pos: " + WorldGeneration.grid[(int)position.X / 100, (int)position.Y - WorldGeneration.grid.GetLength(1) / 100]);
+            // Rita ut de tiles som är innanför
+            WorldGeneration.tilesThatShouldRender.Clear();
+            AddTilesWithinAreaToRenderList(position);
+            // System.Console.WriteLine(WorldGeneration.tilesThatShouldRender.Count);
+        }
+        else
+        {
+            // System.Console.WriteLine("OUTSIDE");
         }
     }
 
-    bool IsInsideGrid()
-    {
-        if (position.X / 100 < 0 || position.X / 100 > WorldGeneration.grid.GetLength(0) || position.Y - WorldGeneration.grid.GetLength(1) / 100 < 0 || position.Y - WorldGeneration.grid.GetLength(1) / 100 > WorldGeneration.grid.GetLength(1))
-            return false;
 
+    // Check if a specific position (x, y) is inside the grid
+    bool IsInsideGrid(int x, int y)
+    {
+        return x >= 0 && x < WorldGeneration.grid.GetLength(0) &&
+               -y >= 0 && -y < WorldGeneration.grid.GetLength(1);
+    }
+
+    // Check if the surrounding 5x5 area around the player's position is inside the grid
+    bool IsInsideSurroundingArea(Vector2 position)
+    {
+        int startX = (int)position.X / 100 - 500;
+        int endX = (int)position.X / 100 + 500;
+        int startY = (int)position.Y / 100 - 500;
+        int endY = (int)position.Y / 100 + 500;
+
+        for (int x = startX; x <= endX; x++)
+        {
+            for (int y = startY; y <= endY; y++)
+            {
+                if (!IsInsideGrid(x, y))
+                {
+                    System.Console.WriteLine(position / 100);
+                    return false;
+                }
+            }
+        }
+        System.Console.WriteLine("INSIDE");
         return true;
+    }
+
+    void AddTilesWithinAreaToRenderList(Vector2 position)
+    {
+        int startX = (int)position.X / 100 - 5;
+        int endX = (int)position.X / 100 + 5;
+        int startY = (int)position.Y / 100 - 5;
+        int endY = (int)position.Y / 100 + 5;
+
+        for (int x = startX; x <= endX; x++)
+        {
+            for (int y = startY; y <= endY; y++)
+            {
+                if (IsInsideGrid(x, y))
+                {
+                    WorldGeneration.tilesThatShouldRender.Add(WorldGeneration.grid[x, -y]);
+                }
+
+            }
+        }
     }
 
     public override void Draw()

@@ -40,7 +40,6 @@ public class Game
         worldGeneration.GenerateTiles();
     }
 
-
     public void Run()
     {
         while (!Raylib.WindowShouldClose())
@@ -63,7 +62,14 @@ public class Game
         Raylib.ClearBackground(Color.White);
         Raylib.BeginMode2D(camera);
 
+
+        //System.Console.WriteLine(WorldGeneration.tilesThatShouldRender.Count);
+
+
+        
+
         drawables.ForEach(e => e.Draw());
+
         Raylib.EndMode2D();
         Raylib.DrawText($"{player.position}", 20, 60, 30, Color.Lime);
         Raylib.DrawFPS(20, 20);
