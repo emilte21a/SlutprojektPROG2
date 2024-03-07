@@ -9,14 +9,15 @@ public class Grass : Tile
 {
     static Texture2D grassTexture;
 
-    public Grass()
+    public Grass(Vector2 pos)
     {
-        _rectangle = new Rectangle(0, 0, 50, 50);
+        _rectangle = new Rectangle(0, 0, 100, 100);
+        position = pos;
         if (grassTexture.Id == 0)
             // grassTexture = Raylib.LoadTexture("Bilder/theo.png");
 
-        position.X = _rectangle.X;
-        position.Y = _rectangle.Y;
+            _rectangle.X = position.X;
+        _rectangle.Y = position.Y;
 
         texture = grassTexture;
     }

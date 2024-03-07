@@ -20,4 +20,20 @@ public class InputManager
 
         return 0;
     }
+
+    private static int _direction = 1;
+    public static float GetLastDirection()
+    {
+
+        if (Raylib.IsKeyDown(KeyboardKey.A))
+            _direction = -1;
+
+        else if (Raylib.IsKeyDown(KeyboardKey.D))
+            _direction = 1;
+
+        return _direction;
+    }
+
+
 }
+

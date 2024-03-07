@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj": {}
+    "C:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj": {}
   },
   "projects": {
-    "c:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj": {
+    "C:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj",
+        "projectUniqueName": "C:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj",
         "projectName": "SlutprojektProg2",
-        "projectPath": "c:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj",
+        "projectPath": "C:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj",
         "packagesPath": "C:\\Users\\emil.ulinjohansson\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\obj\\",
+        "outputPath": "C:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

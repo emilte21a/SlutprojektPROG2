@@ -4,9 +4,11 @@ public class WorldGeneration : IDrawable
     private int worldSize = 200; //Blocks
     private int tileSize = 100;
 
-    public List<Tile> tilesInWorld = new List<Tile>();
+    public static List<Tile> tilesInWorld = new List<Tile>();
 
-    public static List<Tile> tilesThatShouldRender = new List<Tile>();
+    private List<Tile> tilesThatShouldRender = new List<Tile>();
+
+    Rectangle screenRect = new Rectangle(0, 0, Game.ScreenWidth, Game.ScreenHeight);
 
     private int seed;
     private int caveThreshold = 160;
@@ -36,7 +38,7 @@ public class WorldGeneration : IDrawable
             for (int y = -height; y < 0; y++)
             {
                 if (Raylib.GetImageColor(noiseImage, x, y * -1).R < caveThreshold)
-                    SpawnTile(new Grass(), new Vector2(x * tileSize, y * tileSize));
+                    SpawnTile(new Grass(new Vector2(x * tileSize, y * tileSize + 100 * 150)));
             }
             spawnPoints[x] = new Vector2(x, -height);
         }
@@ -45,20 +47,16 @@ public class WorldGeneration : IDrawable
         Raylib.UnloadImage(heightImage);
     }
 
-    public void SpawnTile(Tile tile, Vector2 position)
+    public void SpawnTile(Tile tile)
     {
-        tile.position = position;
         tilesInWorld.Add(tile);
-        grid[(int)position.X / 100, (int)position.Y * -1 / 100] = tile;
+        //grid[(int)position.X / tileSize, (int)position.Y * -1 / tileSize] = tile;
     }
 
     public void Draw()
     {
-        foreach (Tile tile in tilesInWorld)
-        {
-            Raylib.DrawRectangle((int)tile.position.X, (int)tile.position.Y, tileSize, tileSize, Color.Red);
-            //   RaylibDrawTexture(tile.texture, (int)tile.position.X, (int)tile.position.Y, Color.White);
-        }
+        tilesInWorld.ForEach(t => Raylib.DrawRectangleRec(t._rectangle, Color.Red));
+        //Parallel.ForEach(tilesInWorld, t => Raylib.DrawRectangleRec(t._rectangle, Color.Red));
     }
 }
 

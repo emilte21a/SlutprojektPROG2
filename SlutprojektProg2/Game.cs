@@ -21,10 +21,10 @@ public class Game
         InitializeInstances();
 
         drawables = new List<IDrawable>();
-        drawables.Add(player);
         drawables.Add(worldGeneration);
+        drawables.Add(player);
 
-        SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[10]);
+        SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[20]);
     }
 
     private void InitializeInstances()
@@ -33,7 +33,7 @@ public class Game
         {
             Target = new Vector2(0, 0),
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2),
-            Zoom = 0.4f
+            Zoom = 0.5f
         };
         player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
@@ -59,18 +59,16 @@ public class Game
     private void Draw()
     {
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.White);
+        Raylib.ClearBackground(Color.SkyBlue);
         Raylib.BeginMode2D(camera);
-
-
-        //System.Console.WriteLine(WorldGeneration.tilesThatShouldRender.Count);
-
-
-        
 
         drawables.ForEach(e => e.Draw());
 
         Raylib.EndMode2D();
+        for (int i = 0; i < player.components.Count; i++)
+        {
+            Raylib.DrawText($"{player.components[i]}", 20, 100 + i * 40, 20, Color.Black);
+        }
         Raylib.DrawText($"{player.position}", 20, 60, 30, Color.Lime);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
