@@ -21,19 +21,19 @@ public class InputManager
         return 0;
     }
 
-    private static int _direction = 1;
-    public static float GetLastDirection()
+    private static int _directionDelta = 1;
+    private static string _directionName = "Down";
+    public static float GetLastDirectionDelta()
     {
 
         if (Raylib.IsKeyDown(KeyboardKey.A))
-            _direction = -1;
+            _directionDelta = -1;
 
         else if (Raylib.IsKeyDown(KeyboardKey.D))
-            _direction = 1;
+            _directionDelta = 1;
 
-        return _direction;
+        return _directionDelta;
     }
-
 
 }
 

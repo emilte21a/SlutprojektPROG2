@@ -1,5 +1,6 @@
 global using Raylib_cs;
 global using System.Numerics;
+global using System.Collections.Generic;
 public class Game
 {
     public static int ScreenWidth = 1024;
@@ -13,6 +14,10 @@ public class Game
 
     List<IDrawable> drawables;
 
+    public static List<Entity> entities;
+
+    List<GameSystem> gameSystems;
+
     public Game()
     {
         Raylib.InitWindow(ScreenWidth, ScreenHeight, "game");
@@ -24,11 +29,17 @@ public class Game
         drawables.Add(worldGeneration);
         drawables.Add(player);
 
+
+
         SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[20]);
     }
 
     private void InitializeInstances()
     {
+        gameSystems = new List<GameSystem>();
+        gameSystems.Add(new PhysicsSystem());
+        gameSystems.Add(new CollisionSystem());
+
         camera = new()
         {
             Target = new Vector2(0, 0),
@@ -38,6 +49,8 @@ public class Game
         player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
         worldGeneration.GenerateTiles();
+        entities = new();
+        entities.Add(player);
     }
 
     public void Run()
@@ -52,8 +65,9 @@ public class Game
 
     private void Update()
     {
+        gameSystems.ForEach(system => system.Update());
         player.Update();
-        camera.Target = Lerp(camera.Target, player.position, 0.1f);
+        camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.1f);
     }
 
     private void Draw()
@@ -65,17 +79,9 @@ public class Game
         drawables.ForEach(e => e.Draw());
 
         Raylib.EndMode2D();
-        for (int i = 0; i < player.components.Count; i++)
-        {
-            Raylib.DrawText($"{player.components[i]}", 20, 100 + i * 40, 20, Color.Black);
-        }
-        Raylib.DrawText($"{player.position}", 20, 60, 30, Color.Lime);
+        
+        Raylib.DrawText($"{player.position}", 20, 60, 30, Color.White);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
-    }
-
-    Vector2 Lerp(Vector2 startPos, Vector2 targetPos, float time)
-    {
-        return (startPos + (targetPos - startPos) * time);
     }
 }

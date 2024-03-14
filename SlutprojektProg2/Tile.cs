@@ -2,22 +2,28 @@ public abstract class Tile : GameObject
 {
     protected Texture2D texture;
     public Vector2 position;
-    public Rectangle _rectangle;
+    public Rectangle rectangle;
 }
 
 public class Grass : Tile
 {
     static Texture2D grassTexture;
+    Collider collider;
 
     public Grass(Vector2 pos)
     {
-        _rectangle = new Rectangle(0, 0, 100, 100);
+        rectangle = new Rectangle(0, 0, 100, 100);
+
+        components = new();
+        collider = AddComponent<Collider>();
+
+        collider.boxCollider = rectangle;
         position = pos;
         if (grassTexture.Id == 0)
             // grassTexture = Raylib.LoadTexture("Bilder/theo.png");
 
-            _rectangle.X = position.X;
-        _rectangle.Y = position.Y;
+            rectangle.X = position.X;
+        rectangle.Y = position.Y;
 
         texture = grassTexture;
     }

@@ -7,5 +7,15 @@ public abstract class GameObject
         return t;
     }
 
+    public T? GetComponent<T>() where T : Component
+    {
+        foreach (var c in components)
+        {
+            if (c.GetType() == typeof(T))
+                return (T)c;
+        }
+        return null;
+    }
+
     public List<Component> components;
 }

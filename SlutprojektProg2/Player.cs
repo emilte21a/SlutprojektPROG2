@@ -1,9 +1,5 @@
-using System.Net.Security;
-
 public class Player : Entity, IDrawable
 {
-    private float _speed = 500;
-
     public Camera2D camera { get; init; }
 
     PhysicsBody physicsBody;
@@ -19,21 +15,20 @@ public class Player : Entity, IDrawable
         renderer = AddComponent<Renderer>();
         renderer.sprite = Raylib.LoadTexture("Bilder/CharacterSprite.png");
 
-        physicsBody.gravity = PhysicsBody.Gravity.enabled;
+        physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
         _rectangle.X = position.X;
         _rectangle.Y = position.Y;
+
+        collider.boxCollider = _rectangle;
     }
 
 
 
     public override void Update()
     {
-        MovePlayer();
-        physicsBody.Update(ref _rectangle);
-        collider.Update(ref _rectangle);
+
         if (Raylib.IsKeyPressed(KeyboardKey.Space))
             physicsBody.Jump();
-
 
         // if (IsInsideGrid((int)position.X / 100, (int)position.Y / 100) || IsInsideSurroundingArea(position))
         // {
@@ -101,11 +96,5 @@ public class Player : Entity, IDrawable
         // Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirection(), renderer.sprite.Height), position, Color.White);
         //Raylib.DrawTexture(sprite, (int)rectangle.X, (int)rectangle.Y, Color.White);
 
-    }
-
-    private void MovePlayer()
-    {
-        _rectangle.X += InputManager.GetAxisX() * _speed * Raylib.GetFrameTime();
-        //_rectangle.Y += GetAxisY() * _speed;
     }
 }

@@ -24,7 +24,7 @@ public class WorldGeneration : IDrawable
         spawnPoints = new Vector2[worldSize];
         seed = Random.Shared.Next(-10000, 10000);
         grid = new Tile[worldSize, worldSize];
-        System.Console.WriteLine("Width: " + grid.GetLength(0) + " Height: " + grid.GetLength(1));
+        GameSystem.Console.WriteLine("Width: " + grid.GetLength(0) + " Height: " + grid.GetLength(1));
     }
 
     public void GenerateTiles()
@@ -55,7 +55,7 @@ public class WorldGeneration : IDrawable
 
     public void Draw()
     {
-        tilesInWorld.ForEach(t => Raylib.DrawRectangleRec(t._rectangle, Color.Red));
+        tilesInWorld.ForEach(t => Raylib.DrawRectangleRec(t.rectangle, Color.Lime));
         //Parallel.ForEach(tilesInWorld, t => Raylib.DrawRectangleRec(t._rectangle, Color.Red));
     }
 }
