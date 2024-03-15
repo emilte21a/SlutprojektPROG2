@@ -1,12 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Mf9W2AgM6IfNNQNjDQFhUNz/LOt8/5kVN42vjS0iDsL3TJIXvV1hb4pS9P8u1BFax5ihQDq9SwmRmKpzQyQ5jw==",
+  "dgSpecHash": "fP+f9PKOkGWUQbBf9ScPw3pKys5xuMcsiSGk2g4uZLUEHskaYLek0aVGZUJ1INvAIC9rxITFHlpkN7OSQHkNnA==",
   "success": true,
   "projectFilePath": "C:\\Users\\emil.ulinjohansson\\SlutprojektPROG2\\SlutprojektProg2\\SlutprojektProg2.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\emil.ulinjohansson\\.nuget\\packages\\microsoft.toolkit.highperformance\\7.1.2\\microsoft.toolkit.highperformance.7.1.2.nupkg.sha512",
     "C:\\Users\\emil.ulinjohansson\\.nuget\\packages\\raylib-cs\\6.0.0\\raylib-cs.6.0.0.nupkg.sha512",
-    "C:\\Users\\emil.ulinjohansson\\.nuget\\packages\\raylib-cslo\\4.2.0.9\\raylib-cslo.4.2.0.9.nupkg.sha512",
     "C:\\Users\\emil.ulinjohansson\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512"
   ],
   "logs": []

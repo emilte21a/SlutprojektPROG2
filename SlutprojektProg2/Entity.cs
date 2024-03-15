@@ -2,14 +2,14 @@
 
 public abstract class Entity : GameObject
 {
-    protected Rectangle _rectangle;
+    protected Rectangle rectangle;
     public Vector2 position
     {
-        get => new Vector2(_rectangle.X, _rectangle.Y);
+        get => new Vector2(rectangle.X, rectangle.Y);
         set
         {
-            _rectangle.X = value.X;
-            _rectangle.Y = value.Y;
+            rectangle.X = value.X;
+            rectangle.Y = value.Y;
         }
 
     }

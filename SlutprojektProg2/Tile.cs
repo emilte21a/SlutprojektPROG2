@@ -22,7 +22,7 @@ public class Grass : Tile
         if (grassTexture.Id == 0)
             // grassTexture = Raylib.LoadTexture("Bilder/theo.png");
 
-            rectangle.X = position.X;
+        rectangle.X = position.X;
         rectangle.Y = position.Y;
 
         texture = grassTexture;

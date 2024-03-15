@@ -44,10 +44,6 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "Raylib-CsLo": {
-              "target": "Package",
-              "version": "[4.2.0.9, )"
-            },
             "Raylib-cs": {
               "target": "Package",
               "version": "[6.0.0, )"

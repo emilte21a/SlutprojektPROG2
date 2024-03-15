@@ -22,7 +22,6 @@ public class InputManager
     }
 
     private static int _directionDelta = 1;
-    private static string _directionName = "Down";
     public static float GetLastDirectionDelta()
     {
 

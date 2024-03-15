@@ -12,7 +12,8 @@ public class CollisionSystem : GameSystem
 
             if (collider != null && physicsBody != null)
             {
-
+                collider.boxCollider.X = physicsBody.velocity.X;
+                collider.boxCollider.Y = physicsBody.velocity.Y;
             }
         }
     }

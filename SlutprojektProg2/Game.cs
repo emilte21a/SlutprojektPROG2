@@ -30,8 +30,7 @@ public class Game
         drawables.Add(player);
 
 
-
-        SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[20]);
+        // SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[2]);
     }
 
     private void InitializeInstances()
@@ -44,7 +43,7 @@ public class Game
         {
             Target = new Vector2(0, 0),
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2),
-            Zoom = 0.5f
+            Zoom = 0.2f
         };
         player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
@@ -65,8 +64,9 @@ public class Game
 
     private void Update()
     {
-        gameSystems.ForEach(system => system.Update());
+        gameSystems.ForEach(s => s.Update());
         player.Update();
+
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.1f);
     }
 
@@ -77,9 +77,9 @@ public class Game
         Raylib.BeginMode2D(camera);
 
         drawables.ForEach(e => e.Draw());
-
+        entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
-        
+
         Raylib.DrawText($"{player.position}", 20, 60, 30, Color.White);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();

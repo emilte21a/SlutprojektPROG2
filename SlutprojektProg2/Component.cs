@@ -6,15 +6,19 @@ public abstract class Component
 public class PhysicsBody : Component
 {
 
-    public Vector2 acceleration = Vector2.Zero;
+    public Vector2 acceleration;// = Vector2.Zero;
 
-    public Vector2 velocity = Vector2.Zero;
+    public Vector2 velocity;// = Vector2.Zero;
 
     public Vector2 gravity = new Vector2(0, 9.82f);
 
-    private float terminalVelocity = 15;
-
     public AirState airState;
+
+    public PhysicsBody()
+    {
+        acceleration = Vector2.Zero;
+        velocity = Vector2.Zero;
+    }
 
     public enum Gravity
     {
@@ -24,9 +28,9 @@ public class PhysicsBody : Component
 
     public Gravity UseGravity;
 
-    public void Jump()
+    public void Jump(PhysicsBody physicsBody, float jumpForce)
     {
-        gravity.Y -= terminalVelocity * 2;
+        physicsBody.velocity.Y -= jumpForce;
     }
 }
 

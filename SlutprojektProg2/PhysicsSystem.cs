@@ -1,34 +1,37 @@
 public class PhysicsSystem : GameSystem
 {
 
-    private float _speed = 500;
-
+    private float terminalVelocity = 150;
     public override void Update()
     {
         foreach (Entity e in Game.entities)
         {
-            PhysicsBody? physicsBody = new PhysicsBody();
 
-            if (physicsBody != null || physicsBody.UseGravity == PhysicsBody.Gravity.enabled)
+            if (e is IGravityAffected gravityAffected && gravityAffected.PhysicsBody != null && gravityAffected.PhysicsBody.UseGravity == PhysicsBody.Gravity.enabled)
             {
-                physicsBody.acceleration += physicsBody.gravity * Raylib.GetFrameTime() * 60;
-                physicsBody.velocity += physicsBody.acceleration * Raylib.GetFrameTime();
-                e.position += physicsBody.velocity * Raylib.GetFrameTime();
+                PhysicsBody? physicsBody = gravityAffected.PhysicsBody;
+
+                //Lägg till acceleration
+                physicsBody.acceleration += physicsBody.gravity * Raylib.GetFrameTime();
+
+                //Updatera velociteten
+                physicsBody.velocity += physicsBody.acceleration;//* Raylib.GetFrameTime();
+
+                //Clampa maxhastigheten 
+                Raymath.Clamp(physicsBody.velocity.Y, -terminalVelocity, terminalVelocity);
+
+                //Uppdatera positionen
+                e.position += physicsBody.velocity;//* Raylib.GetFrameTime() * 20000;
+
+                //Återställ accelerationen
                 physicsBody.acceleration = Vector2.Zero;
 
-                if (physicsBody.velocity.Y != 0)
-                    physicsBody.airState = AirState.inAir;
+                // if (physicsBody.velocity.Y != 0)
+                //     physicsBody.airState = AirState.inAir;
 
-                else
-                    physicsBody.airState = AirState.notInAir;
-
-                MovePlayer(physicsBody);
+                // else
+                //     physicsBody.airState = AirState.notInAir;
             }
         }
-    }
-
-    private void MovePlayer(PhysicsBody physicsBody)
-    {
-        physicsBody.velocity.X += InputManager.GetAxisX() * _speed * Raylib.GetFrameTime();
     }
 }

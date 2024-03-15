@@ -24,7 +24,7 @@ public class WorldGeneration : IDrawable
         spawnPoints = new Vector2[worldSize];
         seed = Random.Shared.Next(-10000, 10000);
         grid = new Tile[worldSize, worldSize];
-        GameSystem.Console.WriteLine("Width: " + grid.GetLength(0) + " Height: " + grid.GetLength(1));
+        Console.WriteLine("Width: " + grid.GetLength(0) + " Height: " + grid.GetLength(1));
     }
 
     public void GenerateTiles()
