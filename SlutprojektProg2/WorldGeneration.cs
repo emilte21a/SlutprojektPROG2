@@ -55,7 +55,7 @@ public class WorldGeneration : IDrawable
 
     public void Draw()
     {
-        tilesInWorld.ForEach(t => Raylib.DrawRectangleRec(t.rectangle, Color.Lime));
+        tilesInWorld.ForEach(t => Raylib.DrawRectangleRec(t.rectangle, Color.Red));
         //Parallel.ForEach(tilesInWorld, t => Raylib.DrawRectangleRec(t._rectangle, Color.Red));
     }
 }

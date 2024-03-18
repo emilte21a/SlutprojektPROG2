@@ -1,12 +1,9 @@
-public class Player : Entity, IDrawable, IGravityAffected
+public class Player : Entity, IDrawable
 {
     public Camera2D camera { get; init; }
 
     //Skapa spelarens egna physicsbody
     public PhysicsBody physicsBody;
-
-    //Referera att spelarens physicsbody är påverkad av physicssystem
-    PhysicsBody IGravityAffected.PhysicsBody => physicsBody;
 
     //Skapa en renderer för att rita ut spelaren
     public Renderer renderer;
@@ -14,10 +11,10 @@ public class Player : Entity, IDrawable, IGravityAffected
     //Skapa spelarens collider
     public Collider collider;
 
+    private float _playerSpeed = 100;
+
     public Player()
     {
-        rectangle = new Rectangle(0, 0, 50, 50);
-        position = new Vector2(0, 0);
 
         components = new List<Component>();
         physicsBody = AddComponent<PhysicsBody>();
@@ -25,6 +22,8 @@ public class Player : Entity, IDrawable, IGravityAffected
         renderer = AddComponent<Renderer>();
         renderer.sprite = Raylib.LoadTexture("Bilder/CharacterSprite.png");
 
+        rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
+        position = new Vector2(0, 0);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
@@ -32,14 +31,21 @@ public class Player : Entity, IDrawable, IGravityAffected
         collider.boxCollider = rectangle;
     }
 
-
+   
 
     public override void Update()
     {
-        MovePlayer(physicsBody);
+        collider.boxCollider.X = position.X;
+        collider.boxCollider.Y = position.Y;
+        physicsBody.MovePlayer(physicsBody, _playerSpeed);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space))
-            physicsBody.Jump(physicsBody, 30);
+            physicsBody.Jump(physicsBody, 200);
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Enter))
+        {
+            position += new Vector2(0, 200);
+        }
 
         // if (IsInsideGrid((int)position.X / 100, (int)position.Y / 100) || IsInsideSurroundingArea(position))
         // {
@@ -50,11 +56,6 @@ public class Player : Entity, IDrawable, IGravityAffected
         //     WorldGeneration.tilesThatShouldRender.Clear();
     }
 
-    public void MovePlayer(PhysicsBody physicsBody)
-    {
-        physicsBody.velocity.X += InputManager.GetAxisX() * 10 * Raylib.GetFrameTime();
-        System.Console.WriteLine("acceleration: " + physicsBody.acceleration + " Velocity: " + physicsBody.velocity);
-    }
 
     // // Check if a specific position (x, y) is inside the grid
     // bool IsInsideGrid(int x, int y)
@@ -108,8 +109,9 @@ public class Player : Entity, IDrawable, IGravityAffected
 
     public override void Draw()
     {
-        Raylib.DrawRectangleRec(rectangle, Color.Black);
-        // Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirection(), renderer.sprite.Height), position, Color.White);
+        //Raylib.DrawRectangleRec(rectangle, Color.Black);
+        Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
+        Raylib.DrawRectangle((int)position.X, (int)position.Y, 10, 10, Color.Orange);
         //Raylib.DrawTexture(sprite, (int)rectangle.X, (int)rectangle.Y, Color.White);
 
     }

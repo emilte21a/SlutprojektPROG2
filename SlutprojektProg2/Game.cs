@@ -43,8 +43,9 @@ public class Game
         {
             Target = new Vector2(0, 0),
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2),
-            Zoom = 0.2f
+            Zoom = 0.9f
         };
+
         player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
         worldGeneration.GenerateTiles();
@@ -64,7 +65,7 @@ public class Game
 
     private void Update()
     {
-        gameSystems.ForEach(s => s.Update());
+        gameSystems.ForEach(gS => gS.Update());
         player.Update();
 
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.1f);
@@ -80,7 +81,11 @@ public class Game
         entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
 
-        Raylib.DrawText($"{player.position}", 20, 60, 30, Color.White);
+        Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);
+        Raylib.DrawText($"{InputManager.GetAxisX()}", 20, 90, 30, Color.White);
+        Raylib.DrawText($"Vel: {player.physicsBody.velocity}", 20, 120, 30, Color.White);
+        Raylib.DrawText($"Accl: {player.physicsBody.acceleration}", 20, 150, 30, Color.White);
+        Raylib.DrawText($"{player.physicsBody.airState}", 20, 180, 30, Color.White);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
     }
