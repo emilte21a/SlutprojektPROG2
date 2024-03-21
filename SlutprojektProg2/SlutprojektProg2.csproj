@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Bilder\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Images\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Audio\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Script\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Script\Entities\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Script\Systems\**\*.*" CopyToOutputDirectory="Always"/>
+    <Content Include="Script\WorldBuilding\**\*.*" CopyToOutputDirectory="Always"/>
   </ItemGroup>
 </Project>

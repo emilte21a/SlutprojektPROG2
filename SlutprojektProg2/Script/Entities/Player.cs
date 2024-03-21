@@ -11,6 +11,8 @@ public class Player : Entity, IDrawable
     //Skapa spelarens collider
     public Collider collider;
 
+    public AudioPlayer audioPlayer;
+
     private float _playerSpeed = 100;
 
     public Player()
@@ -20,8 +22,9 @@ public class Player : Entity, IDrawable
         physicsBody = AddComponent<PhysicsBody>();
         collider = AddComponent<Collider>();
         renderer = AddComponent<Renderer>();
-        renderer.sprite = Raylib.LoadTexture("Bilder/CharacterSprite.png");
-
+        audioPlayer = AddComponent<AudioPlayer>();
+        renderer.sprite = Raylib.LoadTexture("Images/CharacterSprite.png");
+        audioPlayer.audioClip = Raylib.LoadSound("");
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
         position = new Vector2(0, 0);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
@@ -31,7 +34,7 @@ public class Player : Entity, IDrawable
         collider.boxCollider = rectangle;
     }
 
-   
+
 
     public override void Update()
     {
@@ -40,7 +43,7 @@ public class Player : Entity, IDrawable
         physicsBody.MovePlayer(physicsBody, _playerSpeed);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space))
-            physicsBody.Jump(physicsBody, 200);
+            physicsBody.Jump(physicsBody, 300);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter))
         {

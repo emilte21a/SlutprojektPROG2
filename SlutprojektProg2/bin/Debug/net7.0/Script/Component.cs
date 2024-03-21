@@ -65,3 +65,10 @@ public class Renderer : Component
 {
     public Texture2D sprite { get; set; }
 }
+
+public class AudioPlayer : Component
+{
+    public Sound audioClip { get; set; }
+
+    float audioVolume { get; set; }
+}

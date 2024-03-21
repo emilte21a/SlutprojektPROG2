@@ -23,6 +23,8 @@ public class Game
         Raylib.InitWindow(ScreenWidth, ScreenHeight, "game");
         Raylib.SetTargetFPS(60);
 
+        Raylib.InitAudioDevice();
+
         InitializeInstances();
 
         drawables = new List<IDrawable>();
@@ -30,7 +32,7 @@ public class Game
         drawables.Add(player);
 
 
-        // SpawnManager.SpawnEntityAt(player, worldGeneration.spawnPoints[2]);
+        SpawnManager.SpawnEntityAt(player, new Vector2(worldGeneration.spawnPoints[2].X, worldGeneration.spawnPoints[2].Y - player.collider.boxCollider.Height));
     }
 
     private void InitializeInstances()
@@ -38,6 +40,7 @@ public class Game
         gameSystems = new List<GameSystem>();
         gameSystems.Add(new PhysicsSystem());
         gameSystems.Add(new CollisionSystem());
+        gameSystems.Add(new AudioSystem());
 
         camera = new()
         {

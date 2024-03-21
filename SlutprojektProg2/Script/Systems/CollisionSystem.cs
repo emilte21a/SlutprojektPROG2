@@ -35,29 +35,29 @@ public class CollisionSystem : GameSystem
                         if (physicsBody.velocity.Y > 0)
                         {
                             // Adjust Y velocity if falling
-                            e.position = new Vector2(collider.boxCollider.X, tile.rectangle.Y - collider.boxCollider.Height);
+                            e.position = new Vector2(e.position.X, tile.rectangle.Y - collider.boxCollider.Height);
                             physicsBody.velocity.Y = 0;
                         }
                         else if (physicsBody.velocity.Y < 0)
                         {
                             // Adjust Y velocity if jumping
-                            e.position = new Vector2(collider.boxCollider.X, tile.rectangle.Y + tile.rectangle.Height);
+                            e.position = new Vector2(e.position.X, tile.rectangle.Y + tile.rectangle.Height);
                             physicsBody.velocity.Y = 0;
                         }
                     }
 
                     if (LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Width < LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Height)
                     {
-                        if (InputManager.GetAxisX() == 1)
+                        if (InputManager.GetAxisX() == 1 || InputManager.GetLastDirectionDelta() == 1)
                         {
-                            e.position = new Vector2(tile.rectangle.X - collider.boxCollider.Width, collider.boxCollider.Y);
                             physicsBody.velocity.X = 0;
+                            e.position = new Vector2(tile.rectangle.X - collider.boxCollider.Width, e.position.Y);
                         }
 
-                        else if (InputManager.GetAxisX() == -1)
+                        else if (InputManager.GetAxisX() == -1 || InputManager.GetLastDirectionDelta() == -1)
                         {
-                            e.position = new Vector2(tile.rectangle.X + tile.rectangle.Width, collider.boxCollider.Y);
                             physicsBody.velocity.X = 0;
+                            e.position = new Vector2(tile.rectangle.X + tile.rectangle.Width, e.position.Y);
                         }
                     }
                 }
