@@ -17,7 +17,7 @@ public class WorldGeneration : IDrawable
 
     public static Tile[,] grid;
 
-    public Vector2[] spawnPoints;
+    public static Vector2[] spawnPoints;
 
     public WorldGeneration()
     {
@@ -48,8 +48,8 @@ public class WorldGeneration : IDrawable
                     else
                         SpawnTile(new Stone(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
                 }
+                spawnPoints[x] = new Vector2(x * tileSize, y * tileSize + tileSize * 120);
             }
-            spawnPoints[x] = new Vector2(x * tileSize, -height * tileSize);
         }
 
         Raylib.UnloadImage(noiseImage);

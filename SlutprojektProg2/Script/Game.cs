@@ -30,9 +30,6 @@ public class Game
         drawables = new List<IDrawable>();
         drawables.Add(worldGeneration);
         drawables.Add(player);
-
-
-        SpawnManager.SpawnEntityAt(player, new Vector2(worldGeneration.spawnPoints[2].X, worldGeneration.spawnPoints[2].Y - player.collider.boxCollider.Height));
     }
 
     private void InitializeInstances()
@@ -49,8 +46,9 @@ public class Game
             Zoom = 0.9f
         };
 
-        player = new Player() { camera = camera };
         worldGeneration = new WorldGeneration();
+        player = new Player() { camera = camera };
+
         worldGeneration.GenerateTiles();
         entities = new();
         entities.Add(player);
@@ -58,6 +56,7 @@ public class Game
 
     public void Run()
     {
+        //SpawnManager.SpawnEntityAt(player, new Vector2(WorldGeneration.spawnPoints[2].X, WorldGeneration.spawnPoints[2].Y - player.collider.boxCollider.Height));
         while (!Raylib.WindowShouldClose())
         {
             Update();
@@ -70,7 +69,6 @@ public class Game
     {
         gameSystems.ForEach(gS => gS.Update());
         player.Update();
-
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.1f);
     }
 
@@ -85,6 +83,7 @@ public class Game
         Raylib.EndMode2D();
 
         Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);
+        Raylib.DrawText($"{player.healthPoints}", ScreenWidth - 100, 60, 30, Color.White);
         Raylib.DrawText($"{InputManager.GetAxisX()}", 20, 90, 30, Color.White);
         Raylib.DrawText($"Vel: {player.physicsBody.velocity}", 20, 120, 30, Color.White);
         Raylib.DrawText($"Accl: {player.physicsBody.acceleration}", 20, 150, 30, Color.White);

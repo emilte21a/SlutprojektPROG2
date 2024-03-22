@@ -12,7 +12,7 @@ public class CollisionSystem : GameSystem
             List<Tile> tilesCollidingWithEntity;
             List<Tile> floorCol;
 
-            Rectangle floorCollider = new Rectangle(e.position.X, e.position.Y + renderer.sprite.Height, renderer.sprite.Width, 10);
+            Rectangle floorCollider = new Rectangle(e.position.X + 5, e.position.Y + renderer.sprite.Height, renderer.sprite.Width - 10, 2);
 
             if (collider != null && physicsBody != null)
             {
@@ -48,13 +48,13 @@ public class CollisionSystem : GameSystem
 
                     if (LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Width < LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Height)
                     {
-                        if (InputManager.GetAxisX() == 1 || InputManager.GetLastDirectionDelta() == 1)
+                        if (physicsBody.velocity.X > 0 || InputManager.GetLastDirectionDelta() == 1)
                         {
                             physicsBody.velocity.X = 0;
                             e.position = new Vector2(tile.rectangle.X - collider.boxCollider.Width, e.position.Y);
                         }
 
-                        else if (InputManager.GetAxisX() == -1 || InputManager.GetLastDirectionDelta() == -1)
+                        else if (physicsBody.velocity.X < 0 || InputManager.GetLastDirectionDelta() == -1)
                         {
                             physicsBody.velocity.X = 0;
                             e.position = new Vector2(tile.rectangle.X + tile.rectangle.Width, e.position.Y);

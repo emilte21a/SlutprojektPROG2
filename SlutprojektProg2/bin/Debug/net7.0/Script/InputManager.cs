@@ -28,7 +28,7 @@ public class InputManager
         if (Raylib.IsKeyDown(KeyboardKey.A))
             _directionDelta = -1;
 
-        else if (Raylib.IsKeyDown(KeyboardKey.D))
+        if (Raylib.IsKeyDown(KeyboardKey.D))
             _directionDelta = 1;
 
         return _directionDelta;

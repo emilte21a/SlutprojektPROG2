@@ -13,25 +13,38 @@ public class Player : Entity, IDrawable
 
     public AudioPlayer audioPlayer;
 
-    private float _playerSpeed = 100;
+    public Animator animator;
+
+    private float _playerSpeed = 150;
+
+    public int healthPoints;
+
+    private Texture2D spriteSheet = Raylib.LoadTexture("Images/SpriteSheet.png");
 
     public Player()
     {
-
+        #region Lägg till spelarens komponenter
         components = new List<Component>();
         physicsBody = AddComponent<PhysicsBody>();
         collider = AddComponent<Collider>();
         renderer = AddComponent<Renderer>();
         audioPlayer = AddComponent<AudioPlayer>();
+        animator = AddComponent<Animator>();
+        #endregion
+
+        healthPoints = 100;
+
         renderer.sprite = Raylib.LoadTexture("Images/CharacterSprite.png");
         audioPlayer.audioClip = Raylib.LoadSound("");
+
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
-        position = new Vector2(0, 0);
+
+        position = new Vector2(WorldGeneration.spawnPoints[5].X, WorldGeneration.spawnPoints[5].Y - rectangle.Height);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
-
         collider.boxCollider = rectangle;
+
     }
 
 
@@ -41,8 +54,9 @@ public class Player : Entity, IDrawable
         collider.boxCollider.X = position.X;
         collider.boxCollider.Y = position.Y;
         physicsBody.MovePlayer(physicsBody, _playerSpeed);
+        healthPoints -= FallDamage();
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Space))
+        if (Raylib.IsKeyPressed(KeyboardKey.Space))//&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 300);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter))
@@ -109,12 +123,21 @@ public class Player : Entity, IDrawable
     //         }
     //     }
     // }
+    private int FallDamage()
+    {
+        return (int)physicsBody.velocity.Y > 6 ? (int)physicsBody.velocity.Y : 0;
+    }
 
     public override void Draw()
     {
         //Raylib.DrawRectangleRec(rectangle, Color.Black);
-        Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
+        if (physicsBody.velocity.X != 0)
+            animator.PlayAnimation(spriteSheet, (int)InputManager.GetLastDirectionDelta(), 4, position);
+
+        else
+            Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
         Raylib.DrawRectangle((int)position.X, (int)position.Y, 10, 10, Color.Orange);
+        Raylib.DrawRectangleRec(new Rectangle(position.X + 5, position.Y + renderer.sprite.Height, renderer.sprite.Width - 10, 2), Color.DarkBlue);
         //Raylib.DrawTexture(sprite, (int)rectangle.X, (int)rectangle.Y, Color.White);
 
     }
