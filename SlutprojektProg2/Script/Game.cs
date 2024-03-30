@@ -83,7 +83,7 @@ public class Game
         drawables.ForEach(e => e.Draw());
         entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
-
+        
         Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);
         Raylib.DrawText($"{player.healthPoints}", ScreenWidth - 100, 60, 30, Color.White);
         Raylib.DrawText($"{player.lastDirection}", ScreenWidth - 100, 90, 30, Color.White);

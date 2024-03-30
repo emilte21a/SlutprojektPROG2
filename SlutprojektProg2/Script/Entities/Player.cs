@@ -15,13 +15,15 @@ public class Player : Entity, IDrawable
 
     public Animator animator;
 
+    public Inventory inventory;
+
     private float _playerSpeed = 150;
 
     public int healthPoints;
 
     private Texture2D spriteSheet = Raylib.LoadTexture("Images/SpriteSheet.png");
 
-    public static Vector2 playerPosition;
+    public static PlayerState playerState;
 
     public Player()
     {
@@ -36,6 +38,7 @@ public class Player : Entity, IDrawable
 
         healthPoints = 100;
         tag = "Player";
+        playerState = PlayerState.inGame;
 
         renderer.sprite = Raylib.LoadTexture("Images/CharacterSprite.png");
         audioPlayer.audioClip = Raylib.LoadSound("");
@@ -55,7 +58,6 @@ public class Player : Entity, IDrawable
     {
         collider.boxCollider.X = rectangle.X;
         collider.boxCollider.Y = rectangle.Y;
-        playerPosition = position;
 
         MovePlayer(physicsBody, _playerSpeed);
 
@@ -89,4 +91,11 @@ public class Player : Entity, IDrawable
         Raylib.DrawRectangle((int)position.X, (int)position.Y, 10, 10, Color.Orange);
         Raylib.DrawRectangleRec(new Rectangle(position.X, position.Y + renderer.sprite.Height, renderer.sprite.Width, 2), Color.DarkBlue);
     }
+}
+
+public enum PlayerState
+{
+    inInventory,
+    inGame,
+    inMenu
 }
