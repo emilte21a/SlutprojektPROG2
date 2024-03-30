@@ -4,71 +4,86 @@ public class CollisionSystem : GameSystem
 {
     public override void Update()
     {
+
         foreach (Entity e in Game.entities)
         {
+            #region Hämta potentiella komponenter hos entitites
             PhysicsBody? physicsBody = e.GetComponent<PhysicsBody>();
             Collider? collider = e.GetComponent<Collider>();
-            Renderer? renderer = e.GetComponent<Renderer>();
-            List<Tile> tilesCollidingWithEntity;
-            List<Tile> floorCol;
+            #endregion
 
-            Rectangle floorCollider = new Rectangle(e.position.X + 5, e.position.Y + renderer.sprite.Height, renderer.sprite.Width - 10, 2);
+            List<Tile> tilesCloseToEntity; //Lista med alla rektanglar som screenRectangle kolliderar med
+            List<Tile> tilesCollidingWithFeet; //Lista med alla rektanglar som endast fötterna hos entityn kolliderar med
+
+            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2, e.position.Y - Game.ScreenHeight / 2, Game.ScreenWidth, Game.ScreenWidth);
+
+            Rectangle floorCollider = new Rectangle(e.position.X, e.position.Y + collider.boxCollider.Height, collider.boxCollider.Width, 2);
 
             if (collider != null && physicsBody != null)
             {
-                tilesCollidingWithEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(collider.boxCollider, tile.rectangle)).ToList();
-                floorCol = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(floorCollider, tile.rectangle)).ToList();
+                tilesCloseToEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
+                tilesCollidingWithFeet = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(floorCollider, tile.rectangle)).ToList();
 
-                //System.Console.WriteLine(tilesCollidingWithEntity.Count);
-                System.Console.WriteLine(floorCol.Count);
+                physicsBody.airState = tilesCollidingWithFeet.Count > 0 ? AirState.grounded : AirState.inAir;
 
-                if (floorCol.Count > 0)
-                    physicsBody.airState = AirState.grounded;
+                e.lastDirection.X = physicsBody.velocity.X > 0 ? 1 : -1;
+                e.lastDirection.Y = physicsBody.velocity.Y > 0 ? 1 : -1;
 
-                else
-                    physicsBody.airState = AirState.inAir;
-
-                foreach (Tile tile in tilesCollidingWithEntity)
+                #region Korrigera y positionen 
+                foreach (Tile tile in tilesCollidingWithFeet)
                 {
-                    if (LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Height < LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Width)
+                    Rectangle nextBounds = new Rectangle(e.position.X, e.position.Y + physicsBody.velocity.Y, collider.boxCollider.Width, collider.boxCollider.Height);
+                    if (LargestCollisionRectangle(tilesCollidingWithFeet, nextBounds).Height < LargestCollisionRectangle(tilesCollidingWithFeet, nextBounds).Width)
                     {
-                        if (physicsBody.velocity.Y > 0)
+                        if (physicsBody.velocity.Y > 0 || e.lastDirection.Y == 1)
                         {
-                            // Adjust Y velocity if falling
+                            //Korrigera Y hastigheten ifall spelaren faller
                             e.position = new Vector2(e.position.X, tile.rectangle.Y - collider.boxCollider.Height);
                             physicsBody.velocity.Y = 0;
                         }
-                        else if (physicsBody.velocity.Y < 0)
+                        else if (physicsBody.velocity.Y < 0 || e.lastDirection.Y == -1)
                         {
-                            // Adjust Y velocity if jumping
+                            //Korrigera Y hastigheten ifall spelaren hoppar
                             e.position = new Vector2(e.position.X, tile.rectangle.Y + tile.rectangle.Height);
                             physicsBody.velocity.Y = 0;
                         }
                     }
+                }
+                #endregion
 
-                    if (LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Width < LargestCollisionRectangle(tilesCollidingWithEntity, collider.boxCollider).Height)
+                #region Korrigera x positionen
+                foreach (Tile tile in tilesCloseToEntity)
+                {
+                    Rectangle nextBounds = new Rectangle(e.position.X + physicsBody.velocity.X, e.position.Y, collider.boxCollider.Width, collider.boxCollider.Height);
+                    if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds))//LargestCollisionRectangle(tilesCollidingWithEntity, nextBounds).Width < LargestCollisionRectangle(tilesCollidingWithEntity, nextBounds).Height)
                     {
-                        if (physicsBody.velocity.X > 0 || InputManager.GetLastDirectionDelta() == 1)
+                        if (physicsBody.velocity.X > 0 || e.lastDirection.X == 1)
                         {
-                            physicsBody.velocity.X = 0;
+                            //Korrigera spelarens hastighet åt höger när den kolliderar
                             e.position = new Vector2(tile.rectangle.X - collider.boxCollider.Width, e.position.Y);
+                            physicsBody.velocity.X = 0;
                         }
 
-                        else if (physicsBody.velocity.X < 0 || InputManager.GetLastDirectionDelta() == -1)
+                        else if (physicsBody.velocity.X < 0 || e.lastDirection.X == -1)
                         {
-                            physicsBody.velocity.X = 0;
+                            //Korrigera spelarens hastighet åt vänster när den kolliderar
                             e.position = new Vector2(tile.rectangle.X + tile.rectangle.Width, e.position.Y);
+                            physicsBody.velocity.X = 0;
                         }
                     }
                 }
+                #endregion
             }
         }
     }
 
+    //Metod som returnerar den största rektangeln ur listan med de rektanglar som en entity kolliderar med 
     private Rectangle LargestCollisionRectangle(List<Tile> tiles, Rectangle entityRect)
     {
         List<Tile> order = tiles.OrderByDescending(t => t.rectangle.Width).ThenBy(t => t.rectangle.Height).ToList();
 
         return Raylib.GetCollisionRec(entityRect, order[0].rectangle);
     }
+
+
 }

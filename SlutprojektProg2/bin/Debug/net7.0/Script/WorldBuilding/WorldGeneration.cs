@@ -6,10 +6,6 @@ public class WorldGeneration : IDrawable
 
     public static List<Tile> tilesInWorld = new List<Tile>();
 
-    private List<Tile> tilesThatShouldRender = new List<Tile>();
-
-    Rectangle screenRect = new Rectangle(0, 0, Game.ScreenWidth, Game.ScreenHeight);
-
     private int seed;
     private int caveThreshold = 160;
     private float surfaceThreshold = 0.5f;
@@ -47,8 +43,10 @@ public class WorldGeneration : IDrawable
 
                     else
                         SpawnTile(new Stone(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
+
+                    if(y == -height)
+                        spawnPoints[x] = new Vector2(x * tileSize, y * tileSize);
                 }
-                spawnPoints[x] = new Vector2(x * tileSize, y * tileSize + tileSize * 120);
             }
         }
 

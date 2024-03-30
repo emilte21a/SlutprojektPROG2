@@ -39,26 +39,24 @@ public class Player : Entity, IDrawable
 
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
 
-        position = new Vector2(WorldGeneration.spawnPoints[5].X, WorldGeneration.spawnPoints[5].Y - rectangle.Height);
+        position = new Vector2(0, 0);
+        System.Console.WriteLine(WorldGeneration.spawnPoints[100]);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
-
     }
-
 
 
     public override void Update()
     {
-        collider.boxCollider.X = position.X;
-        collider.boxCollider.Y = position.Y;
-        physicsBody.MovePlayer(physicsBody, _playerSpeed);
-        healthPoints -= FallDamage();
+        collider.boxCollider.X = rectangle.X;
+        collider.boxCollider.Y = rectangle.Y;
+        MovePlayer(physicsBody, _playerSpeed);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space))//&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 300);
-
+    
         if (Raylib.IsKeyPressed(KeyboardKey.Enter))
         {
             position += new Vector2(0, 200);
@@ -123,6 +121,12 @@ public class Player : Entity, IDrawable
     //         }
     //     }
     // }
+
+    public void MovePlayer(PhysicsBody physicsBody, float speed)
+    {
+        physicsBody.velocity.X = Raymath.Clamp(InputManager.GetAxisX() * speed * Raylib.GetFrameTime(), -2f, 2f);
+    }
+
     private int FallDamage()
     {
         return (int)physicsBody.velocity.Y > 6 ? (int)physicsBody.velocity.Y : 0;
@@ -136,8 +140,9 @@ public class Player : Entity, IDrawable
 
         else
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
+
         Raylib.DrawRectangle((int)position.X, (int)position.Y, 10, 10, Color.Orange);
-        Raylib.DrawRectangleRec(new Rectangle(position.X + 5, position.Y + renderer.sprite.Height, renderer.sprite.Width - 10, 2), Color.DarkBlue);
+        Raylib.DrawRectangleRec(new Rectangle(position.X, position.Y + renderer.sprite.Height, renderer.sprite.Width, 2), Color.DarkBlue);
         //Raylib.DrawTexture(sprite, (int)rectangle.X, (int)rectangle.Y, Color.White);
 
     }
