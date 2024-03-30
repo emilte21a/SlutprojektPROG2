@@ -5,12 +5,12 @@ public abstract class Tile : GameObject
     public Rectangle rectangle;
 }
 
-public class Grass : Tile
+public class GrassTile : Tile
 {
     static Texture2D grassTexture;
     Collider collider;
 
-    public Grass(Vector2 pos)
+    public GrassTile(Vector2 pos)
     {
         rectangle = new Rectangle(0, 0, 80, 80);
 
@@ -29,11 +29,11 @@ public class Grass : Tile
     }
 }
 
-public class Stone : Tile
+public class StoneTile : Tile
 {
     static Texture2D stoneTexture;
 
-    public Stone(Vector2 pos)
+    public StoneTile(Vector2 pos)
     {
         rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
@@ -48,11 +48,11 @@ public class Stone : Tile
     }
 }
 
-public class Dirt : Tile
+public class DirtTile : Tile
 {
     static Texture2D dirtTexture;
 
-    public Dirt(Vector2 pos)
+    public DirtTile(Vector2 pos)
     {
         rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;

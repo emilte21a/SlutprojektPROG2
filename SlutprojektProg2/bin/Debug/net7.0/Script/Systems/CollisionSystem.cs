@@ -16,7 +16,7 @@ public class CollisionSystem : GameSystem
             List<Tile> tilesCollidingWithFeet; //Lista med alla rektanglar som endast fötterna hos entityn kolliderar med
 
             #region Rektanglar som kollar spelarens kollisioner
-            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2 - 100, e.position.Y - Game.ScreenHeight / 2 - 100, Game.ScreenWidth + 200, Game.ScreenWidth + 200);
+            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2 - 100, e.position.Y - Game.ScreenHeight / 2 - 100, Game.ScreenWidth + 200, Game.ScreenWidth + 200); //Magiska nummer för offset
             Rectangle floorCollider = new Rectangle(e.position.X, e.position.Y + collider.boxCollider.Height, collider.boxCollider.Width, 2);
             #endregion
 

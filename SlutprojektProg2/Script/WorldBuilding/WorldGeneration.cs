@@ -33,13 +33,13 @@ public class WorldGeneration : IDrawable
                 if (Raylib.GetImageColor(noiseImage, x, y * -1).R < caveThreshold)
                 {
                     if (y == -height)
-                        SpawnTile(new Grass(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
+                        SpawnTile(new GrassTile(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
 
                     else if (y == -height + 1)
-                        SpawnTile(new Dirt(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
+                        SpawnTile(new DirtTile(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
 
                     else
-                        SpawnTile(new Stone(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
+                        SpawnTile(new StoneTile(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
 
                     if (y == -height)
                         spawnPoints[x] = new Vector2(x * tileSize, y * tileSize);

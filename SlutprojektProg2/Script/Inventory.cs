@@ -1,11 +1,14 @@
 
 
-public class Inventory : IDrawable
+public class Inventory
 {
-    private List<Item> itemsInInventory;
+    public List<Item> itemsInInventory;
 
     private Item[] inventorySlots;
 
+    private Texture2D _inventoryTexture = Raylib.LoadTexture("Images/inventoryspot.png");
+
+    private Texture2D _slotTexture = Raylib.LoadTexture("Images/itemChosen.png");
 
     public Inventory()
     {
@@ -16,20 +19,30 @@ public class Inventory : IDrawable
             inventorySlots[i] = null;
     }
 
+
+    public void Update()
+    {
+        for (int i = 0; i < itemsInInventory.Count; i++)
+        {
+            inventorySlots[i] = itemsInInventory[i];
+        }
+    }
+
+    int itemPos = 0;
     public void Draw()
     {
+        Raylib.DrawTexture(_inventoryTexture, 30, 30, Color.White);
+
         foreach (Item item in inventorySlots)
         {
-            int itemPos = 0;
-
             if (itemPos < inventorySlots.Length)
             {
                 if (item != null && itemsInInventory.Contains(item))
                 {
-                    Raylib.DrawTexture(item.texture, 50 + 120 * CurrentActiveItem(), 70, Color.White);
+                    Raylib.DrawTexture(item.texture, 50 + 120 * itemPos, 70, Color.White);
                 }
 
-                Raylib.DrawTexture(Raylib.LoadTexture("Images/itemChosen.png"), 40 + itemPos * 120, 60, Color.White);
+                Raylib.DrawTexture(_slotTexture, 40 + CurrentActiveItem() * 120, 60, Color.White);
 
                 if (itemPos >= inventorySlots.Length)
                 {
@@ -70,8 +83,6 @@ public class Inventory : IDrawable
     {
         if (item.GetType() == typeof(Item) && itemsInInventory.Contains(item))
             itemsInInventory.Remove(item);
-
-
     }
 
     public int FindFirstEmptySlot()

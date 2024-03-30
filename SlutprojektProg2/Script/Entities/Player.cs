@@ -34,7 +34,11 @@ public class Player : Entity, IDrawable
         renderer = AddComponent<Renderer>();
         audioPlayer = AddComponent<AudioPlayer>();
         animator = AddComponent<Animator>();
+        inventory = new Inventory();
         #endregion
+
+        inventory.AddToInventory(new StoneItem());
+        inventory.AddToInventory(new WoodItem());
 
         healthPoints = 100;
         tag = "Player";
@@ -68,6 +72,8 @@ public class Player : Entity, IDrawable
         {
             position += new Vector2(0, 200);
         }
+
+        inventory.Update();
     }
 
     public void MovePlayer(PhysicsBody physicsBody, float speed)

@@ -31,6 +31,7 @@ public class Game
         drawables = new List<IDrawable>();
         drawables.Add(worldGeneration);
         drawables.Add(player);
+
     }
 
     private void InitializeInstances()
@@ -80,17 +81,17 @@ public class Game
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.SkyBlue);
         Raylib.BeginMode2D(camera);
-        drawables.ForEach(e => e.Draw());
+        drawables.ForEach(d => d.Draw());
         entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
-        
-        Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);
-        Raylib.DrawText($"{player.healthPoints}", ScreenWidth - 100, 60, 30, Color.White);
-        Raylib.DrawText($"{player.lastDirection}", ScreenWidth - 100, 90, 30, Color.White);
-        Raylib.DrawText($"{InputManager.GetAxisX()}", 20, 90, 30, Color.White);
-        Raylib.DrawText($"Vel: {player.physicsBody.velocity}", 20, 120, 30, Color.White);
-        Raylib.DrawText($"Accl: {player.physicsBody.acceleration}", 20, 150, 30, Color.White);
-        Raylib.DrawText($"{player.physicsBody.airState}", 20, 180, 30, Color.White);
+        player.inventory.Draw();
+        // Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);
+        // Raylib.DrawText($"{player.healthPoints}", ScreenWidth - 100, 60, 30, Color.White);
+        // Raylib.DrawText($"{player.lastDirection}", ScreenWidth - 100, 90, 30, Color.White);
+        // Raylib.DrawText($"{InputManager.GetAxisX()}", 20, 90, 30, Color.White);
+        // Raylib.DrawText($"Vel: {player.physicsBody.velocity}", 20, 120, 30, Color.White);
+        // Raylib.DrawText($"Accl: {player.physicsBody.acceleration}", 20, 150, 30, Color.White);
+        // Raylib.DrawText($"{player.physicsBody.airState}", 20, 180, 30, Color.White);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
     }
