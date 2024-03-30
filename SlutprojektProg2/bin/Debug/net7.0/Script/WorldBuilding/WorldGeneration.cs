@@ -5,13 +5,12 @@ public class WorldGeneration : IDrawable
     private int tileSize = 80;
 
     public static List<Tile> tilesInWorld = new List<Tile>();
+    public static List<Tile> tilesThatShouldRender = new List<Tile>();
 
     private int seed;
     private int caveThreshold = 160;
     private float surfaceThreshold = 0.5f;
     private int heightMultiplier = 1;
-
-    public static Tile[,] grid;
 
     public static Vector2[] spawnPoints;
 
@@ -19,8 +18,6 @@ public class WorldGeneration : IDrawable
     {
         spawnPoints = new Vector2[worldSize];
         seed = Random.Shared.Next(-10000, 10000);
-        grid = new Tile[worldSize, worldSize];
-        Console.WriteLine("Width: " + grid.GetLength(0) + " Height: " + grid.GetLength(1));
     }
 
     public void GenerateTiles()
@@ -44,7 +41,7 @@ public class WorldGeneration : IDrawable
                     else
                         SpawnTile(new Stone(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
 
-                    if(y == -height)
+                    if (y == -height)
                         spawnPoints[x] = new Vector2(x * tileSize, y * tileSize);
                 }
             }
@@ -57,12 +54,11 @@ public class WorldGeneration : IDrawable
     public void SpawnTile(Tile tile)
     {
         tilesInWorld.Add(tile);
-        //grid[(int)position.X / tileSize, (int)position.Y * -1 / tileSize] = tile;
     }
 
     public void Draw()
     {
-        tilesInWorld.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
+        tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
     }
 }
 

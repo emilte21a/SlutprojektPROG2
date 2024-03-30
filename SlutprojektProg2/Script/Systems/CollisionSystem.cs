@@ -16,12 +16,15 @@ public class CollisionSystem : GameSystem
             List<Tile> tilesCollidingWithFeet; //Lista med alla rektanglar som endast fötterna hos entityn kolliderar med
 
             #region Rektanglar som kollar spelarens kollisioner
-            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2, e.position.Y - Game.ScreenHeight / 2, Game.ScreenWidth, Game.ScreenWidth); 
+            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2 - 100, e.position.Y - Game.ScreenHeight / 2 - 100, Game.ScreenWidth + 200, Game.ScreenWidth + 200); //Magiska nummer för offset
             Rectangle floorCollider = new Rectangle(e.position.X, e.position.Y + collider.boxCollider.Height, collider.boxCollider.Width, 2);
             #endregion
 
             if (collider != null && physicsBody != null) //Kolla så att entityns physicsbody och collider inte är null
             {
+                if (e.tag == "Player")
+                    WorldGeneration.tilesThatShouldRender = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
+
                 tilesCloseToEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
                 tilesCollidingWithFeet = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(floorCollider, tile.rectangle)).ToList();
 
@@ -33,7 +36,7 @@ public class CollisionSystem : GameSystem
                 #region Korrigera y positionen 
                 foreach (Tile tile in tilesCollidingWithFeet)
                 {
-                    //Räkna ut spelarens y-position i nästa frame
+                    //Räkna ut spelarens y-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X, e.position.Y + physicsBody.velocity.Y, collider.boxCollider.Width, collider.boxCollider.Height);
                     if (LargestCollisionRectangle(tilesCollidingWithFeet, nextBounds).Height < LargestCollisionRectangle(tilesCollidingWithFeet, nextBounds).Width) //Spelaren är över tilen
                     {
@@ -56,7 +59,7 @@ public class CollisionSystem : GameSystem
                 #region Korrigera x positionen
                 foreach (Tile tile in tilesCloseToEntity)
                 {
-                    //Räkna ut spelarens nya x-position i nästa frame med en rektangel
+                    //Räkna ut spelarens x-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X + physicsBody.velocity.X, e.position.Y, collider.boxCollider.Width, collider.boxCollider.Height);
                     if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds)) //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
                     {

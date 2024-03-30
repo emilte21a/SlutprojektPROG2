@@ -1,5 +1,7 @@
 public abstract class GameObject
 {
+    public string tag;
+
     public T AddComponent<T>() where T : Component, new()
     {
         T t = new();
