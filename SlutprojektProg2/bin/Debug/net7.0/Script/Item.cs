@@ -3,7 +3,7 @@ public abstract class Item : GameObject
 {
     public string name;
     public int ID;
-    public int stack;
+    public int stack = 1;
     public bool craftable;
     public bool stackable;
 

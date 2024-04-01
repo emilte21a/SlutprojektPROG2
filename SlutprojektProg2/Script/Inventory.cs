@@ -4,7 +4,7 @@ public class Inventory
 {
     public List<Item> itemsInInventory;
 
-    private Item[] inventorySlots;
+    private Slot[] inventorySlots;
 
     private Texture2D _hotbarTexture = Raylib.LoadTexture("Images/Hotbar.png");
 
@@ -13,10 +13,7 @@ public class Inventory
     public Inventory()
     {
         itemsInInventory = new List<Item>();
-        inventorySlots = new Item[5];
-
-        for (int i = 0; i < inventorySlots.Length; i++)
-            inventorySlots[i] = null;
+        inventorySlots = new Slot[5];
     }
 
     public void Update()
@@ -24,27 +21,27 @@ public class Inventory
 
     }
     int itemPos = 0;
-
     public void Draw()
     {
         Raylib.DrawTexture(_hotbarTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2, Game.ScreenHeight - 100, Color.White);
 
-        foreach (Item item in inventorySlots)
+        foreach (Slot slot in inventorySlots)
         {
             if (itemPos < inventorySlots.Length)
             {
-                if (item != null && itemsInInventory.Contains(item))
+                Raylib.DrawTexture(_itemChosenTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + CurrentActiveItem() * 58, Game.ScreenHeight - 89, Color.White);
+                if (slot.item != null && itemsInInventory.Contains(slot.item))
                 {
-                    Raylib.DrawTexture(item.texture, 50 + 120 * itemPos, 70, Color.White);
+                    Raylib.DrawTexture(slot.item.texture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + 58 * slot.index, Game.ScreenHeight - 89, Color.White);
+                    Raylib.DrawText($"{slot.item.stack}", Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 54 + 58 * slot.index, Game.ScreenHeight - 64, 10, Color.White);
                 }
 
-                Raylib.DrawTexture(_itemChosenTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + CurrentActiveItem() * 58, Game.ScreenHeight - 89, Color.White);
+                itemPos++;
             }
-            itemPos++;
-        }
-        if (itemPos >= inventorySlots.Length)
-        {
-            itemPos = FindFirstEmptySlot();
+            if (itemPos >= inventorySlots.Length)
+            {
+                itemPos = FindFirstEmptySlot();
+            }
         }
     }
 
@@ -71,16 +68,13 @@ public class Inventory
 
     public void AddToInventory(Item item)
     {
-        if (itemsInInventory.Contains(item) && item.stackable)
+        if (itemsInInventory.Contains(item) && item.stackable && item.GetType() == typeof(Item))
             item.stack++;
 
         itemsInInventory.Add(item);
         if (itemsInInventory.Count <= 5)
         {
-            for (int i = 0; i < itemsInInventory.Count; i++)
-            {
-                inventorySlots[i] = item;
-            }
+            inventorySlots[FindFirstEmptySlot()] = new Slot(item, FindFirstEmptySlot());
         }
     }
     public void RemoveFromInventory(Item item)
@@ -93,7 +87,7 @@ public class Inventory
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            if (inventorySlots[i] == null)
+            if (inventorySlots[i].item == null)
             {
                 return i;
             }
@@ -126,9 +120,9 @@ public class Inventory
                 foreach (KeyValuePair<Item, int> ingredient in item.recipe)
                 {
                     itemsInInventory[i].stack -= ingredient.Value;
-                    if (itemsInInventory[i].stack <= 0 && inventorySlots[i] != null)
+                    if (itemsInInventory[i].stack <= 0 && inventorySlots[i].item != null)
                     {
-                        inventorySlots[i] = null;
+                        inventorySlots[i].item = null;
                         itemsInInventory.Remove(ingredient.Key);
                     }
 
@@ -141,11 +135,12 @@ public class Inventory
 
 public struct Slot
 {
-    Vector2 position;
-    Item item;
-    public Slot(Item item1, Vector2 pos)
+    public Vector2 position;
+    public int index;
+    public Item item;
+    public Slot(Item item1, int slotIndex)
     {
         this.item = item1;
-        this.position = pos;
+        this.index = slotIndex;
     }
 }

@@ -37,8 +37,10 @@ public class Player : Entity, IDrawable
         inventory = new Inventory();
         #endregion
 
-        inventory.AddToInventory(new StoneItem());
         inventory.AddToInventory(new WoodItem());
+        inventory.AddToInventory(new WoodItem());
+        inventory.AddToInventory(new WoodItem());
+        inventory.AddToInventory(new StoneItem());
 
         healthPoints = 100;
         tag = "Player";
