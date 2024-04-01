@@ -13,10 +13,9 @@ public class CollisionSystem : GameSystem
             #endregion
 
             List<Tile> tilesCloseToEntity; //Lista med alla rektanglar som screenRectangle kolliderar med
-            List<Tile> tilesCollidingWithFeet; //Lista med alla rektanglar som endast fötterna hos entityn kolliderar med
 
             #region Rektanglar som kollar spelarens kollisioner
-            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2 - 100, e.position.Y - Game.ScreenHeight / 2 - 100, Game.ScreenWidth + 200, Game.ScreenWidth + 200); //Magiska nummer för offset
+            Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2 - 100, e.position.Y - Game.ScreenHeight / 2 - 150, Game.ScreenWidth + 200, Game.ScreenWidth + 300); //Magiska nummer för offset
             Rectangle floorCollider = new Rectangle(e.position.X, e.position.Y + collider.boxCollider.Height, collider.boxCollider.Width, 2);
             #endregion
 
@@ -26,19 +25,17 @@ public class CollisionSystem : GameSystem
                     WorldGeneration.tilesThatShouldRender = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
 
                 tilesCloseToEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
-                tilesCollidingWithFeet = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(floorCollider, tile.rectangle)).ToList();
-
-                physicsBody.airState = tilesCollidingWithFeet.Count > 0 ? AirState.grounded : AirState.inAir;
 
                 e.lastDirection.X = physicsBody.velocity.X > 0 ? 1 : -1;
                 e.lastDirection.Y = physicsBody.velocity.Y > 0 ? 1 : -1;
 
                 #region Korrigera y positionen 
-                foreach (Tile tile in tilesCollidingWithFeet)
+                foreach (Tile tile in tilesCloseToEntity)
                 {
+                    physicsBody.airState = Raylib.CheckCollisionRecs(floorCollider, tile.rectangle) ? AirState.grounded : AirState.inAir;
                     //Räkna ut spelarens y-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X, e.position.Y + physicsBody.velocity.Y, collider.boxCollider.Width, collider.boxCollider.Height);
-                    if (LargestCollisionRectangle(tilesCollidingWithFeet, nextBounds).Height < LargestCollisionRectangle(tilesCollidingWithFeet, nextBounds).Width) //Spelaren är över tilen
+                    if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds))
                     {
                         if (physicsBody.velocity.Y > 0 || e.lastDirection.Y == 1)
                         {
