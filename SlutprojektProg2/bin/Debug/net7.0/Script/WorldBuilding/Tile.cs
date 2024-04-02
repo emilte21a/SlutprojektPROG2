@@ -8,16 +8,10 @@ public abstract class Tile : GameObject
 public class GrassTile : Tile
 {
     static Texture2D grassTexture;
-    Collider collider;
-
     public GrassTile(Vector2 pos)
     {
         rectangle = new Rectangle(0, 0, 80, 80);
 
-        // components = new();
-        // collider = AddComponent<Collider>();
-
-        // collider.boxCollider = rectangle;
         this.position = pos;
         if (grassTexture.Id == 0)
             grassTexture = Raylib.LoadTexture("Images/GrassTile.png");
@@ -64,5 +58,19 @@ public class DirtTile : Tile
         rectangle.Y = position.Y;
 
         texture = dirtTexture;
+    }
+}
+
+public class BackgroundTile : Tile
+{
+    static Texture2D backgroundTexture;
+
+    public BackgroundTile(Vector2 pos)
+    {
+        this.position = pos;
+        if (backgroundTexture.Id == 0)
+            backgroundTexture = Raylib.LoadTexture("Images/BackgroundTile.png");
+
+        texture = backgroundTexture;
     }
 }

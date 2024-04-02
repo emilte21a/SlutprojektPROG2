@@ -70,8 +70,10 @@ public class Inventory
     {
         if (itemsInInventory.Contains(item) && item.stackable && item.GetType() == typeof(Item))
             item.stack++;
-
-        itemsInInventory.Add(item);
+            
+        else
+            itemsInInventory.Add(item);
+        
         if (itemsInInventory.Count <= 5)
         {
             inventorySlots[FindFirstEmptySlot()] = new Slot(item, FindFirstEmptySlot());

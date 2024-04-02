@@ -63,3 +63,6 @@ C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\I
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\woodenPickaxeTexture.png
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\woodTexture.png
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\Hotbar.png
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\BackgroundTile.png
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\WorldBuilding\Prefab(TEMP).cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Parallax.cs

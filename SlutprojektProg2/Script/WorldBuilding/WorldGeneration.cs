@@ -5,7 +5,9 @@ public class WorldGeneration : IDrawable
     private int tileSize = 80;
 
     public static List<Tile> tilesInWorld = new List<Tile>();
+    public static List<Tile> backgroundTiles = new List<Tile>();
     public static List<Tile> tilesThatShouldRender = new List<Tile>();
+    public static List<Prefab> prefabs = new List<Prefab>();
 
     private int seed;
     private int caveThreshold = 160;
@@ -30,19 +32,22 @@ public class WorldGeneration : IDrawable
             int height = Raylib.GetImageColor(heightImage, (int)(x * surfaceThreshold), (int)surfaceThreshold).R * heightMultiplier;
             for (int y = -height; y < 0; y++)
             {
+
+                SpawnTile(new BackgroundTile(new Vector2(x * tileSize, y * tileSize)));
+
                 if (Raylib.GetImageColor(noiseImage, x, y * -1).R < caveThreshold)
                 {
                     if (y == -height)
-                        SpawnTile(new GrassTile(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
+                    {
+                        SpawnTile(new GrassTile(new Vector2(x * tileSize, y * tileSize)));
+                        spawnPoints[x] = new Vector2(x * tileSize, y * tileSize - 6 * tileSize);
+                    }
 
                     else if (y == -height + 1)
-                        SpawnTile(new DirtTile(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
+                        SpawnTile(new DirtTile(new Vector2(x * tileSize, y * tileSize)));
 
                     else
-                        SpawnTile(new StoneTile(new Vector2(x * tileSize, y * tileSize + tileSize * 120)));
-
-                    if (y == -height)
-                        spawnPoints[x] = new Vector2(x * tileSize, y * tileSize);
+                        SpawnTile(new StoneTile(new Vector2(x * tileSize, y * tileSize)));
                 }
             }
         }
@@ -53,12 +58,35 @@ public class WorldGeneration : IDrawable
 
     public void SpawnTile(Tile tile)
     {
-        tilesInWorld.Add(tile);
+        if (tile.GetType() != typeof(BackgroundTile))
+            tilesInWorld.Add(tile);
+
+        else
+            backgroundTiles.Add(tile);
+    }
+
+    public void SpawnGameObject(Prefab prefab)
+    {
+        prefabs.Add(prefab);
     }
 
     public void Draw()
     {
+        backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
         tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
+        prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
+    }
+
+    public void GeneratePrefabs()
+    {
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            if (Random.Shared.Next(0, 10) == 1)
+            {
+                SpawnGameObject(new Tree(new Vector2(i * tileSize, spawnPoints[i].Y)));
+            }
+
+        }
     }
 }
 

@@ -6,7 +6,6 @@ public abstract class Item : GameObject
     public int stack = 1;
     public bool craftable;
     public bool stackable;
-
     public Texture2D texture;
     public Dictionary<Item, int> recipe;
 }

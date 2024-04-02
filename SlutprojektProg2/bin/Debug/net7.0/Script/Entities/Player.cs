@@ -67,8 +67,8 @@ public class Player : Entity, IDrawable
 
         MovePlayer(physicsBody, _playerSpeed);
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Space))//&& physicsBody.airState == AirState.grounded)
-            physicsBody.Jump(physicsBody, 300);
+        if (Raylib.IsKeyPressed(KeyboardKey.Space) && physicsBody.airState == AirState.grounded)
+            physicsBody.Jump(physicsBody, 400);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter))
         {
