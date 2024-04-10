@@ -68,21 +68,39 @@ public class Inventory
 
     public void AddToInventory(Item item)
     {
-        if (itemsInInventory.Contains(item) && item.stackable && item.GetType() == typeof(Item))
-            item.stack++;
-            
-        else
+        if (item.stackable && InventoryContains(item))
+        {
+            foreach (Item existingItem in itemsInInventory)
+            {
+                if (existingItem.Equals(item))
+                {
+                    existingItem.stack++;
+                    return;
+                }
+            }
+        }
+
+        else if (!InventoryContains(item) || !item.stackable)
             itemsInInventory.Add(item);
+
         
         if (itemsInInventory.Count <= 5)
-        {
             inventorySlots[FindFirstEmptySlot()] = new Slot(item, FindFirstEmptySlot());
-        }
+
     }
+
     public void RemoveFromInventory(Item item)
     {
         if (item.GetType() == typeof(Item) && itemsInInventory.Contains(item))
             itemsInInventory.Remove(item);
+    }
+
+    private bool InventoryContains(Item item)
+    {
+        if (itemsInInventory.Any(existingItem => existingItem.Equals(item)))
+            return true;
+
+        return false;
     }
 
     public int FindFirstEmptySlot()
@@ -95,7 +113,7 @@ public class Inventory
             }
             continue;
         }
-        return 5;
+        return -1;
     }
 
     public bool CanCraft(Item item)

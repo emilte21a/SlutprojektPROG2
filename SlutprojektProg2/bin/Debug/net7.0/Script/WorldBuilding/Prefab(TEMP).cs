@@ -24,9 +24,32 @@ public class Tree : Prefab
         renderer.sprite = treeTexture;
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
 
+        position.Y-=renderer.sprite.Height;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
+    }
+}
 
+public class Rock : Prefab
+{
+    private static Texture2D rockTexture;
+    public Rock(Vector2 pos)
+    {
+        this.position = pos;
+        components = new();
+        collider = AddComponent<Collider>();
+        renderer = AddComponent<Renderer>();
+
+        if (rockTexture.Id == 0)
+            rockTexture = Raylib.LoadTexture("Images/rock.png");
+
+        renderer.sprite = rockTexture;
+        rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
+
+        position.Y-=renderer.sprite.Height;
+        rectangle.X = position.X;
+        rectangle.Y = position.Y;
+        collider.boxCollider = rectangle;
     }
 }

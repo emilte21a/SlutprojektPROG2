@@ -41,6 +41,7 @@ public class Player : Entity, IDrawable
         inventory.AddToInventory(new WoodItem());
         inventory.AddToInventory(new WoodItem());
         inventory.AddToInventory(new StoneItem());
+        inventory.AddToInventory(new StickItem());
 
         healthPoints = 100;
         tag = "Player";
@@ -52,7 +53,6 @@ public class Player : Entity, IDrawable
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
 
         position = new Vector2(0, 0);
-        System.Console.WriteLine(WorldGeneration.spawnPoints[100]);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
@@ -67,13 +67,16 @@ public class Player : Entity, IDrawable
 
         MovePlayer(physicsBody, _playerSpeed);
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Space) && physicsBody.airState == AirState.grounded)
+        if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 400);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter))
         {
             position += new Vector2(0, 200);
         }
+
+        if(Raylib.IsKeyPressed(KeyboardKey.H))
+            healthPoints = 100;
 
         inventory.Update();
     }
@@ -85,7 +88,7 @@ public class Player : Entity, IDrawable
 
     private int FallDamage()
     {
-        return (int)physicsBody.velocity.Y > 6 ? (int)physicsBody.velocity.Y : 0;
+        return (int)physicsBody.velocity.Y > 10 ? (int)physicsBody.velocity.Y : 0;
     }
 
     public override void Draw()

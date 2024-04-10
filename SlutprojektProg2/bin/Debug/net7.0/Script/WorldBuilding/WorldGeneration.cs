@@ -1,7 +1,7 @@
 public class WorldGeneration : IDrawable
 {
 
-    private int worldSize = 200; //Blocks
+    private int worldSize = 600; //Blocks
     private int tileSize = 80;
 
     public static List<Tile> tilesInWorld = new List<Tile>();
@@ -15,10 +15,12 @@ public class WorldGeneration : IDrawable
     private int heightMultiplier = 1;
 
     public static Vector2[] spawnPoints;
+    public static string[] tileOccupation;
 
     public WorldGeneration()
     {
         spawnPoints = new Vector2[worldSize];
+        tileOccupation = new string[spawnPoints.Length];
         seed = Random.Shared.Next(-10000, 10000);
     }
 
@@ -32,7 +34,6 @@ public class WorldGeneration : IDrawable
             int height = Raylib.GetImageColor(heightImage, (int)(x * surfaceThreshold), (int)surfaceThreshold).R * heightMultiplier;
             for (int y = -height; y < 0; y++)
             {
-
                 SpawnTile(new BackgroundTile(new Vector2(x * tileSize, y * tileSize)));
 
                 if (Raylib.GetImageColor(noiseImage, x, y * -1).R < caveThreshold)
@@ -40,7 +41,7 @@ public class WorldGeneration : IDrawable
                     if (y == -height)
                     {
                         SpawnTile(new GrassTile(new Vector2(x * tileSize, y * tileSize)));
-                        spawnPoints[x] = new Vector2(x * tileSize, y * tileSize - 6 * tileSize);
+                        spawnPoints[x] = new Vector2(x * tileSize, y * tileSize);
                     }
 
                     else if (y == -height + 1)
@@ -81,11 +82,19 @@ public class WorldGeneration : IDrawable
     {
         for (int i = 0; i < spawnPoints.Length; i++)
         {
-            if (Random.Shared.Next(0, 10) == 1)
+            tileOccupation[i] = "Empty";
+            if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty")
             {
-                SpawnGameObject(new Tree(new Vector2(i * tileSize, spawnPoints[i].Y)));
+                SpawnGameObject(new Tree(new Vector2(i * tileSize - tileSize, spawnPoints[i].Y)));
+                tileOccupation[i] = "Tree";
             }
 
+            else if (Random.Shared.Next(0, 13) == 1 && tileOccupation[i] == "Empty")
+            {
+                SpawnGameObject(new Rock(new Vector2(i * tileSize - tileSize, spawnPoints[i].Y)));
+                tileOccupation[i] = "Rock";
+            }
+            
         }
     }
 }

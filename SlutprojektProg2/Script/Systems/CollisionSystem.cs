@@ -28,7 +28,7 @@ public class CollisionSystem : GameSystem
                 tilesCloseToEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
                 floorCollision = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(tile.rectangle, floorCollider)).ToList();
 
-                #region bestäm senaste riktningen samt om spelaren nuddar marken eller ej
+                #region bestäm senaste riktningen samt om entityn nuddar marken eller ej
                 if (physicsBody.velocity.X > 0) { e.lastDirection.X = 1; }
 
                 else if (physicsBody.velocity.X < 0) { e.lastDirection.X = -1; }

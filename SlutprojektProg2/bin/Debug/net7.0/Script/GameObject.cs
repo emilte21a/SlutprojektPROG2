@@ -19,5 +19,11 @@ public abstract class GameObject
         return null;
     }
 
+    // public T? FindObjectByType<T>() where T : GameObject
+    // {
+    //     
+        
+    // }
+
     public List<Component> components;
 }
