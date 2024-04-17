@@ -9,7 +9,7 @@ public class AudioSystem : GameSystem
 
             if (audioPlayer != null)
             {
-                if (Raylib.IsSoundReady(audioPlayer.audioClip) && Raylib.IsSoundPlaying(audioPlayer.audioClip))
+                if (Raylib.IsSoundReady(audioPlayer.audioClip) && !Raylib.IsSoundPlaying(audioPlayer.audioClip))
                     Raylib.PlaySound(audioPlayer.audioClip);
             }
         }

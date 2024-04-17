@@ -11,13 +11,10 @@ public abstract class Item : GameObject
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
-        {
-            return false; // Return false if obj is null or not an Item instance
-        }
+            return false;
 
-        Item otherItem = (Item)obj; // Cast obj to Item type
+        Item otherItem = (Item)obj;
 
-        // Compare items based on specific properties (e.g., Name and Id)
         return name == otherItem.name && ID == otherItem.ID;
     }
 }

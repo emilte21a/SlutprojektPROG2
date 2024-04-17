@@ -111,20 +111,21 @@ public class Inventory
 
     public void AddToInventory(Item item)
     {
-        itemsInInventory[item] = 1;
-
-        foreach (var kvp in itemsInInventory)
+        if (itemsInInventory.Any(i => item.Equals(i)))
         {
-            if (item.Equals(kvp.Key))
+            foreach (var kvp in itemsInInventory)
             {
-                itemsInInventory[item] = kvp.Value + 1;
+                if (item.Equals(kvp.Key))
+                    itemsInInventory[item] = kvp.Value + 1;
             }
         }
-        // if (itemsInInventory.TryGetValue(item, out int currentAmount))
-        // {
-        // }
 
-        // else
+        else
+            itemsInInventory[item] = 1;
+
+        int count = itemsInInventory.Where(i => item.Equals(i)).ToList().Count;
+
+        System.Console.WriteLine(count);
 
         if (itemsInInventory.Count <= inventoryHotbar.Length)
         {
@@ -196,30 +197,22 @@ public class Inventory
     {
         for (int i = 0; i < itemsInInventory.Count; i++)
         {
-            // Skip placing items into hotbar
             if (i < inventoryHotbar.Length)
-            {
                 continue;
-            }
 
-            // Check if xIndex exceeds the width of the backpack
+
             if (xIndex >= inventoryBackpack.GetLength(0))
             {
-                // Reset xIndex and move to the next row (yIndex) in the backpack
                 xIndex = 0;
                 yIndex++;
 
-                // If yIndex exceeds the height of the backpack, break out of the loop
+
                 if (yIndex >= inventoryBackpack.GetLength(1))
-                {
                     break;
-                }
             }
 
-            // Place the item into the backpack at the current indices
             inventoryBackpack[xIndex, yIndex].item = itemsInInventory.Keys.ElementAt(i);
 
-            // Increment xIndex to move to the next column in the backpack
             xIndex++;
         }
 
