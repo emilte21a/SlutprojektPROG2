@@ -39,21 +39,8 @@ public class Player : Entity, IDrawable
 
         inventory.AddToInventory(new WoodItem());
         inventory.AddToInventory(new WoodItem());
-        inventory.AddToInventory(new WoodItem());
         inventory.AddToInventory(new StoneItem());
-        inventory.AddToInventory(new StickItem());
-
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new WoodItem());
         inventory.AddToInventory(new StoneItem());
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new WoodItem());
-        inventory.AddToInventory(new StoneItem());
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new StickItem());
         inventory.AddToInventory(new StickItem());
         inventory.AddToInventory(new StickItem());
 
@@ -89,7 +76,7 @@ public class Player : Entity, IDrawable
             position += new Vector2(0, 200);
         }
 
-        if(Raylib.IsKeyPressed(KeyboardKey.H))
+        if (Raylib.IsKeyPressed(KeyboardKey.H))
             healthPoints = 100;
 
         inventory.Update();
@@ -112,9 +99,6 @@ public class Player : Entity, IDrawable
 
         else
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
-
-        Raylib.DrawRectangle((int)position.X, (int)position.Y, 10, 10, Color.Orange);
-        Raylib.DrawRectangleRec(new Rectangle(position.X, position.Y + renderer.sprite.Height, renderer.sprite.Width, 2), Color.DarkBlue);
     }
 }
 

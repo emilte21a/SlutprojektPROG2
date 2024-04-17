@@ -1,6 +1,7 @@
 global using Raylib_cs;
 global using System.Numerics;
 global using System.Collections.Generic;
+global using System.Collections.Concurrent;
 
 public class Game
 {
@@ -49,7 +50,7 @@ public class Game
         camera = new()
         {
             Target = new Vector2(0, 0),
-            Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2),
+            Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2 + 60),
             Zoom = 1f
         };
         dayNightSystem = new DayNightSystem();
@@ -99,9 +100,9 @@ public class Game
         parallaxManager.Draw();
         Raylib.BeginMode2D(camera);
         drawables.ForEach(d => d.Draw());
-        entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
+        // entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
-        dayNightSystem.DrawR();
+        dayNightSystem.DrawNightOverlay();
         player.inventory.Draw();
         gUIcontroller.Draw(player.healthPoints);
         Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);

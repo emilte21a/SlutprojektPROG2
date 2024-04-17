@@ -45,7 +45,9 @@ public class CollisionSystem : GameSystem
                 {
                     //Räkna ut spelarens y-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X, e.position.Y + physicsBody.velocity.Y, collider.boxCollider.Width, collider.boxCollider.Height);
-                    if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds))
+                    Rectangle collisionRectangle = Raylib.GetCollisionRec(tile.rectangle, nextBounds);
+
+                    if (collisionRectangle.Width > collisionRectangle.Height)
                     {
                         if (physicsBody.velocity.Y > 0 || e.lastDirection.Y == 1)
                         {

@@ -13,12 +13,17 @@ public class Inventory
 
     bool shouldShowInventory = false;
 
+
+
     public Inventory()
     {
         itemsInInventory = new Dictionary<Item, int>();
         inventoryHotbar = new Slot[5];
-        inventoryBackpack = new Slot[10, 10];
+        inventoryBackpack = new Slot[10, 5];
     }
+
+    int xIndex = 0;
+    int yIndex = 0;
 
     public void Update()
     {
@@ -32,36 +37,10 @@ public class Inventory
         }
 
 
-        for (int i = 0; i < itemsInInventory.Count; i++)
-        {
-            if (i > inventoryHotbar.Length)
-            {
-                int xIndex = 0;
-                int yIndex = 0;
-
-                while (xIndex < inventoryBackpack.GetLength(0))
-                {
-                    inventoryBackpack[xIndex, yIndex].item = itemsInInventory.Keys.ElementAt(i);
-
-                    xIndex++;
-
-                    if (xIndex >= inventoryBackpack.GetLength(0))
-                    {
-
-                        xIndex = 0;
-                        yIndex++;
-
-                        if (yIndex >= inventoryBackpack.GetLength(1))
-                        {
-                            break;
-                        }
-                    }
-                    continue;
-                }
-            }
-        }
-
+        UpdateInventoryBackpack();
     }
+
+
     int itemPos = 0;
     public void Draw()
     {
@@ -72,6 +51,7 @@ public class Inventory
             if (itemPos < inventoryHotbar.Length)
             {
                 Raylib.DrawTexture(_itemChosenTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + CurrentActiveItem() * 58, Game.ScreenHeight - 89, Color.White);
+
                 if (slot.item != null && itemsInInventory.ContainsKey(slot.item))
                 {
                     Raylib.DrawTexture(slot.item.texture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + 58 * slot.index, Game.ScreenHeight - 89, Color.White);
@@ -80,21 +60,23 @@ public class Inventory
 
                 itemPos++;
             }
+
             if (itemPos >= inventoryHotbar.Length)
-            {
                 itemPos = FindFirstEmptySlot();
-            }
+
         }
+
         if (shouldShowInventory)
         {
-            Raylib.DrawRectangle(300, 300, 500, 500, Color.Orange);
             for (int x = 0; x < inventoryBackpack.GetLength(0); x++)
             {
                 for (int y = 0; y < inventoryBackpack.GetLength(1); y++)
                 {
+                    Raylib.DrawRectangle(x * 80 + 295, y * 80 + 90, 60, 60, Color.Orange);
                     if (inventoryBackpack[x, y].item != null)
                     {
-                        Raylib.DrawTexture(inventoryBackpack[x, y].item.texture, x * 50 + 300, y * 50 + 300, Color.White);
+                        Raylib.DrawTexture(inventoryBackpack[x, y].item.texture, x * 80 + 305, y * 80 + 100, Color.White);
+                        Raylib.DrawText($"{itemsInInventory[inventoryBackpack[x, y].item]}", 305 + 80 + 80 * x, 100 + 80 + 80 * y, 10, Color.White);
                     }
                 }
             }
@@ -129,36 +111,43 @@ public class Inventory
 
     public void AddToInventory(Item item)
     {
-        if (item.stackable && InventoryContains(item))
+        itemsInInventory[item] = 1;
+
+        foreach (var kvp in itemsInInventory)
         {
-            for (int i = 0; i < itemsInInventory.Count; i++)
+            if (item.Equals(kvp.Key))
             {
-                if (itemsInInventory.Keys.Equals(item))
-                {
-                    itemsInInventory[item]++;
-                }
+                itemsInInventory[item] = kvp.Value + 1;
             }
         }
+        
+        // if (itemsInInventory.TryGetValue(item, out int currentAmount))
+        // {
+        // }
 
-        else if (!InventoryContains(item) || !item.stackable)
-            itemsInInventory.Add(item, 1);
+        // else
 
         if (itemsInInventory.Count <= inventoryHotbar.Length)
-            inventoryHotbar[FindFirstEmptySlot()] = new Slot(item, FindFirstEmptySlot());
+        {
+            int emptySlotIndex = FindFirstEmptySlot();
+            if (emptySlotIndex != -1)
+                inventoryHotbar[emptySlotIndex] = new Slot(item, emptySlotIndex);
+
+        }
+
+
+    }
+
+    public void CreateNewOrUpdateExisting<TKey, TValue>(
+    IDictionary<TKey, TValue> map, TKey key, TValue value)
+    {
+        map[key] = value;
     }
 
     public void RemoveFromInventory(Item item)
     {
-        if (item.GetType() == typeof(Item) && itemsInInventory.ContainsKey(item))
+        if (itemsInInventory.ContainsKey(item))
             itemsInInventory.Remove(item);
-    }
-
-    private bool InventoryContains(Item item)
-    {
-        if (itemsInInventory.Any(existingItem => existingItem.Equals(item)))
-            return true;
-
-        return false;
     }
 
     public int FindFirstEmptySlot()
@@ -176,14 +165,12 @@ public class Inventory
 
     public bool CanCraft(Item item)
     {
-        for (int i = 0; i < itemsInInventory.Count; i++)
+
+        foreach (KeyValuePair<Item, int> ingredient in item.recipe)
         {
-            foreach (KeyValuePair<Item, int> ingredient in item.recipe)
+            if (!itemsInInventory.ContainsKey(ingredient.Key) || itemsInInventory[ingredient.Key] < ingredient.Value)
             {
-                if (!itemsInInventory.ContainsKey(ingredient.Key) || itemsInInventory[item] < ingredient.Value)
-                {
-                    return false;
-                }
+                return false;
             }
         }
         return true;
@@ -193,21 +180,52 @@ public class Inventory
     {
         if (CanCraft(item))
         {
-            for (int i = 0; i < itemsInInventory.Count; i++)
+            foreach (KeyValuePair<Item, int> ingredient in item.recipe)
             {
-                foreach (KeyValuePair<Item, int> ingredient in item.recipe)
+                itemsInInventory[ingredient.Key] -= ingredient.Value;
+                if (itemsInInventory[ingredient.Key] <= 0)
                 {
-                    itemsInInventory[item] -= ingredient.Value;
-                    if (itemsInInventory[item] <= 0 && inventoryHotbar[i].item != null)
-                    {
-                        inventoryHotbar[i].item = null;
-                        itemsInInventory.Remove(ingredient.Key);
-                    }
-
+                    itemsInInventory.Remove(ingredient.Key);
                 }
             }
+
             AddToInventory(item);
         }
+    }
+
+    private void UpdateInventoryBackpack()
+    {
+        for (int i = 0; i < itemsInInventory.Count; i++)
+        {
+            // Skip placing items into hotbar
+            if (i < inventoryHotbar.Length)
+            {
+                continue;
+            }
+
+            // Check if xIndex exceeds the width of the backpack
+            if (xIndex >= inventoryBackpack.GetLength(0))
+            {
+                // Reset xIndex and move to the next row (yIndex) in the backpack
+                xIndex = 0;
+                yIndex++;
+
+                // If yIndex exceeds the height of the backpack, break out of the loop
+                if (yIndex >= inventoryBackpack.GetLength(1))
+                {
+                    break;
+                }
+            }
+
+            // Place the item into the backpack at the current indices
+            inventoryBackpack[xIndex, yIndex].item = itemsInInventory.Keys.ElementAt(i);
+
+            // Increment xIndex to move to the next column in the backpack
+            xIndex++;
+        }
+
+        xIndex = 0;
+        yIndex = 0;
     }
 }
 

@@ -6,25 +6,34 @@ public abstract class Prefab : GameObject
 
     public Collider collider;
     public Renderer renderer;
+
+    protected static List<Texture2D> textures;
 }
 
 public class Tree : Prefab
 {
-    private static Texture2D treeTexture;
+    private static Texture2D oakTexture;
+    private static Texture2D birchTexture;
     public Tree(Vector2 pos)
     {
+        textures = new();
+        textures.Add(oakTexture);
+        textures.Add(birchTexture);
         this.position = pos;
         components = new();
         collider = AddComponent<Collider>();
         renderer = AddComponent<Renderer>();
 
-        if (treeTexture.Id == 0)
-            treeTexture = Raylib.LoadTexture("Images/tree.png");
+        if (oakTexture.Id == 0)
+            oakTexture = Raylib.LoadTexture("Images/oakTree.png");
 
-        renderer.sprite = treeTexture;
+        if (birchTexture.Id == 0)
+            birchTexture = Raylib.LoadTexture("Images/birchTree.png");
+
+        renderer.sprite = textures[Random.Shared.Next(0, textures.Count)];
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
 
-        position.Y-=renderer.sprite.Height;
+        position.Y -= renderer.sprite.Height;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
@@ -47,7 +56,7 @@ public class Rock : Prefab
         renderer.sprite = rockTexture;
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
 
-        position.Y-=renderer.sprite.Height;
+        position.Y -= renderer.sprite.Height;
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
