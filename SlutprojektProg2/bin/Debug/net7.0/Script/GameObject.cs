@@ -1,6 +1,6 @@
 public abstract class GameObject
 {
-    public string tag;
+    public string tag = "";
 
     public T AddComponent<T>() where T : Component, new()
     {
@@ -18,12 +18,6 @@ public abstract class GameObject
         }
         return null;
     }
-
-    // public T? FindObjectByType<T>() where T : GameObject
-    // {
-    //     
-        
-    // }
 
     public List<Component> components;
 }

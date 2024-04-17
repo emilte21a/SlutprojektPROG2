@@ -43,6 +43,20 @@ public class Player : Entity, IDrawable
         inventory.AddToInventory(new StoneItem());
         inventory.AddToInventory(new StickItem());
 
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new WoodItem());
+        inventory.AddToInventory(new StoneItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new WoodItem());
+        inventory.AddToInventory(new StoneItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new StickItem());
+
         healthPoints = 100;
         tag = "Player";
         playerState = PlayerState.inGame;

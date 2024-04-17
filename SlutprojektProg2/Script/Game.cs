@@ -66,7 +66,7 @@ public class Game
 
     public void Run()
     {
-        SpawnManager.SpawnEntityAt(player, new Vector2(WorldGeneration.spawnPoints[100].X - 80, WorldGeneration.spawnPoints[100].Y - player.collider.boxCollider.Height));
+        SpawnManager.SpawnEntityAt(player, new Vector2(WorldGeneration.spawnPoints[100].X, WorldGeneration.spawnPoints[100].Y - player.collider.boxCollider.Height));
         while (!Raylib.WindowShouldClose())
         {
             Update();
@@ -101,10 +101,10 @@ public class Game
         drawables.ForEach(d => d.Draw());
         entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
+        dayNightSystem.DrawR();
         player.inventory.Draw();
         gUIcontroller.Draw(player.healthPoints);
         Raylib.DrawText($"Pos: {player.position}", 20, 60, 30, Color.White);
-        //Raylib.DrawText($"{player.healthPoints}", ScreenWidth - 100, 60, 30, Color.White);
         Raylib.DrawText($"{player.lastDirection}", ScreenWidth - 100, 120, 30, Color.White);
         Raylib.DrawText($"{InputManager.GetAxisX()}", 20, 90, 30, Color.White);
         Raylib.DrawText($"Vel: {player.physicsBody.velocity}", 20, 120, 30, Color.White);

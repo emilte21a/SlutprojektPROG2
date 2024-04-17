@@ -22,7 +22,7 @@ public class ParallaxManager
     public ParallaxManager()
     {
         parallaxLayers = new();
-        parallaxLayers.Add(new ParallaxLayer(layer1) { parallaxFactor = 35, color = new Color(255, 255, 255, 200) });
+        parallaxLayers.Add(new ParallaxLayer(layer1) { parallaxFactor = 35, color = Color.White });
         parallaxLayers.Add(new ParallaxLayer(layer2) { parallaxFactor = 50, color = Color.White });
     }
     public void Update(Player player)

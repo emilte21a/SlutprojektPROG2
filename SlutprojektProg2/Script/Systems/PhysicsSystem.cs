@@ -6,6 +6,7 @@ public class PhysicsSystem : GameSystem
         foreach (Entity e in Game.entities)
         {
             PhysicsBody? physicsBody = e.GetComponent<PhysicsBody>();
+            
             if (physicsBody != null && physicsBody.UseGravity == PhysicsBody.Gravity.enabled)
             {
                 //Lägg till acceleration

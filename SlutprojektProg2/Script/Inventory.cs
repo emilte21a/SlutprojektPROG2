@@ -2,22 +2,64 @@
 
 public class Inventory
 {
-    public List<Item> itemsInInventory;
+    public Dictionary<Item, int> itemsInInventory;
 
-    private Slot[] inventorySlots;
+    private Slot[] inventoryHotbar;
+    private Slot[,] inventoryBackpack;
 
     private Texture2D _hotbarTexture = Raylib.LoadTexture("Images/Hotbar.png");
 
     private Texture2D _itemChosenTexture = Raylib.LoadTexture("Images/itemChosen.png");
 
+    bool shouldShowInventory = false;
+
     public Inventory()
     {
-        itemsInInventory = new List<Item>();
-        inventorySlots = new Slot[5];
+        itemsInInventory = new Dictionary<Item, int>();
+        inventoryHotbar = new Slot[5];
+        inventoryBackpack = new Slot[10, 10];
     }
 
     public void Update()
     {
+        if (Raylib.IsKeyPressed(KeyboardKey.Tab) && !shouldShowInventory)
+        {
+            shouldShowInventory = true;
+        }
+        else if (Raylib.IsKeyPressed(KeyboardKey.Tab) && shouldShowInventory)
+        {
+            shouldShowInventory = false;
+        }
+
+
+        for (int i = 0; i < itemsInInventory.Count; i++)
+        {
+            if (i > inventoryHotbar.Length)
+            {
+                int xIndex = 0;
+                int yIndex = 0;
+
+                while (xIndex < inventoryBackpack.GetLength(0))
+                {
+                    inventoryBackpack[xIndex, yIndex].item = itemsInInventory.Keys.ElementAt(i);
+
+                    xIndex++;
+
+                    if (xIndex >= inventoryBackpack.GetLength(0))
+                    {
+
+                        xIndex = 0;
+                        yIndex++;
+
+                        if (yIndex >= inventoryBackpack.GetLength(1))
+                        {
+                            break;
+                        }
+                    }
+                    continue;
+                }
+            }
+        }
 
     }
     int itemPos = 0;
@@ -25,22 +67,36 @@ public class Inventory
     {
         Raylib.DrawTexture(_hotbarTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2, Game.ScreenHeight - 100, Color.White);
 
-        foreach (Slot slot in inventorySlots)
+        foreach (Slot slot in inventoryHotbar)
         {
-            if (itemPos < inventorySlots.Length)
+            if (itemPos < inventoryHotbar.Length)
             {
                 Raylib.DrawTexture(_itemChosenTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + CurrentActiveItem() * 58, Game.ScreenHeight - 89, Color.White);
-                if (slot.item != null && itemsInInventory.Contains(slot.item))
+                if (slot.item != null && itemsInInventory.ContainsKey(slot.item))
                 {
                     Raylib.DrawTexture(slot.item.texture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + 58 * slot.index, Game.ScreenHeight - 89, Color.White);
-                    Raylib.DrawText($"{slot.item.stack}", Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 54 + 58 * slot.index, Game.ScreenHeight - 64, 10, Color.White);
+                    Raylib.DrawText($"{itemsInInventory[slot.item]}", Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 54 + 58 * slot.index, Game.ScreenHeight - 64, 10, Color.White);
                 }
 
                 itemPos++;
             }
-            if (itemPos >= inventorySlots.Length)
+            if (itemPos >= inventoryHotbar.Length)
             {
                 itemPos = FindFirstEmptySlot();
+            }
+        }
+        if (shouldShowInventory)
+        {
+            Raylib.DrawRectangle(300, 300, 500, 500, Color.Orange);
+            for (int x = 0; x < inventoryBackpack.GetLength(0); x++)
+            {
+                for (int y = 0; y < inventoryBackpack.GetLength(1); y++)
+                {
+                    if (inventoryBackpack[x, y].item != null)
+                    {
+                        Raylib.DrawTexture(inventoryBackpack[x, y].item.texture, x * 50 + 300, y * 50 + 300, Color.White);
+                    }
+                }
             }
         }
     }
@@ -48,21 +104,26 @@ public class Inventory
     int activeitem;
     public int CurrentActiveItem()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.One))
-            activeitem = 0;
+        KeyboardKey keyPressed = (KeyboardKey)Raylib.GetKeyPressed();
 
-        else if (Raylib.IsKeyPressed(KeyboardKey.Two))
-            activeitem = 1;
-
-        else if (Raylib.IsKeyPressed(KeyboardKey.Three))
-            activeitem = 2;
-
-        else if (Raylib.IsKeyPressed(KeyboardKey.Four))
-            activeitem = 3;
-
-        else if (Raylib.IsKeyPressed(KeyboardKey.Five))
-            activeitem = 4;
-
+        switch (keyPressed)
+        {
+            case KeyboardKey.One:
+                activeitem = 0;
+                break;
+            case KeyboardKey.Two:
+                activeitem = 1;
+                break;
+            case KeyboardKey.Three:
+                activeitem = 2;
+                break;
+            case KeyboardKey.Four:
+                activeitem = 3;
+                break;
+            case KeyboardKey.Five:
+                activeitem = 4;
+                break;
+        }
         return activeitem;
     }
 
@@ -70,28 +131,25 @@ public class Inventory
     {
         if (item.stackable && InventoryContains(item))
         {
-            foreach (Item existingItem in itemsInInventory)
+            for (int i = 0; i < itemsInInventory.Count; i++)
             {
-                if (existingItem.Equals(item))
+                if (itemsInInventory.Keys.Equals(item))
                 {
-                    existingItem.stack++;
-                    return;
+                    itemsInInventory[item]++;
                 }
             }
         }
 
         else if (!InventoryContains(item) || !item.stackable)
-            itemsInInventory.Add(item);
+            itemsInInventory.Add(item, 1);
 
-        
-        if (itemsInInventory.Count <= 5)
-            inventorySlots[FindFirstEmptySlot()] = new Slot(item, FindFirstEmptySlot());
-
+        if (itemsInInventory.Count <= inventoryHotbar.Length)
+            inventoryHotbar[FindFirstEmptySlot()] = new Slot(item, FindFirstEmptySlot());
     }
 
     public void RemoveFromInventory(Item item)
     {
-        if (item.GetType() == typeof(Item) && itemsInInventory.Contains(item))
+        if (item.GetType() == typeof(Item) && itemsInInventory.ContainsKey(item))
             itemsInInventory.Remove(item);
     }
 
@@ -105,9 +163,9 @@ public class Inventory
 
     public int FindFirstEmptySlot()
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        for (int i = 0; i < inventoryHotbar.Length; i++)
         {
-            if (inventorySlots[i].item == null)
+            if (inventoryHotbar[i].item == null)
             {
                 return i;
             }
@@ -122,7 +180,7 @@ public class Inventory
         {
             foreach (KeyValuePair<Item, int> ingredient in item.recipe)
             {
-                if (!itemsInInventory.Contains(ingredient.Key) || itemsInInventory[i].stack < ingredient.Value)
+                if (!itemsInInventory.ContainsKey(ingredient.Key) || itemsInInventory[item] < ingredient.Value)
                 {
                     return false;
                 }
@@ -139,10 +197,10 @@ public class Inventory
             {
                 foreach (KeyValuePair<Item, int> ingredient in item.recipe)
                 {
-                    itemsInInventory[i].stack -= ingredient.Value;
-                    if (itemsInInventory[i].stack <= 0 && inventorySlots[i].item != null)
+                    itemsInInventory[item] -= ingredient.Value;
+                    if (itemsInInventory[item] <= 0 && inventoryHotbar[i].item != null)
                     {
-                        inventorySlots[i].item = null;
+                        inventoryHotbar[i].item = null;
                         itemsInInventory.Remove(ingredient.Key);
                     }
 
