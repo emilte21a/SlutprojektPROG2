@@ -6,11 +6,11 @@ public class PhysicsSystem : GameSystem
         foreach (Entity e in Game.entities)
         {
             PhysicsBody? physicsBody = e.GetComponent<PhysicsBody>();
-            
+
             if (physicsBody != null && physicsBody.UseGravity == PhysicsBody.Gravity.enabled)
             {
                 //Lägg till acceleration
-                physicsBody.acceleration += physicsBody.gravity * Raylib.GetFrameTime();
+                physicsBody.acceleration += physicsBody.gravity * Raylib.GetFrameTime() * 4;
 
                 if (physicsBody.airState != AirState.grounded)
                 {

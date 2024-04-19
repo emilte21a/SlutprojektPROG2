@@ -3,9 +3,10 @@ public abstract class Tile : GameObject
     public Texture2D texture;
     public Vector2 position { get; set; }
     public Rectangle rectangle;
+    public int lightLevel = 100;
 }
 
-public class GrassTile : Tile
+public sealed class GrassTile : Tile
 {
     static Texture2D grassTexture;
     public GrassTile(Vector2 pos)
@@ -23,7 +24,7 @@ public class GrassTile : Tile
     }
 }
 
-public class StoneTile : Tile
+public sealed class StoneTile : Tile
 {
     static Texture2D stoneTexture;
 
@@ -42,7 +43,7 @@ public class StoneTile : Tile
     }
 }
 
-public class DirtTile : Tile
+public sealed class DirtTile : Tile
 {
     static Texture2D dirtTexture;
 
@@ -61,7 +62,7 @@ public class DirtTile : Tile
     }
 }
 
-public class BackgroundTile : Tile
+public sealed class BackgroundTile : Tile
 {
     static Texture2D backgroundTexture;
 

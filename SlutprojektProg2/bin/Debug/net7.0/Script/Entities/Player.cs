@@ -1,4 +1,4 @@
-public class Player : Entity, IDrawable
+public sealed class Player : Entity, IDrawable
 {
     public Camera2D camera { get; init; }
 
@@ -17,7 +17,9 @@ public class Player : Entity, IDrawable
 
     public Inventory inventory;
 
-    private float _playerSpeed = 150;
+    public PlayerAction playerAction;
+
+    private float _playerSpeed = 2.5f;
 
     public int healthPoints;
 
@@ -35,14 +37,13 @@ public class Player : Entity, IDrawable
         audioPlayer = AddComponent<AudioPlayer>();
         animator = AddComponent<Animator>();
         inventory = new Inventory();
+        playerAction = new PlayerAction();
         #endregion
 
-        inventory.AddToInventory(new WoodItem());
-        inventory.AddToInventory(new WoodItem());
-        inventory.AddToInventory(new StoneItem());
-        inventory.AddToInventory(new StoneItem());
-        inventory.AddToInventory(new StickItem());
-        inventory.AddToInventory(new StickItem());
+        inventory.AddToInventory(new WoodItem(), 2);
+        inventory.AddToInventory(new WoodItem(), 2);
+        inventory.AddToInventory(new StoneItem(), 9);
+        inventory.AddToInventory(new StickItem(), 4);
 
         healthPoints = 100;
         tag = "Player";
@@ -55,8 +56,6 @@ public class Player : Entity, IDrawable
 
         position = new Vector2(0, 0);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
-        rectangle.X = position.X;
-        rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
     }
 
@@ -68,8 +67,13 @@ public class Player : Entity, IDrawable
 
         MovePlayer(physicsBody, _playerSpeed);
 
+        playerAction.origin = position;
+
+        if (Raylib.IsKeyPressed(KeyboardKey.F))
+            playerAction.OnClick(position, inventory.currentActiveItem);
+
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
-            physicsBody.Jump(physicsBody, 400);
+            physicsBody.Jump(physicsBody, 7);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Enter))
         {
@@ -84,7 +88,7 @@ public class Player : Entity, IDrawable
 
     public void MovePlayer(PhysicsBody physicsBody, float speed)
     {
-        physicsBody.velocity.X = Raymath.Clamp(InputManager.GetAxisX() * speed * Raylib.GetFrameTime(), -2f, 2f);
+        physicsBody.velocity.X = Raymath.Clamp(InputManager.GetAxisX() * speed, -5f, 5f);
     }
 
     private int FallDamage()
@@ -99,6 +103,8 @@ public class Player : Entity, IDrawable
 
         else
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
+
+        Raylib.DrawRectangleRec(playerAction.handRectangle, Color.Red);
     }
 }
 

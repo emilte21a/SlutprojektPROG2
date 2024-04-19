@@ -3,14 +3,12 @@ public abstract class Prefab : GameObject
 {
     public Vector2 position;
     public Rectangle rectangle;
-
     public Collider collider;
     public Renderer renderer;
-
     protected static List<Texture2D> textures;
 }
 
-public class Tree : Prefab
+public sealed class Tree : Prefab
 {
     private static Texture2D oakTexture;
     private static Texture2D birchTexture;
@@ -40,7 +38,7 @@ public class Tree : Prefab
     }
 }
 
-public class Rock : Prefab
+public sealed class Rock : Prefab
 {
     private static Texture2D rockTexture;
     public Rock(Vector2 pos)
@@ -60,5 +58,14 @@ public class Rock : Prefab
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
+    }
+}
+
+public sealed class Krukväxt : Prefab
+{
+    public Krukväxt(Vector2 pos)
+    {
+        this.position = pos;
+        
     }
 }

@@ -1,5 +1,3 @@
-
-
 using System.Globalization;
 
 public class DayNightSystem
@@ -18,8 +16,12 @@ public class DayNightSystem
 
     private float _rotation = 0f;
 
-    private int _timePerHour = 3;
+    private int _timePerHour = 10;
 
+    public DayNightSystem()
+    {
+        currentTime = 6;
+    }
 
     private int _overlayAlpha;
 
@@ -34,18 +36,18 @@ public class DayNightSystem
 
         _rotation = currentTime * 15 - 90;
 
-        nightColor.A = (byte)Raymath.Clamp((float)Calculate(currentTime), 0, 255);
-        _overlayAlpha = (int)Raymath.Clamp((float)Calculate(currentTime), 0, 180);
+        nightColor.A = (byte)Raymath.Clamp((float)CalculateRotation(currentTime), 0, 255);
+        _overlayAlpha = (int)Raymath.Clamp((float)CalculateRotation(currentTime), 0, 180);
     }
 
     public void Draw()
     {
         Raylib.DrawRectangle(0, 0, Game.ScreenWidth, Game.ScreenHeight, dayColor);
         Raylib.DrawRectangleRec(skyRectangle, nightColor);
-        DrawCircle();
+        DrawCelestialBodies();
     }
 
-    private void DrawCircle()
+    private void DrawCelestialBodies()
     {
         Raylib.DrawTexturePro(sunSprite,
             new Rectangle(0, 0, sunSprite.Width, sunSprite.Height), // Source rectangle (whole texture)
@@ -62,7 +64,7 @@ public class DayNightSystem
             Color.White);
     }
 
-    public static double Calculate(float x)
+    public static double CalculateRotation(float x)
     {
         return -180 * Math.Cos((x - 12) * Math.PI / 12);
     }

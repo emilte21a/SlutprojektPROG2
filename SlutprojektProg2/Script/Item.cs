@@ -6,8 +6,11 @@ public abstract class Item : GameObject
     public bool craftable;
     public bool stackable;
     public Texture2D texture;
+    public int itemDamage;
+    public bool usable;
     public Dictionary<Item, int> recipe;
 
+    //Hitta items av samma typ
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -19,7 +22,7 @@ public abstract class Item : GameObject
     }
 }
 
-public class StoneItem : Item
+public sealed class StoneItem : Item
 {
     static Texture2D stoneTexture;
     public StoneItem()
@@ -28,6 +31,7 @@ public class StoneItem : Item
         ID = 0;
         craftable = false;
         stackable = true;
+        usable = false;
         if (stoneTexture.Id == 0)
             stoneTexture = Raylib.LoadTexture("Images/rockTexture.png");
 
@@ -35,7 +39,7 @@ public class StoneItem : Item
     }
 }
 
-public class WoodItem : Item
+public sealed class WoodItem : Item
 {
     static Texture2D woodTexture;
     public WoodItem()
@@ -44,6 +48,7 @@ public class WoodItem : Item
         ID = 1;
         craftable = false;
         stackable = true;
+        usable = false;
 
         if (woodTexture.Id == 0)
             woodTexture = Raylib.LoadTexture("Images/woodTexture.png");
@@ -52,7 +57,7 @@ public class WoodItem : Item
     }
 }
 
-public class StickItem : Item
+public sealed class StickItem : Item
 {
     static Texture2D stickTexture;
     public StickItem()
@@ -61,6 +66,7 @@ public class StickItem : Item
         ID = 2;
         craftable = true;
         stackable = true;
+        usable = false;
 
         if (stickTexture.Id == 0)
             stickTexture = Raylib.LoadTexture("Images/stickTexture.png");
@@ -71,7 +77,7 @@ public class StickItem : Item
     }
 }
 
-public class WoodPickaxe : Item
+public sealed class WoodPickaxe : Item
 {
     static Texture2D woodPickaxeTexture;
     public WoodPickaxe()
@@ -80,6 +86,8 @@ public class WoodPickaxe : Item
         ID = 3;
         stackable = true;
         craftable = false;
+        usable = false;
+        itemDamage = 10;
 
         if (woodPickaxeTexture.Id == 0)
             woodPickaxeTexture = Raylib.LoadTexture("Images/woodenPickaxeTexture.png");

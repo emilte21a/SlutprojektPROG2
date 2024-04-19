@@ -23,11 +23,9 @@ public class PhysicsBody : Component
         disabled
     }
 
-
-
     public void Jump(PhysicsBody physicsBody, float jumpForce)
     {
-        physicsBody.velocity.Y = -jumpForce * Raylib.GetFrameTime();
+        physicsBody.velocity.Y = -jumpForce;
     }
 }
 

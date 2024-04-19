@@ -1,7 +1,9 @@
+using System.Security.Cryptography.X509Certificates;
+
 public class WorldGeneration : IDrawable
 {
 
-    private int _worldSize = 300; 
+    private int _worldSize = 300;
     private int _tileSize = 80;
 
     public static List<Tile> tilesInWorld = new List<Tile>();
@@ -16,11 +18,13 @@ public class WorldGeneration : IDrawable
 
     public static Vector2[] spawnPoints;
     public static string[] tileOccupation;
+    public Tile[,] tilemap;
 
     public WorldGeneration()
     {
         spawnPoints = new Vector2[_worldSize];
         tileOccupation = new string[spawnPoints.Length];
+        tilemap = new Tile[_worldSize, _worldSize];
         _seed = Random.Shared.Next(-10000, 10000);
     }
 
@@ -40,15 +44,28 @@ public class WorldGeneration : IDrawable
                 {
                     if (y == -height)
                     {
-                        SpawnTile(new GrassTile(new Vector2(x * _tileSize, y * _tileSize)));
+                        GrassTile grassTile = new GrassTile(new Vector2(x * _tileSize, y * _tileSize));
+                        SpawnTile(grassTile);
                         spawnPoints[x] = new Vector2(x * _tileSize, y * _tileSize);
+                        tilemap[x, -y] = grassTile;
+                        grassTile.lightLevel = 0;
                     }
 
                     else if (y == -height + 1)
-                        SpawnTile(new DirtTile(new Vector2(x * _tileSize, y * _tileSize)));
+                    {
+                        DirtTile dirtTile = new DirtTile(new Vector2(x * _tileSize, y * _tileSize));
+                        SpawnTile(dirtTile);
+                        tilemap[x, -y] = dirtTile;
+                        dirtTile.lightLevel = -y / 3;
+                    }
 
                     else
-                        SpawnTile(new StoneTile(new Vector2(x * _tileSize, y * _tileSize)));
+                    {
+                        StoneTile stoneTile = new StoneTile(new Vector2(x * _tileSize, y * _tileSize));
+                        SpawnTile(stoneTile);
+                        tilemap[x, -y] = stoneTile;
+                        stoneTile.lightLevel = -y;
+                    }
                 }
             }
         }
@@ -73,9 +90,18 @@ public class WorldGeneration : IDrawable
 
     public void Draw()
     {
-        //backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
+        backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
         tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
         prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
+    }
+
+    public Tile GetTileAt(Vector2 position)
+    {
+        if (position.X / _tileSize >= 0 && position.X / _tileSize <= tilemap.GetLength(0) && position.Y / _tileSize >= 0 && position.Y / _tileSize <= tilemap.GetLength(1))
+        {
+            return tilemap[(int)position.X / _tileSize, (int)position.Y / _tileSize];
+        }
+        return null;
     }
 
     public void GeneratePrefabs()

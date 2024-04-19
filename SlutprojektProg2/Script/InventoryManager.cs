@@ -11,9 +11,9 @@ public class Inventory
 
     private Texture2D _itemChosenTexture = Raylib.LoadTexture("Images/itemChosen.png");
 
-    bool shouldShowInventory = false;
+    private bool _shouldShowInventory = false;
 
-
+    public Item currentActiveItem;
 
     public Inventory()
     {
@@ -27,17 +27,15 @@ public class Inventory
 
     public void Update()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Tab) && !shouldShowInventory)
-        {
-            shouldShowInventory = true;
-        }
-        else if (Raylib.IsKeyPressed(KeyboardKey.Tab) && shouldShowInventory)
-        {
-            shouldShowInventory = false;
-        }
+        if (Raylib.IsKeyPressed(KeyboardKey.Tab) && !_shouldShowInventory)
+            _shouldShowInventory = true;
 
+        else if (Raylib.IsKeyPressed(KeyboardKey.Tab) && _shouldShowInventory)
+            _shouldShowInventory = false;
 
         UpdateInventoryBackpack();
+
+        currentActiveItem = inventoryHotbar[CurrentItemIndex()].item;
     }
 
 
@@ -50,7 +48,7 @@ public class Inventory
         {
             if (itemPos < inventoryHotbar.Length)
             {
-                Raylib.DrawTexture(_itemChosenTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + CurrentActiveItem() * 58, Game.ScreenHeight - 89, Color.White);
+                Raylib.DrawTexture(_itemChosenTexture, Game.ScreenWidth / 2 - _hotbarTexture.Width / 2 + 11 + CurrentItemIndex() * 58, Game.ScreenHeight - 89, Color.White);
 
                 if (slot.item != null && itemsInInventory.ContainsKey(slot.item))
                 {
@@ -66,7 +64,7 @@ public class Inventory
 
         }
 
-        if (shouldShowInventory)
+        if (_shouldShowInventory)
         {
             for (int x = 0; x < inventoryBackpack.GetLength(0); x++)
             {
@@ -83,44 +81,49 @@ public class Inventory
         }
     }
 
-    int activeitem;
-    public int CurrentActiveItem()
+    int activeitemIndex;
+    public int CurrentItemIndex()
     {
         KeyboardKey keyPressed = (KeyboardKey)Raylib.GetKeyPressed();
 
         switch (keyPressed)
         {
             case KeyboardKey.One:
-                activeitem = 0;
+                activeitemIndex = 0;
                 break;
             case KeyboardKey.Two:
-                activeitem = 1;
+                activeitemIndex = 1;
                 break;
             case KeyboardKey.Three:
-                activeitem = 2;
+                activeitemIndex = 2;
                 break;
             case KeyboardKey.Four:
-                activeitem = 3;
+                activeitemIndex = 3;
                 break;
             case KeyboardKey.Five:
-                activeitem = 4;
+                activeitemIndex = 4;
                 break;
         }
-        return activeitem;
+        return activeitemIndex;
     }
 
-    public void AddToInventory(Item item)
+    public void AddToInventory(Item item, int quantity)
     {
-        if (itemsInInventory.Any(i => item.Equals(i)))
+        // bool x = itemsInInventory.Keys.Any(k => k.Equals(item));
+
+        itemsInInventory[item] = 0;
+
+        foreach (var kvp in itemsInInventory)
         {
-            foreach (var kvp in itemsInInventory)
+            if (item.Equals(kvp.Key))
             {
-                if (item.Equals(kvp.Key))
-                    itemsInInventory[item] = kvp.Value + 1;
+                itemsInInventory[kvp.Key] += quantity;
             }
         }
-        else
-            itemsInInventory[item] = 1;
+
+        // if (itemsInInventory.ContainsKey(item))
+        //     itemsInInventory[item] += quantity;
+
 
         if (itemsInInventory.Count <= inventoryHotbar.Length)
         {
@@ -129,8 +132,6 @@ public class Inventory
                 inventoryHotbar[emptySlotIndex] = new Slot(item, emptySlotIndex);
 
         }
-
-
     }
 
     public void CreateNewOrUpdateExisting<TKey, TValue>(
@@ -184,7 +185,7 @@ public class Inventory
                 }
             }
 
-            AddToInventory(item);
+            AddToInventory(item, 1);
         }
     }
 

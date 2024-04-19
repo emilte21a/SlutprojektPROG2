@@ -19,6 +19,10 @@ public class ParallaxManager
     Texture2D layer1 = Raylib.LoadTexture("Images/mountains.png");
     Texture2D layer2 = Raylib.LoadTexture("Images/parallaxbackground.png");
 
+    Texture2D cloudsTexture = Raylib.LoadTexture("Images/clouds.png");
+    float scroll = 0;
+
+
     public ParallaxManager()
     {
         parallaxLayers = new();
@@ -27,6 +31,10 @@ public class ParallaxManager
     }
     public void Update(Player player)
     {
+        scroll += 0.2f;
+
+        if (scroll >= cloudsTexture.Width) scroll = 1;
+
         foreach (var p in parallaxLayers)
         {
             p.position.X = 0;
@@ -34,11 +42,13 @@ public class ParallaxManager
             p.position.Y = Raymath.Lerp(p.position.Y, p.parallaxFactor * 10, 0.5f) + 2 * p.parallaxFactor - 200;
         }
 
+
     }
 
     public void Draw()
     {
         parallaxLayers.ForEach(p => Raylib.DrawTextureRec(p.texture, p.rectangle, p.position, p.color));
+        Raylib.DrawTextureRec(cloudsTexture, new Rectangle(scroll, 0, cloudsTexture.Width * 10, cloudsTexture.Height), new Vector2(0, 0), Color.White);
     }
 
 }
