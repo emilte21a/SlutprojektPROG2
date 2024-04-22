@@ -5,6 +5,7 @@ public abstract class Entity : GameObject
     protected Rectangle rectangle;
 
     public Vector2 lastDirection;
+
     public Vector2 position
     {
         get => new Vector2(rectangle.X, rectangle.Y);

@@ -9,14 +9,14 @@ public class DayNightSystem
     Rectangle skyRectangle = new Rectangle(0, 0, Game.ScreenWidth, Game.ScreenHeight);
 
     Color dayColor = new Color(135, 206, 235, 255);
-    Color nightColor = new Color(0, 17, 41, 255);
+    Color nightColor = new Color(0, 8, 20, 255);
 
     Texture2D sunSprite = Raylib.LoadTexture("Images/sunSprite.png");
     Texture2D moonSprite = Raylib.LoadTexture("Images/moonSprite.png");
 
     private float _rotation = 0f;
 
-    private int _timePerHour = 10;
+    private int _timePerHour = 1;
 
     public DayNightSystem()
     {

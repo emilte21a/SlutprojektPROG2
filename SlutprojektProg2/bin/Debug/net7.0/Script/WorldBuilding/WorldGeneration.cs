@@ -3,7 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 public class WorldGeneration : IDrawable
 {
 
-    private int _worldSize = 300;
+    private int _worldSize = 350;
     private int _tileSize = 80;
 
     public static List<Tile> tilesInWorld = new List<Tile>();
@@ -36,37 +36,39 @@ public class WorldGeneration : IDrawable
         for (int x = 0; x < noiseImage.Width; x++)
         {
             int height = Raylib.GetImageColor(heightImage, (int)(x * _surfaceThreshold), (int)_surfaceThreshold).R * _heightMultiplier;
-            for (int y = -height; y < 0; y++)
+            for (int y = height; y < _worldSize; y++)
             {
                 SpawnTile(new BackgroundTile(new Vector2(x * _tileSize, y * _tileSize)));
 
-                if (Raylib.GetImageColor(noiseImage, x, y * -1).R < _caveThreshold)
+                if (Raylib.GetImageColor(noiseImage, x, y).R < _caveThreshold)
                 {
-                    if (y == -height)
+                    if (y == height)
                     {
                         GrassTile grassTile = new GrassTile(new Vector2(x * _tileSize, y * _tileSize));
                         SpawnTile(grassTile);
                         spawnPoints[x] = new Vector2(x * _tileSize, y * _tileSize);
-                        tilemap[x, -y] = grassTile;
+                        tilemap[x, y] = grassTile;
                         grassTile.lightLevel = 0;
                     }
 
-                    else if (y == -height + 1)
+                    else if (y == height + 1)
                     {
                         DirtTile dirtTile = new DirtTile(new Vector2(x * _tileSize, y * _tileSize));
                         SpawnTile(dirtTile);
-                        tilemap[x, -y] = dirtTile;
-                        dirtTile.lightLevel = -y / 3;
+                        tilemap[x, y] = dirtTile;
+                        dirtTile.lightLevel = y / 3;
                     }
 
                     else
                     {
                         StoneTile stoneTile = new StoneTile(new Vector2(x * _tileSize, y * _tileSize));
                         SpawnTile(stoneTile);
-                        tilemap[x, -y] = stoneTile;
-                        stoneTile.lightLevel = -y;
+                        tilemap[x, y] = stoneTile;
+                        stoneTile.lightLevel = y;
                     }
                 }
+                else
+                    tilemap[x, y] = null;
             }
         }
 
@@ -90,7 +92,7 @@ public class WorldGeneration : IDrawable
 
     public void Draw()
     {
-        backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
+        // backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
         tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
         prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
     }
@@ -109,13 +111,13 @@ public class WorldGeneration : IDrawable
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             tileOccupation[i] = "Empty";
-            if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty")
+            if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty" && spawnPoints[i].Y != 0)
             {
                 SpawnGameObject(new Tree(new Vector2(i * _tileSize - _tileSize, spawnPoints[i].Y)));
                 tileOccupation[i] = "Tree";
             }
 
-            else if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty")
+            else if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty" && spawnPoints[i].Y != 0)
             {
                 SpawnGameObject(new Rock(new Vector2(i * _tileSize, spawnPoints[i].Y)));
                 tileOccupation[i] = "Rock";

@@ -26,7 +26,6 @@ public class Game
     public static List<Entity> entities;
     public static readonly List<GameObject> gameObjects;
 
-
     public Game()
     {
         Raylib.InitWindow(ScreenWidth, ScreenHeight, "game");
@@ -34,7 +33,7 @@ public class Game
         Raylib.InitAudioDevice();
 
         InitializeInstances();
-
+        lightingSystem.InstantiateLightMap(worldGeneration.tilemap);
         drawables = new List<IDrawable>();
         drawables.Add(worldGeneration);
         drawables.Add(player);
@@ -64,7 +63,7 @@ public class Game
         worldGeneration.GenerateTiles();
         worldGeneration.GeneratePrefabs();
 
-        lightingSystem.InstantiateLightMap(worldGeneration.tilemap);
+
 
         entities = new();
         entities.Add(player);
@@ -94,18 +93,19 @@ public class Game
         player.Update(); //Spelaren
         gameSystems[1].Update(); //Kollisioner
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.6f);
-        parallaxManager.Update(player);
-        dayNightSystem.Update();
+        // parallaxManager.Update(player);
+        // dayNightSystem.Update();
     }
 
     private void Draw()
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.SkyBlue);
-        dayNightSystem.Draw();
-        parallaxManager.Draw();
+        //dayNightSystem.Draw();
+        //parallaxManager.Draw();
         Raylib.BeginMode2D(camera);
         drawables.ForEach(d => d.Draw());
+        Raylib.DrawTextureEx(lightingSystem.lightMapTexture, new Vector2(0, 0), 0, 80, Color.White);
         // entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
         dayNightSystem.DrawNightOverlay();
@@ -119,7 +119,6 @@ public class Game
         Raylib.DrawText($"{player.physicsBody.airState}", 20, 180, 30, Color.White);
         Raylib.DrawText($"{camera.Zoom}", 20, 210, 30, Color.White);
         Raylib.DrawText($"Time: {dayNightSystem.currentTime}", 20, 240, 30, Color.White);
-        Raylib.DrawTexture(lightingSystem.lightMapTexture, 300, 300, Color.White);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
     }
