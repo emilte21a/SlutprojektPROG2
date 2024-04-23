@@ -68,8 +68,8 @@ C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\I
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\birchTree.png
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\oakTree.png
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\moonSprite.png
-C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\InventoryManager.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\ParallaxManager.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\PlayerAction.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\LightingSystem.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\ItemHandler.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory.cs

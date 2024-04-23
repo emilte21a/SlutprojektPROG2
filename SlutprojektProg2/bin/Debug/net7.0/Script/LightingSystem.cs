@@ -55,7 +55,7 @@ public class LightingSystem
     {
         InitializeLightmap(tileMap);
         _lightMapImage = CreateLightMapImage();
-        Raylib.ImageBlurGaussian(ref _lightMapImage, 5);
+        Raylib.ImageResize(ref _lightMapImage, 28000, 28000);
         lightMapTexture = Raylib.LoadTextureFromImage(_lightMapImage);
         Raylib.UnloadImage(_lightMapImage);
     }

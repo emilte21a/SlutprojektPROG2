@@ -44,6 +44,7 @@ public sealed class Player : Entity, IDrawable
         inventory.AddToInventory(new WoodItem(), 2);
         inventory.AddToInventory(new StoneItem(), 9);
         inventory.AddToInventory(new StickItem(), 4);
+        inventory.AddToInventory(new WoodPickaxe(), 1);
 
         healthPoints = 100;
         tag = "Player";
@@ -69,7 +70,7 @@ public sealed class Player : Entity, IDrawable
 
         playerAction.origin = position;
 
-        if (Raylib.IsKeyPressed(KeyboardKey.F))
+        if (Raylib.IsKeyDown(KeyboardKey.F))
             playerAction.OnClick(position, inventory.currentActiveItem);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
@@ -84,6 +85,7 @@ public sealed class Player : Entity, IDrawable
             healthPoints = 100;
 
         inventory.Update();
+        playerAction.Update();
     }
 
     public void MovePlayer(PhysicsBody physicsBody, float speed)
@@ -105,6 +107,8 @@ public sealed class Player : Entity, IDrawable
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
 
         Raylib.DrawRectangleRec(playerAction.handRectangle, Color.Red);
+        //Raylib.DrawTexture(inventory.currentActiveItem.texture, position.X, position.Y, Color.White);
+        Raylib.DrawTexture(inventory.currentActiveItem.texture, (int)position.X, (int)position.Y, Color.White);//, playerAction.handRectangle, position, playerAction.rotation, Color.White);
     }
 }
 

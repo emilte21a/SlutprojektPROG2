@@ -5,8 +5,8 @@ public class PlayerAction
 {
     public Rectangle handRectangle;
     Vector2 position;
-    float timer = 1;
-
+    float timer = 2;
+    public float rotation = 0;
     public Vector2 origin;
 
     public PlayerAction()
@@ -15,15 +15,22 @@ public class PlayerAction
         handRectangle = new Rectangle(0, 0, 20, 20);
     }
 
+    public void Update()
+    {
+
+        if (timer <= 0)
+            timer = 2;
+    }
+
     public void OnClick(Vector2 playerPosition, Item currentItem)
     {
         origin = playerPosition + new Vector2(40, 40);
-        System.Console.WriteLine(handRectangle);
         position = Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera);
         handRectangle.X = position.X;
         handRectangle.Y = position.Y;
-        if (Vector2.Distance(origin, position) <= 240 && currentItem.usable)
+        if (Vector2.Distance(origin, position) <= 240 && currentItem.usable & timer > 0)
         {
+            rotation = Raymath.Lerp(rotation, 120, 0.8f);
             /*
                 skapa funktion som kollar om handrektangeln kolliderar med någon rektangel i världen t.ex träd eller stenblock
                 eller så kollar jag checkcollisionpointrec 
@@ -37,11 +44,8 @@ public class PlayerAction
 
                 currentItem.itemDamage;
             */
+            timer -= Raylib.GetFrameTime();
         }
-
-        timer -= Raylib.GetFrameTime();
-
-        if (timer <= 0)
-            timer = 1;
+        rotation = 0;
     }
 }

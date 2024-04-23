@@ -93,19 +93,19 @@ public class Game
         player.Update(); //Spelaren
         gameSystems[1].Update(); //Kollisioner
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.6f);
-        // parallaxManager.Update(player);
-        // dayNightSystem.Update();
+        parallaxManager.Update(player);
+        dayNightSystem.Update();
     }
 
     private void Draw()
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.SkyBlue);
-        //dayNightSystem.Draw();
-        //parallaxManager.Draw();
+        dayNightSystem.Draw();
+        parallaxManager.Draw();
         Raylib.BeginMode2D(camera);
         drawables.ForEach(d => d.Draw());
-        Raylib.DrawTextureEx(lightingSystem.lightMapTexture, new Vector2(0, 0), 0, 80, Color.White);
+        Raylib.DrawTexture(lightingSystem.lightMapTexture, 0, 0, Color.White);
         // entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
         dayNightSystem.DrawNightOverlay();
