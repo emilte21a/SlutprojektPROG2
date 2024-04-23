@@ -11,6 +11,7 @@ public class Game
     public static int ScreenHeight = 1024;
 
     //Klass-instanser
+    SceneHandler sceneHandler;
     Player player;
     WorldGeneration worldGeneration;
     ParallaxManager parallaxManager;
@@ -33,7 +34,7 @@ public class Game
         Raylib.InitAudioDevice();
 
         InitializeInstances();
-        lightingSystem.InstantiateLightMap(worldGeneration.tilemap);
+        lightingSystem.InstantiateLightMap(worldGeneration.tilemap); // Måste köras efter initwindow
         drawables = new List<IDrawable>();
         drawables.Add(worldGeneration);
         drawables.Add(player);
@@ -52,6 +53,7 @@ public class Game
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2 + 60),
             Zoom = 1f
         };
+        sceneHandler = new();
         dayNightSystem = new DayNightSystem();
         gUIcontroller = new GUIcontroller();
         worldGeneration = new WorldGeneration();
@@ -83,6 +85,7 @@ public class Game
 
     private void Update()
     {
+        worldGeneration.screenRectangle = new Rectangle(player.position.X - 250, player.position.Y - 250, 500, 500);
         if (Raylib.IsKeyPressed(KeyboardKey.Z))
             camera.Zoom -= 0.05f;
 

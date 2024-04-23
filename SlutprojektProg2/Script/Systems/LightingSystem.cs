@@ -23,7 +23,7 @@ public class LightingSystem
 
                 else
                 {
-                    if (y > 0 && y < height - 1)//&& x > 0 && x < width - 1)
+                    if (y > 1 && y < height - 1)//&& x > 0 && x < width - 1)
                     {
                         //float newLightLevel = (lightMap[x, y - 1] + lightMap[x, y + 1] + lightMap[x - 1, y] + lightMap[x + 1, y]) / 3;
                         lightMap[x, y] = (int)Raymath.Clamp(lightMap[x, y - 1] - 1, 5, 15);
@@ -55,7 +55,6 @@ public class LightingSystem
     {
         InitializeLightmap(tileMap);
         _lightMapImage = CreateLightMapImage();
-        Raylib.ImageResize(ref _lightMapImage, 28000, 28000);
         lightMapTexture = Raylib.LoadTextureFromImage(_lightMapImage);
         Raylib.UnloadImage(_lightMapImage);
     }

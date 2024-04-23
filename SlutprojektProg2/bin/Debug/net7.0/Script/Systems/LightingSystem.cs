@@ -23,7 +23,7 @@ public class LightingSystem
 
                 else
                 {
-                    if (y > 0 && y < height - 1)//&& x > 0 && x < width - 1)
+                    if (y > 1 && y < height - 1)//&& x > 0 && x < width - 1)
                     {
                         //float newLightLevel = (lightMap[x, y - 1] + lightMap[x, y + 1] + lightMap[x - 1, y] + lightMap[x + 1, y]) / 3;
                         lightMap[x, y] = (int)Raymath.Clamp(lightMap[x, y - 1] - 1, 5, 15);

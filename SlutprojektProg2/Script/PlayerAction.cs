@@ -17,9 +17,15 @@ public class PlayerAction
 
     public void Update()
     {
-
         if (timer <= 0)
             timer = 2;
+
+        if (timer > 1)
+        {
+            rotation = Raymath.Lerp(rotation, 120, 0.8f);
+        }
+        rotation = 0;
+
     }
 
     public void OnClick(Vector2 playerPosition, Item currentItem)

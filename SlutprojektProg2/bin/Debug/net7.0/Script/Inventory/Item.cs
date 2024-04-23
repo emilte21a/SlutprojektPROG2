@@ -84,9 +84,9 @@ public sealed class WoodPickaxe : Item
     {
         name = "Wooden Pickaxe";
         ID = 3;
-        stackable = true;
+        stackable = false;
         craftable = false;
-        usable = false;
+        usable = true;
         itemDamage = 10;
 
         if (woodPickaxeTexture.Id == 0)

@@ -70,8 +70,9 @@ public sealed class Player : Entity, IDrawable
 
         playerAction.origin = position;
 
-        if (Raylib.IsKeyDown(KeyboardKey.F))
-            playerAction.OnClick(position, inventory.currentActiveItem);
+        // if (Raylib.IsKeyDown(KeyboardKey.F))
+        //     playerAction.OnClick(position, inventory.currentActiveItem);
+        
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 7);
@@ -108,7 +109,11 @@ public sealed class Player : Entity, IDrawable
 
         Raylib.DrawRectangleRec(playerAction.handRectangle, Color.Red);
         //Raylib.DrawTexture(inventory.currentActiveItem.texture, position.X, position.Y, Color.White);
-        Raylib.DrawTexture(inventory.currentActiveItem.texture, (int)position.X, (int)position.Y, Color.White);//, playerAction.handRectangle, position, playerAction.rotation, Color.White);
+        if (inventory.currentActiveItem.usable)
+        {
+            Raylib.DrawTexturePro(inventory.currentActiveItem.texture, new Rectangle(0, 0, inventory.currentActiveItem.texture.Width, inventory.currentActiveItem.texture.Height), new Rectangle(40, 40, inventory.currentActiveItem.texture.Width, inventory.currentActiveItem.texture.Height), new Vector2(position.X + rectangle.Width / 2 + lastDirection.X * 5, position.Y + rectangle.Height / 2), playerAction.rotation, Color.White);
+         //  Raylib.DrawTexture(inventory.currentActiveItem.texture, (int)position.X, (int)position.Y, Color.White);//, playerAction.handRectangle, position, playerAction.rotation, Color.White);
+        }
     }
 }
 
