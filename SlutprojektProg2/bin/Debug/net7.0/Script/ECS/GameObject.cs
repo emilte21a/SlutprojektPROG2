@@ -2,8 +2,6 @@ public abstract class GameObject
 {
     public string tag = "";
 
-    public Transform transform = new Transform();
-
     public T AddComponent<T>() where T : Component, new()
     {
         T t = new();

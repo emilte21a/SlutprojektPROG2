@@ -22,8 +22,8 @@ public class ItemHandler
 
     public static List<Enum> itemTypes;
 
-    public enum ItemType
-    {
-
-    }
+}
+public enum ItemType
+{
+    wood, stone, stick, woodenPickaxe, stoneAxe
 }

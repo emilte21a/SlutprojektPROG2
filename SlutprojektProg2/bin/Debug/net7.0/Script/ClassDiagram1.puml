@@ -1,0 +1,147 @@
+@startuml SlutProjekt2
+
+Class GameObject{
+    public tag : string
+    public T AddComponent<T>();
+    public T? GetComponent<T>();
+    public List<Component> components;
+}
+
+Class GameSystem{
+    public virtual void Update();
+}
+
+
+Class PhysicsSystem{
+    public override void Update();
+}
+
+Class CollisionSystem{
+    public override void Update();
+}
+
+Class PhysicsBody{
+    public Vector2 Acceleration;
+    public Vector2 velocity;
+
+    public Vector2 gravity;
+
+    public Gravity UseGravity;
+    public AirState airState;
+
+    public void Jump(PhysicsBody physicsBody, float jumpForce);
+}
+Enum AirState{
+    inAir
+    grounded
+}
+
+Class Collider{
+    public Rectangle boxCollider;
+}
+
+Class Renderer{
+    public Texture2D sprite;
+}
+
+Class AudioPlayer{
+    public Sound audioClip;
+    public float AudioVolume;
+}
+
+Class Animator 
+{
+    private int _frame;
+    private float _timer;
+    private int _maxTime;
+
+    public void PlayAnimation(Texture2D spriteSheet, int direction, int maxFrames, Vector2 position);
+}
+
+Interface IDrawable{
+    public void Draw();
+}
+
+Class WorldGeneration{
+
+}
+
+Class Component {
+
+}
+
+Class DayNightSystem{
+
+} 
+
+Class LightingSystem{
+    private int[,] lightMap;
+    private Image _lightMapImage;
+    public Texture2D lightMapTexture;
+
+    public void InitializeLightMap(Tile[,] tileMap);
+    private Image CreateLightMapImage();
+    public void InstantiateLightMap(Tile[,] tileMap);
+}
+
+Class AudioSystem{}
+
+Class ParallaxManager{}
+
+Class Prefab{
+    public Vector2 position;
+    public Rectangle rectangle;
+    public Collider collider;
+    public Renderer renderer
+    Protected static List<Texture2D> textures;
+    public Dictionary<ItemType, int> dropType;
+}
+
+Class InputManager{}
+
+Class PlayerAction{}
+
+Class SceneHandler{}
+
+Class Inventory{}
+
+Struct Slot{
+
+}
+
+PhysicsSystem --> PhysicsBody : use
+PhysicsSystem *-- GameSystem 
+PhysicsBody --> AirState : use  
+CollisionSystem --> Collider : use
+CollisionSystem *-- GameSystem 
+
+AudioSystem *-- GameSystem 
+' LightingSystem *-- GameSystem
+
+
+
+Collider *-- Component 
+PhysicsBody *-- Component 
+Renderer *-- Component
+AudioPlayer *-- Component
+Animator *-- Component
+
+Class Player{}
+
+Entity Entity{}
+
+Class Tile{}
+
+GameObject *-- Entity 
+GameObject *-- Tile 
+GameObject *-- Item
+
+Entity *-- Player
+IDrawable <-- Player
+IDrawable <-- WorldGeneration
+
+Class Game{
+
+}
+
+@enduml

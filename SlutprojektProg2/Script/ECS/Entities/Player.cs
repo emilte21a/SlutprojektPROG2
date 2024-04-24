@@ -41,10 +41,10 @@ public sealed class Player : Entity, IDrawable
         #endregion
 
         inventory.AddToInventory(new WoodItem(), 2);
-        inventory.AddToInventory(new WoodItem(), 2);
         inventory.AddToInventory(new StoneItem(), 9);
         inventory.AddToInventory(new StickItem(), 4);
         inventory.AddToInventory(new WoodPickaxe(), 1);
+        inventory.AddToInventory(new StoneAxe(), 1);
 
         healthPoints = 100;
         tag = "Player";
@@ -70,10 +70,7 @@ public sealed class Player : Entity, IDrawable
 
         playerAction.origin = position;
 
-        // if (Raylib.IsKeyDown(KeyboardKey.F))
-        //     playerAction.OnClick(position, inventory.currentActiveItem);
-        
-
+        playerAction.OnClick(position, inventory.currentActiveItem, (int)lastDirection.X);
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 7);
 
@@ -108,11 +105,22 @@ public sealed class Player : Entity, IDrawable
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
 
         Raylib.DrawRectangleRec(playerAction.handRectangle, Color.Red);
-        //Raylib.DrawTexture(inventory.currentActiveItem.texture, position.X, position.Y, Color.White);
         if (inventory.currentActiveItem.usable)
         {
-            Raylib.DrawTexturePro(inventory.currentActiveItem.texture, new Rectangle(0, 0, inventory.currentActiveItem.texture.Width, inventory.currentActiveItem.texture.Height), new Rectangle(40, 40, inventory.currentActiveItem.texture.Width, inventory.currentActiveItem.texture.Height), new Vector2(position.X + rectangle.Width / 2 + lastDirection.X * 5, position.Y + rectangle.Height / 2), playerAction.rotation, Color.White);
-         //  Raylib.DrawTexture(inventory.currentActiveItem.texture, (int)position.X, (int)position.Y, Color.White);//, playerAction.handRectangle, position, playerAction.rotation, Color.White);
+            Texture2D texture = inventory.currentActiveItem.texture;
+
+            // Calculate rotation origin
+            Vector2 origin = new Vector2(texture.Width / 2, texture.Height / 2);
+
+            // Draw the texture with rotation around the player
+            Raylib.DrawTexturePro(
+                texture,
+                new Rectangle(0, 0, texture.Width * playerAction.xScale, texture.Height * playerAction.yScale), // Source rectangle (full texture)
+                new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20 * playerAction.yScale, texture.Width, texture.Height), // Destination rectangle
+                origin, // Rotation origin (center of the texture)
+                playerAction.rotation, // Rotation angle in radians
+                Color.White // Tint color (white for no tint)
+            );
         }
     }
 }

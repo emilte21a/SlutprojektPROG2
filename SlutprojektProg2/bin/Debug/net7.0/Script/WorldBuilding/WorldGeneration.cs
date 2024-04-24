@@ -11,8 +11,6 @@ public class WorldGeneration : IDrawable
     public static List<Tile> tilesThatShouldRender = new List<Tile>();
     public static List<Prefab> prefabs = new List<Prefab>();
 
-    public Rectangle screenRectangle;
-
     private int _seed;
     private int _caveThreshold = 160;
     private float _surfaceThreshold = 0.5f;
@@ -94,7 +92,7 @@ public class WorldGeneration : IDrawable
 
     public void Draw()
     {
-        backgroundTiles.ForEach(bg => Raylib.DrawTextureRec(bg.texture, screenRectangle, new Vector2(bg.position.X, bg.position.Y), Color.White));
+        //backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
         tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
         prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
     }

@@ -16,7 +16,7 @@ public class DayNightSystem
 
     private float _rotation = 0f;
 
-    private int _timePerHour = 1;
+    private int _timePerHour = 10;
 
     public DayNightSystem()
     {

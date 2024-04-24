@@ -85,7 +85,6 @@ public class Game
 
     private void Update()
     {
-        worldGeneration.screenRectangle = new Rectangle(player.position.X - 250, player.position.Y - 250, 500, 500);
         if (Raylib.IsKeyPressed(KeyboardKey.Z))
             camera.Zoom -= 0.05f;
 

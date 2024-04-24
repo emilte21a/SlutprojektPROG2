@@ -6,6 +6,7 @@ public abstract class Prefab : GameObject
     public Collider collider;
     public Renderer renderer;
     protected static List<Texture2D> textures;
+    public Dictionary<ItemType, int> dropType;
 }
 
 public sealed class Tree : Prefab
@@ -58,14 +59,5 @@ public sealed class Rock : Prefab
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
-    }
-}
-
-public sealed class Krukväxt : Prefab
-{
-    public Krukväxt(Vector2 pos)
-    {
-        this.position = pos;
-        
     }
 }
