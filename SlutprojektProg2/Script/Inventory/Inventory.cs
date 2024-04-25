@@ -2,6 +2,7 @@
 
 public class Inventory
 {
+    public static Inventory current;
     public Dictionary<Item, int> itemsInInventory;
 
     private Slot[] inventoryHotbar;

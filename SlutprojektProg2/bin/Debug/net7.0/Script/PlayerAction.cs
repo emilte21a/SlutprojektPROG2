@@ -49,7 +49,7 @@ public class PlayerAction
     public int yScale = 1;
     public int xScale = 1;
 
-    public void OnClick(Vector2 playerPosition, int direction)
+    public void OnClick(Vector2 playerPosition, int direction, Inventory inventory)
     {
         attackCount++;
         origin = playerPosition + new Vector2(40, 40);
@@ -61,8 +61,16 @@ public class PlayerAction
         isRotating = true;
         targetRotation *= -1;
         yScale *= -1;
-        if (!isRotating && Vector2.Distance(origin, position) <= 240)
+        if (Vector2.Distance(origin, position) <= 240)
         {
+            foreach (var pF in WorldGeneration.prefabs)
+            {
+                if (Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), pF.rectangle))
+                {
+                    Item item = pF.dropType;
+                    inventory.AddToInventory(item, 1);
+                }
+            }
             // om Checkcollisionpointrec(musposition, valid colliders i världen typ)
             // minska hp på den colliderns ägare??
             // Om HP på den colliderns ägare == 0

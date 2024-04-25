@@ -73,15 +73,12 @@ public sealed class Player : Entity, IDrawable
         playerAction.origin = position;
 
         if (Raylib.IsMouseButtonPressed(0))
-            playerAction.OnClick(position, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1));
+            playerAction.OnClick(position, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1), inventory);
+            
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 7);
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Enter))
-        {
-            position += new Vector2(0, 200);
-        }
 
         if (Raylib.IsKeyPressed(KeyboardKey.H))
             healthPoints = 100;

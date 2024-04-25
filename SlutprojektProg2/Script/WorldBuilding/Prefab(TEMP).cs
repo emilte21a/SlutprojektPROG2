@@ -6,7 +6,7 @@ public abstract class Prefab : GameObject
     public Collider collider;
     public Renderer renderer;
     protected static List<Texture2D> textures;
-    public Dictionary<ItemType, int> dropType;
+    public Item dropType;
 }
 
 public sealed class Tree : Prefab
@@ -36,6 +36,8 @@ public sealed class Tree : Prefab
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
+
+        dropType = new WoodItem();
     }
 }
 
@@ -59,5 +61,6 @@ public sealed class Rock : Prefab
         rectangle.X = position.X;
         rectangle.Y = position.Y;
         collider.boxCollider = rectangle;
+        dropType = new StoneItem();
     }
 }
