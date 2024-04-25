@@ -9,7 +9,9 @@ public class PlayerAction
     public float rotation = 0;
     public Vector2 origin;
 
-    RotationDirection rotationDirection = RotationDirection.down;
+    public RotationDirection rotationDirection = RotationDirection.down;
+
+    public int attackCount = 0;
 
     public PlayerAction()
     {
@@ -19,54 +21,57 @@ public class PlayerAction
 
     public void Update()
     {
-
-    }
-
-    private bool isRotating = false;
-    private float targetRotation = 0f;
-    private const float rotationSpeed = 90f; // Degrees per second
-
-    public int yScale = 1;
-    public int xScale;
-
-    public void OnClick(Vector2 playerPosition, Item currentItem, int direction)
-    {
-
-        origin = playerPosition + new Vector2(40, 40);
-        position = Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera);
-
-        handRectangle.X = position.X;
-        handRectangle.Y = position.Y;
-
-        if (Raylib.IsMouseButtonPressed(0) && !isRotating && Vector2.Distance(origin, position) <= 240 && currentItem.usable)
-        {
-            xScale = direction;
-            yScale *= -1;
-            isRotating = true;
-
-            if (rotationDirection == RotationDirection.down)
-                targetRotation = 90f;
-
-            else if (rotationDirection == RotationDirection.up)
-                targetRotation = -90f;
-
-        }
-
         if (isRotating)
         {
             // Increment rotation towards the target rotation
             if (rotation != targetRotation)
             {
-                rotation = Raymath.Lerp(rotation, targetRotation * direction, 0.3f);
+                rotation = Raymath.Lerp(rotation, targetRotation * xScale, 0.3f);
             }
             else
             {
                 isRotating = false;
             }
         }
+
+        if (attackCount % 2 == 1)
+        {
+            rotationDirection = RotationDirection.down;
+        }
+        else
+            rotationDirection = RotationDirection.up;
     }
 
-    enum RotationDirection
+    private bool isRotating = false;
+    private float targetRotation = -90f;
+    private const float rotationSpeed = 90f; // Degrees per second
+
+    public int yScale = 1;
+    public int xScale = 1;
+
+    public void OnClick(Vector2 playerPosition, int direction)
+    {
+        attackCount++;
+        origin = playerPosition + new Vector2(40, 40);
+        position = Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera);
+
+        handRectangle.X = position.X;
+        handRectangle.Y = position.Y;
+        xScale = direction;
+        isRotating = true;
+        targetRotation *= -1;
+        yScale *= -1;
+        if (!isRotating && Vector2.Distance(origin, position) <= 240)
+        {
+            // om Checkcollisionpointrec(musposition, valid colliders i världen typ)
+            // minska hp på den colliderns ägare??
+            // Om HP på den colliderns ägare == 0
+            //Add to inventory colliderns ägares itemtype
+        }
+    }
+
+
+    public enum RotationDirection
     {
         up, down
     }

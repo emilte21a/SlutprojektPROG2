@@ -107,7 +107,7 @@ public sealed class StoneAxe : Item
     public StoneAxe()
     {
         name = "Stone Axe";
-        ID = 3;
+        ID = 4;
         stackable = false;
         craftable = false;
         usable = true;

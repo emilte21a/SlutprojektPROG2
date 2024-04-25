@@ -109,14 +109,13 @@ public class Inventory
 
     public void AddToInventory(Item item, int quantity)
     {
-        bool x = itemsInInventory.Keys.Any(k => k.itemType.Equals(item.itemType));
+        bool x = itemsInInventory.Keys.Any(k => k.ID.Equals(item.ID));
 
-
-        if (x)
+        if (x && item.stackable)
         {
             foreach (var kvp in itemsInInventory)
             {
-                if (item.itemType.Equals(kvp.Key.itemType))
+                if (item.ID.Equals(kvp.Key.ID))
                 {
                     itemsInInventory[kvp.Key] += quantity;
                 }
@@ -124,11 +123,6 @@ public class Inventory
         }
         else
             itemsInInventory[item] = 1;
-
-
-        // if (itemsInInventory.ContainsKey(item))
-        //     itemsInInventory[item] += quantity;
-
 
         if (itemsInInventory.Count <= inventoryHotbar.Length)
         {

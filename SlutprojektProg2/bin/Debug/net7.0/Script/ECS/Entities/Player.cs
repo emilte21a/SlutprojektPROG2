@@ -45,10 +45,8 @@ public sealed class Player : Entity, IDrawable
         inventory.AddToInventory(new StickItem(), 1);
         inventory.AddToInventory(new WoodPickaxe(), 1);
         inventory.AddToInventory(new StoneAxe(), 1);
-        inventory.AddToInventory(new StoneItem(), 1);
-        inventory.AddToInventory(new StoneItem(), 1);
-        inventory.AddToInventory(new StoneItem(), 1);
-        inventory.AddToInventory(new StoneItem(), 1);
+        inventory.AddToInventory(new StoneItem(), 2);
+        inventory.AddToInventory(new StoneAxe(), 1);
 
         healthPoints = 100;
         tag = "Player";
@@ -74,8 +72,8 @@ public sealed class Player : Entity, IDrawable
 
         playerAction.origin = position;
 
-        playerAction.OnClick(position, inventory.currentActiveItem, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1));
-
+        if (Raylib.IsMouseButtonPressed(0))
+            playerAction.OnClick(position, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1));
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 7);

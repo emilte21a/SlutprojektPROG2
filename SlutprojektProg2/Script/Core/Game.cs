@@ -121,6 +121,8 @@ public class Game
         Raylib.DrawText($"{player.physicsBody.airState}", 20, 180, 30, Color.White);
         Raylib.DrawText($"{camera.Zoom}", 20, 210, 30, Color.White);
         Raylib.DrawText($"Time: {dayNightSystem.currentTime}", 20, 240, 30, Color.White);
+        Raylib.DrawText($"rotDir: {player.playerAction.rotationDirection}", 20, 300, 30, Color.White);
+        Raylib.DrawText($"rot: {player.playerAction.rotation}", 20, 360, 30, Color.White);
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
     }
