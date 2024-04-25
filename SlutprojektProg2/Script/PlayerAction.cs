@@ -9,6 +9,8 @@ public class PlayerAction
     public float rotation = 0;
     public Vector2 origin;
 
+    RotationDirection rotationDirection = RotationDirection.down;
+
     public PlayerAction()
     {
         position = new Vector2(0, 0);
@@ -34,32 +36,35 @@ public class PlayerAction
         position = Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera);
         handRectangle.X = position.X;
         handRectangle.Y = position.Y;
+        System.Console.WriteLine(rotation);
 
-        if (Raylib.IsMouseButtonPressed(0) && currentItem.usable)
+        if (Raylib.IsMouseButtonPressed(0) && !isRotating && Vector2.Distance(origin, position) <= 240 && currentItem.usable)
         {
             yScale *= -1;
+            isRotating = true;
+            if (rotationDirection == RotationDirection.down)
+                targetRotation = 90f;
+
+            else
+                targetRotation = 0;
+
         }
-        // // Check if left mouse button is pressed and rotation is not already in progress
-        // if (Raylib.IsMouseButtonPressed(0) && !isRotating && Vector2.Distance(origin, position) <= 240 && currentItem.usable && timer <= 0)
-        // {
-        //     // Set up the rotation process
-        //     isRotating = true;
-        //     targetRotation = 90f; // Rotate to 90 degrees (clockwise)
 
-        //     // Reset rotation state to start from 0
-        //     rotation = 0f;
-        // }
+        if (isRotating)
+        {
+            // Increment rotation towards the target rotation
+            if (rotation != targetRotation)
+                rotation = (int)Raymath.Lerp(rotation, targetRotation * direction, 0.3f);
 
-        // // Handle rotation process if it's in progress
-        // if (isRotating)
-        // {
+            else
+                isRotating = false;
+        }
 
-        //     // Increment rotation towards the target rotation
-        //     if (rotation < targetRotation)
-        //     {
-        //         rotation = Raymath.Lerp(rotation, targetRotation * direction, 0.1f);
-        //     }
 
-        // }
+    }
+
+    enum RotationDirection
+    {
+        up, down
     }
 }

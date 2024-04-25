@@ -70,7 +70,9 @@ public sealed class Player : Entity, IDrawable
 
         playerAction.origin = position;
 
-        playerAction.OnClick(position, inventory.currentActiveItem, (int)lastDirection.X);
+        playerAction.OnClick(position, inventory.currentActiveItem, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1));
+
+
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 7);
 
@@ -114,12 +116,13 @@ public sealed class Player : Entity, IDrawable
 
             // Draw the texture with rotation around the player
             Raylib.DrawTexturePro(
-                texture,
-                new Rectangle(0, 0, texture.Width * playerAction.xScale, texture.Height * playerAction.yScale), // Source rectangle (full texture)
-                new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20 * playerAction.yScale, texture.Width, texture.Height), // Destination rectangle
-                origin, // Rotation origin (center of the texture)
-                playerAction.rotation, // Rotation angle in radians
-                Color.White // Tint color (white for no tint)
+            texture,
+            new Rectangle(0, 0, texture.Width * playerAction.xScale, texture.Height),
+            new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20 * playerAction.yScale,
+            texture.Width, texture.Height),
+            origin,
+            playerAction.rotation,
+            Color.White
             );
         }
     }
