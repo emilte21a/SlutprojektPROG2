@@ -40,11 +40,15 @@ public sealed class Player : Entity, IDrawable
         playerAction = new PlayerAction();
         #endregion
 
-        inventory.AddToInventory(new WoodItem(), 2);
-        inventory.AddToInventory(new StoneItem(), 9);
-        inventory.AddToInventory(new StickItem(), 4);
+        inventory.AddToInventory(new WoodItem(), 1);
+        inventory.AddToInventory(new StoneItem(), 1);
+        inventory.AddToInventory(new StickItem(), 1);
         inventory.AddToInventory(new WoodPickaxe(), 1);
         inventory.AddToInventory(new StoneAxe(), 1);
+        inventory.AddToInventory(new StoneItem(), 1);
+        inventory.AddToInventory(new StoneItem(), 1);
+        inventory.AddToInventory(new StoneItem(), 1);
+        inventory.AddToInventory(new StoneItem(), 1);
 
         healthPoints = 100;
         tag = "Player";
@@ -118,7 +122,7 @@ public sealed class Player : Entity, IDrawable
             Raylib.DrawTexturePro(
             texture,
             new Rectangle(0, 0, texture.Width * playerAction.xScale, texture.Height),
-            new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20 * playerAction.yScale,
+            new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20,
             texture.Width, texture.Height),
             origin,
             playerAction.rotation,

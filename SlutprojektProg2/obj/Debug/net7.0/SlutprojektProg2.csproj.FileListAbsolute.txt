@@ -69,9 +69,9 @@ C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\S
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\ECS\GameObject.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory\Inventory.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory\Item.cs
-C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory\ItemHandler.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\SceneHandler.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Systems\LightingSystem.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\WorldBuilding\DayNightSystem.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\WorldBuilding\ParallaxManager.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\ClassDiagram1.puml
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory\ItemManager.cs

@@ -109,17 +109,22 @@ public class Inventory
 
     public void AddToInventory(Item item, int quantity)
     {
-        // bool x = itemsInInventory.Keys.Any(k => k.Equals(item));
+        bool x = itemsInInventory.Keys.Any(k => k.itemType.Equals(item.itemType));
 
-        itemsInInventory[item] = 0;
 
-        foreach (var kvp in itemsInInventory)
+        if (x)
         {
-            if (item.Equals(kvp.Key))
+            foreach (var kvp in itemsInInventory)
             {
-                itemsInInventory[kvp.Key] += quantity;
+                if (item.itemType.Equals(kvp.Key.itemType))
+                {
+                    itemsInInventory[kvp.Key] += quantity;
+                }
             }
         }
+        else
+            itemsInInventory[item] = 1;
+
 
         // if (itemsInInventory.ContainsKey(item))
         //     itemsInInventory[item] += quantity;

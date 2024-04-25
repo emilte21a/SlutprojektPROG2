@@ -9,6 +9,7 @@ public abstract class Item : GameObject
     public int itemDamage;
     public bool usable;
     public Dictionary<Item, int> recipe;
+    public ItemType itemType;
 
     //Hitta items av samma typ
     public override bool Equals(object obj)
@@ -32,6 +33,7 @@ public sealed class StoneItem : Item
         craftable = false;
         stackable = true;
         usable = false;
+        itemType = ItemType.stone;
         if (tex.Id == 0)
             tex = Raylib.LoadTexture("Images/rockTexture.png");
 
@@ -49,6 +51,7 @@ public sealed class WoodItem : Item
         craftable = false;
         stackable = true;
         usable = false;
+        itemType = ItemType.wood;
 
         if (tex.Id == 0)
             tex = Raylib.LoadTexture("Images/woodTexture.png");
@@ -67,6 +70,7 @@ public sealed class StickItem : Item
         craftable = true;
         stackable = true;
         usable = false;
+        itemType = ItemType.stick;
 
         if (tex.Id == 0)
             tex = Raylib.LoadTexture("Images/stickTexture.png");
@@ -88,6 +92,7 @@ public sealed class WoodPickaxe : Item
         craftable = false;
         usable = true;
         itemDamage = 10;
+        itemType = ItemType.woodenPickaxe;
 
         if (tex.Id == 0)
             tex = Raylib.LoadTexture("Images/woodenPickaxeTexture.png");
@@ -107,6 +112,7 @@ public sealed class StoneAxe : Item
         craftable = false;
         usable = true;
         itemDamage = 15;
+        itemType = ItemType.stoneAxe;
 
         if (tex.Id == 0)
             tex = Raylib.LoadTexture("Images/stoneAxeTexture.png");

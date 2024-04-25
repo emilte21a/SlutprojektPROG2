@@ -1,6 +1,6 @@
-public class ItemHandler
+public class ItemManager
 {
-    public T EnumToItem<T>(Item itemType)
+    public static T EnumToItem<T>(Item itemType)
     {
         Type enumType = typeof(T);
 
@@ -19,9 +19,7 @@ public class ItemHandler
 
     //     itemTypes.Add(@enum);
     // }
-
-    public static List<Enum> itemTypes;
-
+    
 }
 public enum ItemType
 {
