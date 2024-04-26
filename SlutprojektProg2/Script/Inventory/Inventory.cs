@@ -134,12 +134,6 @@ public class Inventory
         }
     }
 
-    public void CreateNewOrUpdateExisting<TKey, TValue>(
-    IDictionary<TKey, TValue> map, TKey key, TValue value)
-    {
-        map[key] = value;
-    }
-
     public void RemoveFromInventory(Item item)
     {
         if (itemsInInventory.ContainsKey(item))

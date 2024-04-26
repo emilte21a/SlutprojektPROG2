@@ -3,7 +3,6 @@ public abstract class Tile : GameObject
     public Texture2D texture;
     public Vector2 position { get; set; }
     public Rectangle rectangle;
-    public int lightLevel = 100;
 }
 
 public sealed class GrassTile : Tile

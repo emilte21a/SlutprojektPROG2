@@ -74,7 +74,7 @@ public sealed class Player : Entity, IDrawable
 
         if (Raylib.IsMouseButtonPressed(0))
             playerAction.OnClick(position, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1), inventory);
-            
+
 
         if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
             physicsBody.Jump(physicsBody, 7);
@@ -106,24 +106,30 @@ public sealed class Player : Entity, IDrawable
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
 
         Raylib.DrawRectangleRec(playerAction.handRectangle, Color.Red);
+        
         if (inventory.currentActiveItem.usable)
         {
-            Texture2D texture = inventory.currentActiveItem.texture;
-
-            // Calculate rotation origin
-            Vector2 origin = new Vector2(texture.Width / 2, texture.Height / 2);
-
-            // Draw the texture with rotation around the player
-            Raylib.DrawTexturePro(
-            texture,
-            new Rectangle(0, 0, texture.Width * playerAction.xScale, texture.Height),
-            new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20,
-            texture.Width, texture.Height),
-            origin,
-            playerAction.rotation,
-            Color.White
-            );
+            DrawCurrentItemAnimation();
         }
+    }
+
+    private void DrawCurrentItemAnimation()
+    {
+        Texture2D texture = inventory.currentActiveItem.texture;
+
+        // Calculate rotation origin
+        Vector2 origin = new Vector2(0, texture.Height);
+
+        // Draw the texture with rotation around the player
+        Raylib.DrawTexturePro(
+        texture,
+        new Rectangle(0, 0, texture.Width * playerAction.xScale, texture.Height),
+        new Rectangle(position.X + rectangle.Width / 2 + 20 * playerAction.xScale, position.Y - 20,
+        texture.Width, texture.Height),
+        origin,
+        playerAction.rotation,
+        Color.White
+        );
     }
 }
 

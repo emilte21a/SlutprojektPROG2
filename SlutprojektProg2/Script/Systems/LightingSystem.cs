@@ -1,8 +1,9 @@
 public class LightingSystem
 {
-    private int[,] lightMap;
-    private Image _lightMapImage;
-    public Texture2D lightMapTexture;
+
+    private int[,] lightMap; //En array av ints som bestämmer ljusnivån på varje position
+    private Image _lightMapImage; //En bild som man ritar på för att visa rätt värden
+    public Texture2D lightMapTexture; //En texture som man ritar ut som overlay över världen
 
     private void InitializeLightmap(Tile[,] tileMap)
     {
@@ -17,6 +18,8 @@ public class LightingSystem
             {
                 if (tileMap[x, y] == null && y < height - 1)
                 {
+                    //Om det inte finns en tile på x och y och om y värdet är mindre än höjden -1
+                    //Gör denna positionen och den unders ljusnivå till 15
                     lightMap[x, y] = 15;
                     lightMap[x, y + 1] = 15;
                 }
@@ -58,11 +61,4 @@ public class LightingSystem
         lightMapTexture = Raylib.LoadTextureFromImage(_lightMapImage);
         Raylib.UnloadImage(_lightMapImage);
     }
-}
-
-public struct Light
-{
-    Vector2 position;
-    int spread;
-    Color color;
 }

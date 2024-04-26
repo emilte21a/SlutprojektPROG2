@@ -1,5 +1,5 @@
 
-using System.Runtime.CompilerServices;
+
 
 public class PlayerAction
 {
@@ -63,24 +63,29 @@ public class PlayerAction
         yScale *= -1;
         if (Vector2.Distance(origin, position) <= 240)
         {
-            foreach (var pF in WorldGeneration.prefabs)
+            Prefab GO = WorldGeneration.prefabs.Find(g => Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), g.rectangle));
+
+            if (GO != null)
             {
-                if (Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), pF.rectangle))
+
+                Item item = GO.dropType;
+
+                GO.HP -= inventory.currentActiveItem.itemDamage;
+
+                if (GO.HP <= 0)
                 {
-                    Item item = pF.dropType;
                     inventory.AddToInventory(item, 1);
+                    Game.gameObjectsToDestroy.Add(GO);
+
+                    WorldGeneration.prefabs.Remove(GO);
                 }
             }
-            // om Checkcollisionpointrec(musposition, valid colliders i världen typ)
-            // minska hp på den colliderns ägare??
-            // Om HP på den colliderns ägare == 0
-            //Add to inventory colliderns ägares itemtype
         }
     }
+}
 
 
-    public enum RotationDirection
-    {
-        up, down
-    }
+public enum RotationDirection
+{
+    up, down
 }

@@ -25,14 +25,17 @@ public class Game
     List<GameSystem> gameSystems;
 
     public static List<Entity> entities;
-    public static readonly List<GameObject> gameObjects;
+    
+    public static List<GameObject> gameObjects; //Tom för nu
+
+    public static List<GameObject> gameObjectsToDestroy;
 
     public Game()
     {
         Raylib.InitWindow(ScreenWidth, ScreenHeight, "game");
 
         Raylib.InitAudioDevice();
-
+        gameObjectsToDestroy = new List<GameObject>();
         InitializeInstances();
         lightingSystem.InstantiateLightMap(worldGeneration.tilemap); // Måste köras efter initwindow
         drawables = new List<IDrawable>();

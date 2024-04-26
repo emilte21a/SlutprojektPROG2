@@ -41,8 +41,6 @@ public class ParallaxManager
             p.rectangle.X = player.position.X * p.parallaxFactor / 500;
             p.position.Y = Raymath.Lerp(p.position.Y, p.parallaxFactor * 10, 0.5f) + 2 * p.parallaxFactor - 200;
         }
-
-
     }
 
     public void Draw()

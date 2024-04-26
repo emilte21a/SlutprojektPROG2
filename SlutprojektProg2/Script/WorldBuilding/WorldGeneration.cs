@@ -2,82 +2,90 @@ using System.Security.Cryptography.X509Certificates;
 
 public class WorldGeneration : IDrawable
 {
+    private int _worldSize = 350; //Världsstorlek
+    private int _tileSize = 80; //Varje tiles storlek
 
-    private int _worldSize = 350;
-    private int _tileSize = 80;
-
+    #region  Listor för alla tiles och prefabs i världen
     public static List<Tile> tilesInWorld = new List<Tile>();
     public static List<Tile> backgroundTiles = new List<Tile>();
     public static List<Tile> tilesThatShouldRender = new List<Tile>();
     public static List<Prefab> prefabs = new List<Prefab>();
 
+    #endregion
+
+    #region Variabler som bestämmer hur världen ser ut
     private int _seed;
     private int _caveThreshold = 160;
     private float _surfaceThreshold = 0.5f;
     private int _heightMultiplier = 1;
 
-    public static Vector2[] spawnPoints;
-    public static string[] tileOccupation;
-    public Tile[,] tilemap;
+    #endregion
+
+    public static Vector2[] spawnPoints; //Varje möjliga plats att spawna en entity på
+    public static string[] tileOccupation; //En array där man kan se ifall en position på ytan ockuperas av en prefab
+    public Tile[,] tilemap; 
 
     public WorldGeneration()
     {
         spawnPoints = new Vector2[_worldSize];
         tileOccupation = new string[spawnPoints.Length];
         tilemap = new Tile[_worldSize, _worldSize];
-        _seed = Random.Shared.Next(-10000, 10000);
+        _seed = Random.Shared.Next(-10000, 10000); //Skapa nytt seed varje gång man startar spelet
     }
 
+    //Metod som procedurellt genererar en ny värld varje gång man startar spelet.
     public void GenerateTiles()
     {
-        Image heightImage = Raylib.GenImagePerlinNoise(_worldSize, _worldSize, _seed, _seed, 1f);
-        Image noiseImage = Raylib.GenImagePerlinNoise(_worldSize, _worldSize, _seed, _seed, 10f);
+        Image heightImage = Raylib.GenImagePerlinNoise(_worldSize, _worldSize, _seed, _seed, 1f); //En perlinnoise bild som bestämmer hur "len" ytan ska vara. Desto större scale, desto "galnare"
+        Image noiseImage = Raylib.GenImagePerlinNoise(_worldSize, _worldSize, _seed, _seed, 10f); //Bestämmer hur grottorna ska se ut.
 
         for (int x = 0; x < noiseImage.Width; x++)
         {
             int height = Raylib.GetImageColor(heightImage, (int)(x * _surfaceThreshold), (int)_surfaceThreshold).R * _heightMultiplier;
+            //Hämta en höjd för varje x värde i världen genom att ta det röda värdet på varje x pixel.
+
             for (int y = height; y < _worldSize; y++)
             {
-                SpawnTile(new BackgroundTile(new Vector2(x * _tileSize, y * _tileSize)));
+                SpawnTile(new BackgroundTile(new Vector2(x * _tileSize, y * _tileSize))); //Background tile på varje plats i världen
 
-                if (Raylib.GetImageColor(noiseImage, x, y).R < _caveThreshold)
+                if (Raylib.GetImageColor(noiseImage, x, y).R < _caveThreshold) //Placera endast ut ett block om det röda värdet på varje pixel på noiseimage är mindre än en threshold
                 {
-                    if (y == height)
+                    if (y == height) //Spawna gräs
                     {
                         GrassTile grassTile = new GrassTile(new Vector2(x * _tileSize, y * _tileSize));
                         SpawnTile(grassTile);
                         spawnPoints[x] = new Vector2(x * _tileSize, y * _tileSize);
                         tilemap[x, y] = grassTile;
-                        grassTile.lightLevel = 0;
                     }
 
-                    else if (y == height + 1)
+                    else if (y == height + 1) //Spawna jord under gräs
                     {
                         DirtTile dirtTile = new DirtTile(new Vector2(x * _tileSize, y * _tileSize));
                         SpawnTile(dirtTile);
                         tilemap[x, y] = dirtTile;
-                        dirtTile.lightLevel = y / 3;
                     }
 
-                    else
+                    else //Annars spawna sten
                     {
                         StoneTile stoneTile = new StoneTile(new Vector2(x * _tileSize, y * _tileSize));
                         SpawnTile(stoneTile);
                         tilemap[x, y] = stoneTile;
-                        stoneTile.lightLevel = y;
                     }
                 }
-                else
+                else //Gör varje plats där det inte finns en tile till tom på tilemap. Detta används i lightingsystem
                     tilemap[x, y] = null;
             }
         }
 
         Raylib.UnloadImage(noiseImage);
         Raylib.UnloadImage(heightImage);
+        //Ladda ur båda bilderna från CPU för att frigöra minne
     }
+
 
     public void SpawnTile(Tile tile)
     {
+        //Spawna en ny tile men lägg till den i backgroundTiles om den är en background tile och annars i tilesInWorld
         if (tile.GetType() != typeof(BackgroundTile))
             tilesInWorld.Add(tile);
 
@@ -85,14 +93,17 @@ public class WorldGeneration : IDrawable
             backgroundTiles.Add(tile);
     }
 
-    public void SpawnGameObject(Prefab prefab)
+    public void SpawnPrefab(Prefab prefab)
     {
+        //Spawna en prefab
         prefabs.Add(prefab);
     }
 
+
+    //Metod som ritar ut varje tile och prefab som finns i världen
     public void Draw()
     {
-        //backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
+        backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
         tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
         prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
     }
@@ -106,6 +117,7 @@ public class WorldGeneration : IDrawable
         return null;
     }
 
+    //Metod som genererar prefabs
     public void GeneratePrefabs()
     {
         for (int i = 0; i < spawnPoints.Length; i++)
@@ -113,18 +125,28 @@ public class WorldGeneration : IDrawable
             tileOccupation[i] = "Empty";
             if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty" && spawnPoints[i].Y != 0)
             {
-                SpawnGameObject(new Tree(new Vector2(i * _tileSize - _tileSize, spawnPoints[i].Y)));
+                SpawnPrefab(new Tree(new Vector2(i * _tileSize - _tileSize, spawnPoints[i].Y)));
                 tileOccupation[i] = "Tree";
             }
 
             else if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty" && spawnPoints[i].Y != 0)
             {
-                SpawnGameObject(new Rock(new Vector2(i * _tileSize, spawnPoints[i].Y)));
+                SpawnPrefab(new Rock(new Vector2(i * _tileSize, spawnPoints[i].Y)));
                 tileOccupation[i] = "Rock";
             }
-
         }
     }
+
+    /*
+        För varje position som är giltid på världen
+            Gör alla till tomma
+
+            10% att spawna ett träd på varje tile om den är tom 
+                Spawna ett träd på den positionen och gör att den platsen ockuperas av ett träd
+
+            10% att spawna en sten på varje tile om den är tom 
+                spawna en sten på den postitionen och gör att den platsen ockuperas av en sten
+    */
 }
 
 public class SpawnManager
