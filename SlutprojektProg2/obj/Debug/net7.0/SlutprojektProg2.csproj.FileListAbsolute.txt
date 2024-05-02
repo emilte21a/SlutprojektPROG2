@@ -75,3 +75,7 @@ C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\S
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\WorldBuilding\ParallaxManager.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\ClassDiagram1.puml
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory\ItemManager.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Systems\CraftingSystem.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Systems\PlacementSystem.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\IPlacable.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\TreeParallax.png

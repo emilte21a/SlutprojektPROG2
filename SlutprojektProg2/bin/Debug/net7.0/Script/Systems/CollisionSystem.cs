@@ -22,11 +22,12 @@ public class CollisionSystem : GameSystem
 
             if (collider != null && physicsBody != null) //Kolla så att entityns physicsbody och collider inte är null
             {
-                if (e.tag == "Player")
-                    WorldGeneration.tilesThatShouldRender = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
 
                 tilesCloseToEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
-                floorCollision = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(tile.rectangle, floorCollider)).ToList();
+                floorCollision = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(tile.rectangle, floorCollider) && tile.tag == "Tile").ToList();
+
+                if (e.tag == "Player")
+                    WorldGeneration.tilesThatShouldRender = tilesCloseToEntity;
 
                 #region bestäm senaste riktningen samt om entityn nuddar marken eller ej
                 if (physicsBody.velocity.X > 0) { e.lastDirection.X = 1; }
@@ -47,7 +48,7 @@ public class CollisionSystem : GameSystem
                     Rectangle nextBounds = new Rectangle(e.position.X, e.position.Y + physicsBody.velocity.Y, collider.boxCollider.Width, collider.boxCollider.Height);
                     Rectangle collisionRectangle = Raylib.GetCollisionRec(tile.rectangle, nextBounds);
 
-                    if (collisionRectangle.Width > collisionRectangle.Height)
+                    if (collisionRectangle.Width > collisionRectangle.Height && tile.tag == "Tile")
                     {
                         if (physicsBody.velocity.Y > 0 || e.lastDirection.Y == 1)
                         {
@@ -70,7 +71,8 @@ public class CollisionSystem : GameSystem
                 {
                     //Räkna ut spelarens x-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X + physicsBody.velocity.X, e.position.Y, collider.boxCollider.Width, collider.boxCollider.Height);
-                    if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds)) //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
+
+                    if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds) && tile.tag == "Tile") //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
                     {
                         if (physicsBody.velocity.X > 0 || e.lastDirection.X == 1)
                         {

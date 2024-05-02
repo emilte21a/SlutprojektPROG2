@@ -10,6 +10,7 @@ public sealed class GrassTile : Tile
     static Texture2D grassTexture;
     public GrassTile(Vector2 pos)
     {
+        tag = "Tile";
         rectangle = new Rectangle(0, 0, 80, 80);
 
         this.position = pos;
@@ -29,6 +30,7 @@ public sealed class StoneTile : Tile
 
     public StoneTile(Vector2 pos)
     {
+        tag = "Tile";
         rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
         if (stoneTexture.Id == 0)
@@ -48,6 +50,7 @@ public sealed class DirtTile : Tile
 
     public DirtTile(Vector2 pos)
     {
+        tag = "Tile";
         rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
         if (dirtTexture.Id == 0)
@@ -67,10 +70,14 @@ public sealed class BackgroundTile : Tile
 
     public BackgroundTile(Vector2 pos)
     {
+        tag = "BackgroundTile";
+        rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
         if (backgroundTexture.Id == 0)
             backgroundTexture = Raylib.LoadTexture("Images/BackgroundTile.png");
 
+        rectangle.X = position.X;
+        rectangle.Y = position.Y;
         texture = backgroundTexture;
     }
 }

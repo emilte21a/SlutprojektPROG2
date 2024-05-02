@@ -36,7 +36,13 @@ public class Inventory
 
         UpdateInventoryBackpack();
 
-        currentActiveItem = inventoryHotbar[CurrentItemIndex()].item;
+        if (itemsInInventory.Count != 0)
+        {
+
+            currentActiveItem = inventoryHotbar[CurrentItemIndex()].item;
+        }
+        else
+            currentActiveItem = null;
     }
 
 
@@ -132,12 +138,6 @@ public class Inventory
                 inventoryHotbar[emptySlotIndex] = new Slot(item, emptySlotIndex);
 
         }
-    }
-
-    public void CreateNewOrUpdateExisting<TKey, TValue>(
-    IDictionary<TKey, TValue> map, TKey key, TValue value)
-    {
-        map[key] = value;
     }
 
     public void RemoveFromInventory(Item item)

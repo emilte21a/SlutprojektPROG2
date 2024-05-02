@@ -23,7 +23,7 @@ public class WorldGeneration : IDrawable
 
     public static Vector2[] spawnPoints; //Varje möjliga plats att spawna en entity på
     public static string[] tileOccupation; //En array där man kan se ifall en position på ytan ockuperas av en prefab
-    public Tile[,] tilemap; 
+    public Tile[,] tilemap;
 
     public WorldGeneration()
     {
@@ -82,15 +82,9 @@ public class WorldGeneration : IDrawable
         //Ladda ur båda bilderna från CPU för att frigöra minne
     }
 
-
     public void SpawnTile(Tile tile)
     {
-        //Spawna en ny tile men lägg till den i backgroundTiles om den är en background tile och annars i tilesInWorld
-        if (tile.GetType() != typeof(BackgroundTile))
-            tilesInWorld.Add(tile);
-
-        else
-            backgroundTiles.Add(tile);
+        tilesInWorld.Add(tile);
     }
 
     public void SpawnPrefab(Prefab prefab)
@@ -103,7 +97,6 @@ public class WorldGeneration : IDrawable
     //Metod som ritar ut varje tile och prefab som finns i världen
     public void Draw()
     {
-        backgroundTiles.ForEach(bg => Raylib.DrawTexture(bg.texture, (int)bg.position.X, (int)bg.position.Y, Color.White));
         tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
         prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
     }

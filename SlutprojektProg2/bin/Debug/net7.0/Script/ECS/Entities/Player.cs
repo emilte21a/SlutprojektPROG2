@@ -40,13 +40,7 @@ public sealed class Player : Entity, IDrawable
         playerAction = new PlayerAction();
         #endregion
 
-        inventory.AddToInventory(new WoodItem(), 1);
-        inventory.AddToInventory(new StoneItem(), 1);
-        inventory.AddToInventory(new StickItem(), 1);
         inventory.AddToInventory(new WoodPickaxe(), 1);
-        inventory.AddToInventory(new StoneAxe(), 1);
-        inventory.AddToInventory(new StoneItem(), 2);
-        inventory.AddToInventory(new StoneAxe(), 1);
 
         healthPoints = 100;
         tag = "Player";
@@ -106,10 +100,11 @@ public sealed class Player : Entity, IDrawable
             Raylib.DrawTextureRec(renderer.sprite, new Rectangle(0, 0, renderer.sprite.Width * InputManager.GetLastDirectionDelta(), renderer.sprite.Height), position, Color.White);
 
         Raylib.DrawRectangleRec(playerAction.handRectangle, Color.Red);
-        
-        if (inventory.currentActiveItem.usable)
+
+        if (inventory.currentActiveItem != null)
         {
-            DrawCurrentItemAnimation();
+            if (inventory.currentActiveItem.usable)
+                DrawCurrentItemAnimation();
         }
     }
 
@@ -118,7 +113,7 @@ public sealed class Player : Entity, IDrawable
         Texture2D texture = inventory.currentActiveItem.texture;
 
         // Calculate rotation origin
-        Vector2 origin = new Vector2(0, texture.Height);
+        Vector2 origin = new Vector2(texture.Width / 2, texture.Height / 2);
 
         // Draw the texture with rotation around the player
         Raylib.DrawTexturePro(

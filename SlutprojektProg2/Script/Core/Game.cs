@@ -4,6 +4,7 @@ global using System.Collections.Generic;
 global using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
 
 public class Game
 {
@@ -25,7 +26,7 @@ public class Game
     List<GameSystem> gameSystems;
 
     public static List<Entity> entities;
-    
+
     public static List<GameObject> gameObjects; //Tom för nu
 
     public static List<GameObject> gameObjectsToDestroy;
@@ -100,6 +101,17 @@ public class Game
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.6f);
         parallaxManager.Update(player);
         dayNightSystem.Update();
+
+        if (Raylib.IsKeyPressed(KeyboardKey.H) && player.inventory.currentActiveItem is IPlacable && player.inventory.currentActiveItem != null)
+        {
+            Vector2 pos = PlacementSystem.WorldToTile(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera), 80);
+            if (worldGeneration.tilemap[(int)pos.X, (int)pos.Y] == null)
+            {
+                StoneTile stoneTile = new StoneTile(new Vector2((int)pos.X * 80, (int)pos.Y * 80));
+                worldGeneration.SpawnTile(stoneTile);
+                worldGeneration.tilemap[(int)pos.X, (int)pos.Y] = stoneTile;
+            }
+        }
     }
 
     private void Draw()

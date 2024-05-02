@@ -36,7 +36,13 @@ public class Inventory
 
         UpdateInventoryBackpack();
 
-        currentActiveItem = inventoryHotbar[CurrentItemIndex()].item;
+        if (itemsInInventory.Count != 0)
+        {
+
+            currentActiveItem = inventoryHotbar[CurrentItemIndex()].item;
+        }
+        else
+            currentActiveItem = null;
     }
 
 

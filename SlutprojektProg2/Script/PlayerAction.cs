@@ -1,6 +1,3 @@
-
-
-
 public class PlayerAction
 {
     public Rectangle handRectangle;

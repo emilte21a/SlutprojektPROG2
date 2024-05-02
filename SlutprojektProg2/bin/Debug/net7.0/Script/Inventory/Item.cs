@@ -23,7 +23,7 @@ public abstract class Item : GameObject
     }
 }
 
-public sealed class StoneItem : Item
+public sealed class StoneItem : Item, IPlacable
 {
     static Texture2D tex;
     public StoneItem()
@@ -38,6 +38,10 @@ public sealed class StoneItem : Item
             tex = Raylib.LoadTexture("Images/rockTexture.png");
 
         texture = tex;
+    }
+    public Tile ItemToPlace(Vector2 pos)
+    {
+        return new StoneTile(pos);
     }
 }
 
@@ -58,6 +62,7 @@ public sealed class WoodItem : Item
 
         texture = tex;
     }
+
 }
 
 public sealed class StickItem : Item
