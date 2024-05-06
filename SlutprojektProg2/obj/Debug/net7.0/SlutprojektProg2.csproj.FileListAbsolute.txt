@@ -77,5 +77,10 @@ C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\S
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Inventory\ItemManager.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Systems\CraftingSystem.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\Systems\PlacementSystem.cs
-C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\IPlacable.cs
 C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\TreeParallax.png
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\grassTexture.png
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\WorldBuilding\TilePref.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\IPlaceable.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Script\TilePrefToItem.cs
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\dirtTexture.png
+C:\Users\emil.ulinjohansson\SlutprojektPROG2\SlutprojektProg2\bin\Debug\net7.0\Images\itemFrame.png

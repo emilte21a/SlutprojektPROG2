@@ -19,9 +19,8 @@ public class ItemManager
 
     //     itemTypes.Add(@enum);
     // }
-    
 }
 public enum ItemType
 {
-    wood, stone, stick, woodenPickaxe, stoneAxe
+    wood, stone, dirt, grass, stick, woodenPickaxe, stoneAxe
 }

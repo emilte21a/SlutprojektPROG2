@@ -12,8 +12,8 @@ public class CollisionSystem : GameSystem
             Collider? collider = e.GetComponent<Collider>();
             #endregion
 
-            List<Tile> tilesCloseToEntity; //Lista med alla rektanglar som screenRectangle kolliderar med
-            List<Tile> floorCollision;
+            List<TilePref> tilesCloseToEntity; //Lista med alla rektanglar som screenRectangle kolliderar med
+            List<TilePref> floorCollision;
 
             #region Rektanglar som kollar spelarens kollisioner
             Rectangle ScreenRectangle = new Rectangle(e.position.X - Game.ScreenWidth / 2 - 100, e.position.Y - Game.ScreenHeight / 2 - 150, Game.ScreenWidth + 200, Game.ScreenWidth + 300); //Magiska nummer för offset
@@ -23,11 +23,11 @@ public class CollisionSystem : GameSystem
             if (collider != null && physicsBody != null) //Kolla så att entityns physicsbody och collider inte är null
             {
 
-                tilesCloseToEntity = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
-                floorCollision = WorldGeneration.tilesInWorld.Where(tile => Raylib.CheckCollisionRecs(tile.rectangle, floorCollider) && tile.tag == "Tile").ToList();
+                tilesCloseToEntity = WorldGeneration.gameObjectsInWorld.Where(tile => Raylib.CheckCollisionRecs(ScreenRectangle, tile.rectangle)).ToList();
+                floorCollision = WorldGeneration.gameObjectsInWorld.Where(tile => Raylib.CheckCollisionRecs(tile.rectangle, floorCollider) && tile.tag == "Tile").ToList();
 
                 if (e.tag == "Player")
-                    WorldGeneration.tilesThatShouldRender = tilesCloseToEntity;
+                    WorldGeneration.gameObjectsThatShouldRender = tilesCloseToEntity;
 
                 #region bestäm senaste riktningen samt om entityn nuddar marken eller ej
                 if (physicsBody.velocity.X > 0) { e.lastDirection.X = 1; }
@@ -42,24 +42,24 @@ public class CollisionSystem : GameSystem
                 #endregion
 
                 #region Korrigera y positionen 
-                foreach (Tile tile in tilesCloseToEntity)
+                foreach (TilePref tilePref in tilesCloseToEntity)
                 {
                     //Räkna ut spelarens y-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X, e.position.Y + physicsBody.velocity.Y, collider.boxCollider.Width, collider.boxCollider.Height);
-                    Rectangle collisionRectangle = Raylib.GetCollisionRec(tile.rectangle, nextBounds);
+                    Rectangle collisionRectangle = Raylib.GetCollisionRec(tilePref.rectangle, nextBounds);
 
-                    if (collisionRectangle.Width > collisionRectangle.Height && tile.tag == "Tile")
+                    if (collisionRectangle.Width > collisionRectangle.Height && tilePref.tag == "Tile")
                     {
                         if (physicsBody.velocity.Y > 0 || e.lastDirection.Y == 1)
                         {
                             //Korrigera Y hastigheten ifall spelaren faller
-                            e.position = new Vector2(e.position.X, tile.rectangle.Y - collider.boxCollider.Height);
+                            e.position = new Vector2(e.position.X, tilePref.rectangle.Y - collider.boxCollider.Height);
                             physicsBody.velocity.Y = 0;
                         }
                         else if (physicsBody.velocity.Y < 0 || e.lastDirection.Y == -1)
                         {
                             //Korrigera Y hastigheten ifall spelaren hoppar
-                            e.position = new Vector2(e.position.X, tile.rectangle.Y + tile.rectangle.Height);
+                            e.position = new Vector2(e.position.X, tilePref.rectangle.Y + tilePref.rectangle.Height);
                             physicsBody.velocity.Y = 0;
                         }
                     }
@@ -67,24 +67,24 @@ public class CollisionSystem : GameSystem
                 #endregion
 
                 #region Korrigera x positionen
-                foreach (Tile tile in tilesCloseToEntity)
+                foreach (TilePref tilePref in tilesCloseToEntity)
                 {
                     //Räkna ut spelarens x-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X + physicsBody.velocity.X, e.position.Y, collider.boxCollider.Width, collider.boxCollider.Height);
 
-                    if (Raylib.CheckCollisionRecs(tile.rectangle, nextBounds) && tile.tag == "Tile") //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
+                    if (Raylib.CheckCollisionRecs(tilePref.rectangle, nextBounds) && tilePref.tag == "Tile") //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
                     {
                         if (physicsBody.velocity.X > 0 || e.lastDirection.X == 1)
                         {
                             //Korrigera spelarens hastighet åt höger när den kolliderar
-                            e.position = new Vector2(tile.rectangle.X - collider.boxCollider.Width, e.position.Y);
+                            e.position = new Vector2(tilePref.rectangle.X - collider.boxCollider.Width, e.position.Y);
                             physicsBody.velocity.X = 0;
                         }
 
                         else if (physicsBody.velocity.X < 0 || e.lastDirection.X == -1)
                         {
                             //Korrigera spelarens hastighet åt vänster när den kolliderar
-                            e.position = new Vector2(tile.rectangle.X + tile.rectangle.Width, e.position.Y);
+                            e.position = new Vector2(tilePref.rectangle.X + tilePref.rectangle.Width, e.position.Y);
                             physicsBody.velocity.X = 0;
                         }
                     }

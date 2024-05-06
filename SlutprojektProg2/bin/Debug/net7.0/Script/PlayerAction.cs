@@ -58,13 +58,13 @@ public class PlayerAction
         isRotating = true;
         targetRotation *= -1;
         yScale *= -1;
+
         if (Vector2.Distance(origin, position) <= 240)
         {
-            Prefab GO = WorldGeneration.prefabs.Find(g => Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), g.rectangle));
+            TilePref GO = WorldGeneration.gameObjectsInWorld.Find(g => Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), g.rectangle) && g.tag != "BackgroundTile");
 
             if (GO != null)
             {
-
                 Item item = GO.dropType;
 
                 GO.HP -= inventory.currentActiveItem.itemDamage;
@@ -74,7 +74,7 @@ public class PlayerAction
                     inventory.AddToInventory(item, 1);
                     Game.gameObjectsToDestroy.Add(GO);
 
-                    WorldGeneration.prefabs.Remove(GO);
+                    WorldGeneration.gameObjectsInWorld.Remove(GO);
                 }
             }
         }

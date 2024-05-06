@@ -1,13 +1,7 @@
 
-public abstract class Prefab : GameObject
+public abstract class Prefab : TilePref
 {
-    public Vector2 position;
-    public Rectangle rectangle;
-    public Collider collider;
-    public Renderer renderer;
     protected static List<Texture2D> textures;
-    public Item dropType;
-    public int HP;
 }
 
 public sealed class Tree : Prefab

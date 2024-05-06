@@ -1,26 +1,24 @@
-public abstract class Tile : GameObject
-{
-    public Texture2D texture;
-    public Vector2 position { get; set; }
-    public Rectangle rectangle;
-}
+public abstract class Tile : TilePref { }
 
 public sealed class GrassTile : Tile
 {
     static Texture2D grassTexture;
     public GrassTile(Vector2 pos)
     {
+        components = new();
+        renderer = AddComponent<Renderer>();
         tag = "Tile";
-        rectangle = new Rectangle(0, 0, 80, 80);
 
         this.position = pos;
         if (grassTexture.Id == 0)
             grassTexture = Raylib.LoadTexture("Images/GrassTile.png");
 
-        rectangle.X = position.X;
-        rectangle.Y = position.Y;
 
-        texture = grassTexture;
+        renderer.sprite = grassTexture;
+        rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
+        HP = 100;
+
+        dropType = new GrassItem();
     }
 }
 
@@ -30,17 +28,20 @@ public sealed class StoneTile : Tile
 
     public StoneTile(Vector2 pos)
     {
+        components = new();
+        renderer = AddComponent<Renderer>();
         tag = "Tile";
-        rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
         if (stoneTexture.Id == 0)
         {
             stoneTexture = Raylib.LoadTexture("Images/StoneTile.png");
         }
-        rectangle.X = position.X;
-        rectangle.Y = position.Y;
 
-        texture = stoneTexture;
+        renderer.sprite = stoneTexture;
+        rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
+        HP = 100;
+
+        dropType = new StoneItem();
     }
 }
 
@@ -50,6 +51,8 @@ public sealed class DirtTile : Tile
 
     public DirtTile(Vector2 pos)
     {
+        components = new();
+        renderer = AddComponent<Renderer>();
         tag = "Tile";
         rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
@@ -57,10 +60,10 @@ public sealed class DirtTile : Tile
         {
             dirtTexture = Raylib.LoadTexture("Images/DirtTile.png");
         }
-        rectangle.X = position.X;
-        rectangle.Y = position.Y;
+        renderer.sprite = dirtTexture;
 
-        texture = dirtTexture;
+        rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
+        HP = 100;
     }
 }
 
@@ -70,14 +73,17 @@ public sealed class BackgroundTile : Tile
 
     public BackgroundTile(Vector2 pos)
     {
+        components = new();
+        renderer = AddComponent<Renderer>();
         tag = "BackgroundTile";
         rectangle = new Rectangle(0, 0, 80, 80);
         this.position = pos;
         if (backgroundTexture.Id == 0)
             backgroundTexture = Raylib.LoadTexture("Images/BackgroundTile.png");
 
-        rectangle.X = position.X;
-        rectangle.Y = position.Y;
-        texture = backgroundTexture;
+        renderer.sprite = backgroundTexture;
+        rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
+
+        HP = 100;
     }
 }

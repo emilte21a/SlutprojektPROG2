@@ -87,8 +87,13 @@ public class Game
         Raylib.CloseWindow();
     }
 
+    Task updateDayNightCycle;
+
     private void Update()
     {
+        updateDayNightCycle = new Task(dayNightSystem.Update);
+        updateDayNightCycle.Start();
+
         if (Raylib.IsKeyPressed(KeyboardKey.Z))
             camera.Zoom -= 0.05f;
 
@@ -100,18 +105,17 @@ public class Game
         gameSystems[1].Update(); //Kollisioner
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.6f);
         parallaxManager.Update(player);
-        dayNightSystem.Update();
 
-        if (Raylib.IsKeyPressed(KeyboardKey.H) && player.inventory.currentActiveItem is IPlacable && player.inventory.currentActiveItem != null)
-        {
-            Vector2 pos = PlacementSystem.WorldToTile(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera), 80);
-            if (worldGeneration.tilemap[(int)pos.X, (int)pos.Y] == null)
-            {
-                StoneTile stoneTile = new StoneTile(new Vector2((int)pos.X * 80, (int)pos.Y * 80));
-                worldGeneration.SpawnTile(stoneTile);
-                worldGeneration.tilemap[(int)pos.X, (int)pos.Y] = stoneTile;
-            }
-        }
+        // if (Raylib.IsKeyPressed(KeyboardKey.H) && player.inventory.currentActiveItem is IPlacable && player.inventory.currentActiveItem != null)
+        // {
+        //     Vector2 pos = PlacementSystem.WorldToTile(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera), 80);
+        //     if (worldGeneration.tilemap[(int)pos.X, (int)pos.Y] == null)
+        //     {
+        //         Tile tile = player.inventory.currentActiveItem.tileType;
+        //         worldGeneration.SpawnTilePrefab(tile);
+        //         worldGeneration.tilemap[(int)pos.X, (int)pos.Y] = tile;
+        //     }
+        // }
     }
 
     private void Draw()

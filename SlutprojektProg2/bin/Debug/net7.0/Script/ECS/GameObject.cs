@@ -21,3 +21,4 @@ public abstract class GameObject
 
     public List<Component> components;
 }
+

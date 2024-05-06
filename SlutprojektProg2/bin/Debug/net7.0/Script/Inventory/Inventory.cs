@@ -12,6 +12,8 @@ public class Inventory
 
     private Texture2D _itemChosenTexture = Raylib.LoadTexture("Images/itemChosen.png");
 
+    private Texture2D _itemFrameTexture = Raylib.LoadTexture("Images/itemFrame.png");
+
     private bool _shouldShowInventory = false;
 
     public Item currentActiveItem;
@@ -77,7 +79,7 @@ public class Inventory
             {
                 for (int y = 0; y < inventoryBackpack.GetLength(1); y++)
                 {
-                    Raylib.DrawRectangle(x * 80 + 295, y * 80 + 90, 60, 60, Color.Orange);
+                    Raylib.DrawTexture(_itemFrameTexture, x * 80 + 295, y * 80 + 90, Color.White);
                     if (inventoryBackpack[x, y].item != null)
                     {
                         Raylib.DrawTexture(inventoryBackpack[x, y].item.texture, x * 80 + 305, y * 80 + 100, Color.White);

@@ -59,26 +59,28 @@ public sealed class Player : Entity, IDrawable
 
     public override void Update()
     {
-        collider.boxCollider.X = rectangle.X;
-        collider.boxCollider.Y = rectangle.Y;
+        if (playerState == PlayerState.inGame)
+        {
+            collider.boxCollider.X = rectangle.X;
+            collider.boxCollider.Y = rectangle.Y;
 
-        MovePlayer(physicsBody, _playerSpeed);
+            MovePlayer(physicsBody, _playerSpeed);
 
-        playerAction.origin = position;
+            playerAction.origin = position;
 
-        if (Raylib.IsMouseButtonPressed(0))
-            playerAction.OnClick(position, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1), inventory);
+            if (Raylib.IsMouseButtonPressed(0))
+                playerAction.OnClick(position, (int)Raymath.Clamp(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera).X - position.X, -1, 1), inventory);
+
+            if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
+                physicsBody.Jump(physicsBody, 7);
 
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Space)) //&& physicsBody.airState == AirState.grounded)
-            physicsBody.Jump(physicsBody, 7);
+            if (Raylib.IsKeyPressed(KeyboardKey.H))
+                healthPoints = 100;
 
-
-        if (Raylib.IsKeyPressed(KeyboardKey.H))
-            healthPoints = 100;
-
+            playerAction.Update();
+        }
         inventory.Update();
-        playerAction.Update();
     }
 
     public void MovePlayer(PhysicsBody physicsBody, float speed)

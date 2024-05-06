@@ -6,10 +6,8 @@ public class WorldGeneration : IDrawable
     private int _tileSize = 80; //Varje tiles storlek
 
     #region  Listor för alla tiles och prefabs i världen
-    public static List<Tile> tilesInWorld = new List<Tile>();
-    public static List<Tile> backgroundTiles = new List<Tile>();
-    public static List<Tile> tilesThatShouldRender = new List<Tile>();
-    public static List<Prefab> prefabs = new List<Prefab>();
+    public static List<TilePref> gameObjectsInWorld = new List<TilePref>();
+    public static List<TilePref> gameObjectsThatShouldRender = new List<TilePref>();
 
     #endregion
 
@@ -46,14 +44,14 @@ public class WorldGeneration : IDrawable
 
             for (int y = height; y < _worldSize; y++)
             {
-                SpawnTile(new BackgroundTile(new Vector2(x * _tileSize, y * _tileSize))); //Background tile på varje plats i världen
+                SpawnTilePrefab(new BackgroundTile(new Vector2(x * _tileSize, y * _tileSize))); //Background tile på varje plats i världen
 
                 if (Raylib.GetImageColor(noiseImage, x, y).R < _caveThreshold) //Placera endast ut ett block om det röda värdet på varje pixel på noiseimage är mindre än en threshold
                 {
                     if (y == height) //Spawna gräs
                     {
                         GrassTile grassTile = new GrassTile(new Vector2(x * _tileSize, y * _tileSize));
-                        SpawnTile(grassTile);
+                        SpawnTilePrefab(grassTile);
                         spawnPoints[x] = new Vector2(x * _tileSize, y * _tileSize);
                         tilemap[x, y] = grassTile;
                     }
@@ -61,14 +59,14 @@ public class WorldGeneration : IDrawable
                     else if (y == height + 1) //Spawna jord under gräs
                     {
                         DirtTile dirtTile = new DirtTile(new Vector2(x * _tileSize, y * _tileSize));
-                        SpawnTile(dirtTile);
+                        SpawnTilePrefab(dirtTile);
                         tilemap[x, y] = dirtTile;
                     }
 
                     else //Annars spawna sten
                     {
                         StoneTile stoneTile = new StoneTile(new Vector2(x * _tileSize, y * _tileSize));
-                        SpawnTile(stoneTile);
+                        SpawnTilePrefab(stoneTile);
                         tilemap[x, y] = stoneTile;
                     }
                 }
@@ -81,24 +79,15 @@ public class WorldGeneration : IDrawable
         Raylib.UnloadImage(heightImage);
         //Ladda ur båda bilderna från CPU för att frigöra minne
     }
-
-    public void SpawnTile(Tile tile)
+    public void SpawnTilePrefab(TilePref tilePref)
     {
-        tilesInWorld.Add(tile);
+        gameObjectsInWorld.Add(tilePref);
     }
-
-    public void SpawnPrefab(Prefab prefab)
-    {
-        //Spawna en prefab
-        prefabs.Add(prefab);
-    }
-
 
     //Metod som ritar ut varje tile och prefab som finns i världen
     public void Draw()
     {
-        tilesThatShouldRender.ForEach(t => Raylib.DrawTexture(t.texture, (int)t.rectangle.X, (int)t.rectangle.Y, Color.White));
-        prefabs.ForEach(p => Raylib.DrawTexture(p.renderer.sprite, (int)p.position.X, (int)p.position.Y, Color.White));
+        gameObjectsThatShouldRender.ForEach(TP => Raylib.DrawTexture(TP.renderer.sprite, (int)TP.position.X, (int)TP.position.Y, Color.White));
     }
 
     public Tile GetTileAt(Vector2 position)
@@ -118,13 +107,13 @@ public class WorldGeneration : IDrawable
             tileOccupation[i] = "Empty";
             if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty" && spawnPoints[i].Y != 0)
             {
-                SpawnPrefab(new Tree(new Vector2(i * _tileSize - _tileSize, spawnPoints[i].Y)));
+                SpawnTilePrefab(new Tree(new Vector2(i * _tileSize - _tileSize, spawnPoints[i].Y)));
                 tileOccupation[i] = "Tree";
             }
 
             else if (Random.Shared.Next(0, 10) == 1 && tileOccupation[i] == "Empty" && spawnPoints[i].Y != 0)
             {
-                SpawnPrefab(new Rock(new Vector2(i * _tileSize, spawnPoints[i].Y)));
+                SpawnTilePrefab(new Rock(new Vector2(i * _tileSize, spawnPoints[i].Y)));
                 tileOccupation[i] = "Rock";
             }
         }
