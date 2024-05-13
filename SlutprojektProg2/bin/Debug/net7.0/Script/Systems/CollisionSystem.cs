@@ -4,7 +4,6 @@ public class CollisionSystem : GameSystem
 {
     public override void Update()
     {
-
         foreach (Entity e in Game.entities)
         {
             #region Hämta potentiella komponenter hos entitites
@@ -72,7 +71,7 @@ public class CollisionSystem : GameSystem
                     //Räkna ut spelarens x-position i nästa frame med en rektangel
                     Rectangle nextBounds = new Rectangle(e.position.X + physicsBody.velocity.X, e.position.Y, collider.boxCollider.Width, collider.boxCollider.Height);
 
-                    if (Raylib.CheckCollisionRecs(tilePref.rectangle, nextBounds) && tilePref.tag == "Tile") //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
+                    if (Raylib.CheckCollisionRecs(nextBounds, tilePref.rectangle) && tilePref.tag == "Tile") //Kolla kollisioner mellan alla tiles som är inom ett visst område av spelaren och spelarens rektangel i nästa frame
                     {
                         if (physicsBody.velocity.X > 0 || e.lastDirection.X == 1)
                         {

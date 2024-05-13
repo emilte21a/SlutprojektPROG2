@@ -64,6 +64,8 @@ public sealed class DirtTile : Tile
 
         rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
         HP = 100;
+
+        dropType = new DirtItem();
     }
 }
 
@@ -82,6 +84,27 @@ public sealed class BackgroundTile : Tile
             backgroundTexture = Raylib.LoadTexture("Images/BackgroundTile.png");
 
         renderer.sprite = backgroundTexture;
+        rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
+
+        HP = 100;
+    }
+}
+
+public sealed class CraftingTable : Tile
+{
+    static Texture2D craftingTableTexture;
+
+    public CraftingTable(Vector2 pos)
+    {
+        components = new();
+        renderer = AddComponent<Renderer>();
+        tag = "CraftingTable";
+        rectangle = new Rectangle(0, 0, 80, 80);
+        this.position = pos;
+        if (craftingTableTexture.Id == 0)
+            craftingTableTexture = Raylib.LoadTexture("Images/CraftingTable.png");
+
+        renderer.sprite = craftingTableTexture;
         rectangle = new Rectangle(position.X, position.Y, renderer.sprite.Width, renderer.sprite.Height);
 
         HP = 100;

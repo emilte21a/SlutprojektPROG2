@@ -61,7 +61,7 @@ public class PlayerAction
 
         if (Vector2.Distance(origin, position) <= 240)
         {
-            TilePref GO = WorldGeneration.gameObjectsInWorld.Find(g => Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), g.rectangle) && g.tag != "BackgroundTile");
+            TilePref GO = WorldGeneration.gameObjectsThatShouldRender.Find(g => Raylib.CheckCollisionPointRec(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), Game.camera), g.rectangle) && g.tag != "BackgroundTile");
 
             if (GO != null)
             {
@@ -71,7 +71,7 @@ public class PlayerAction
 
                 if (GO.HP <= 0)
                 {
-                    inventory.AddToInventory(item, 1);
+                    inventory.AddToInventory(item, item.dropAmount);
                     Game.gameObjectsToDestroy.Add(GO);
 
                     WorldGeneration.gameObjectsInWorld.Remove(GO);

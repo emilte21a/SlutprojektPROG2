@@ -2,9 +2,11 @@ global using Raylib_cs;
 global using System.Numerics;
 global using System.Collections.Generic;
 global using System.Collections.Concurrent;
+global using System.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Specialized;
 
 public class Game
 {
@@ -27,9 +29,15 @@ public class Game
 
     public static List<Entity> entities;
 
-    public static List<GameObject> gameObjects; //Tom för nu
+    //public static List<GameObject> gameObjects; //Tom för nu
 
+    public ObservableCollection<GameObject> gameObjects;
     public static List<GameObject> gameObjectsToDestroy;
+
+
+
+    //Multithreading/Task
+    Task updateDayNightCycle;
 
     public Game()
     {
@@ -39,6 +47,10 @@ public class Game
         gameObjectsToDestroy = new List<GameObject>();
         InitializeInstances();
         lightingSystem.InstantiateLightMap(worldGeneration.tilemap); // Måste köras efter initwindow
+
+        // gameObjects = new ObservableCollection<GameObject>(WorldGeneration.gameObjectsInWorld);
+       
+
         drawables = new List<IDrawable>();
         drawables.Add(worldGeneration);
         drawables.Add(player);
@@ -55,7 +67,7 @@ public class Game
         {
             Target = new Vector2(0, 0),
             Offset = new Vector2(ScreenWidth / 2, ScreenHeight / 2 + 60),
-            Zoom = 1f
+            Zoom = 0.9f
         };
         sceneHandler = new();
         dayNightSystem = new DayNightSystem();
@@ -65,10 +77,7 @@ public class Game
         parallaxManager = new ParallaxManager();
         lightingSystem = new LightingSystem();
 
-
-        worldGeneration.GenerateTiles();
-        worldGeneration.GeneratePrefabs();
-
+        worldGeneration.GenerateWorld();
 
 
         entities = new();
@@ -77,7 +86,7 @@ public class Game
 
     public void Run()
     {
-        SpawnManager.SpawnEntityAt(player, new Vector2(WorldGeneration.spawnPoints[100].X, WorldGeneration.spawnPoints[100].Y - player.collider.boxCollider.Height));
+        //SpawnManager.SpawnEntityAt(player, new Vector2(WorldGeneration.spawnPoints[100].X, WorldGeneration.spawnPoints[100].Y - player.collider.boxCollider.Height));
 
         while (!Raylib.WindowShouldClose())
         {
@@ -87,7 +96,7 @@ public class Game
         Raylib.CloseWindow();
     }
 
-    Task updateDayNightCycle;
+
 
     private void Update()
     {
@@ -103,19 +112,25 @@ public class Game
         gameSystems[0].Update(); //Fysik
         player.Update(); //Spelaren
         gameSystems[1].Update(); //Kollisioner
+
         camera.Target = Raymath.Vector2Lerp(camera.Target, player.position, 0.6f);
         parallaxManager.Update(player);
 
-        // if (Raylib.IsKeyPressed(KeyboardKey.H) && player.inventory.currentActiveItem is IPlacable && player.inventory.currentActiveItem != null)
-        // {
-        //     Vector2 pos = PlacementSystem.WorldToTile(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera), 80);
-        //     if (worldGeneration.tilemap[(int)pos.X, (int)pos.Y] == null)
-        //     {
-        //         Tile tile = player.inventory.currentActiveItem.tileType;
-        //         worldGeneration.SpawnTilePrefab(tile);
-        //         worldGeneration.tilemap[(int)pos.X, (int)pos.Y] = tile;
-        //     }
-        // }
+        if (Raylib.IsKeyPressed(KeyboardKey.H) && player.inventory.currentActiveItem is IPlaceable && player.inventory.currentActiveItem != null)
+        {
+            Vector2 pos = PlacementSystem.WorldToTile(Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera), 80);
+            if (worldGeneration.tilemap[(int)pos.X, (int)pos.Y] == null)
+            {
+                TilePref tile = new Torch(pos);
+                worldGeneration.SpawnTilePrefab(tile);
+            }
+        }
+    }
+
+    private void HandleChange(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        lightingSystem.InstantiateLightMap(worldGeneration.tilemap);
+        System.Console.WriteLine("CHANGE");
     }
 
     private void Draw()
@@ -126,7 +141,7 @@ public class Game
         parallaxManager.Draw();
         Raylib.BeginMode2D(camera);
         drawables.ForEach(d => d.Draw());
-        Raylib.DrawTextureEx(lightingSystem.lightMapTexture, new Vector2(0, 0), 0, 80, Color.White);
+        Raylib.DrawTextureEx(lightingSystem.lightMapTexture.Texture, new Vector2(0, 0), 0, 80, Color.White);
         // entities.ForEach(e => Raylib.DrawRectangleRec(e.GetComponent<Collider>().boxCollider, new Color(0, 255, 50, 100)));
         Raylib.EndMode2D();
         dayNightSystem.DrawNightOverlay();
@@ -142,6 +157,7 @@ public class Game
         Raylib.DrawText($"Time: {dayNightSystem.currentTime}", 20, 240, 30, Color.White);
         Raylib.DrawText($"rotDir: {player.playerAction.rotationDirection}", 20, 300, 30, Color.White);
         Raylib.DrawText($"rot: {player.playerAction.rotation}", 20, 360, 30, Color.White);
+
         Raylib.DrawFPS(20, 20);
         Raylib.EndDrawing();
     }

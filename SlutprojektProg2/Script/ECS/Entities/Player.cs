@@ -51,7 +51,7 @@ public sealed class Player : Entity, IDrawable
 
         rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
 
-        position = new Vector2(0, 0);
+        position = new Vector2(0, -1000);
         physicsBody.UseGravity = PhysicsBody.Gravity.enabled;
         collider.boxCollider = rectangle;
     }

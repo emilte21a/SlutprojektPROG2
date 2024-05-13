@@ -62,3 +62,30 @@ public sealed class Rock : Prefab
         dropType = new StoneItem();
     }
 }
+
+public sealed class Torch : Prefab
+{
+    private static Texture2D torchTexture;
+
+    public Torch(Vector2 pos)
+    {
+        this.position = pos;
+        components = new();
+        collider = AddComponent<Collider>();
+        renderer = AddComponent<Renderer>();
+
+        if (torchTexture.Id == 0)
+            torchTexture = Raylib.LoadTexture("Images/torchTexture.png");
+
+        renderer.sprite = torchTexture;
+        rectangle = new Rectangle(0, 0, renderer.sprite.Width, renderer.sprite.Height);
+
+        position.Y -= renderer.sprite.Height;
+        rectangle.X = position.X;
+        rectangle.Y = position.Y;
+        collider.boxCollider = rectangle;
+
+        HP = 1;
+        dropType = new TorchItem();
+    }
+}

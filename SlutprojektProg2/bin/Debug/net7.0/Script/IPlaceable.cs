@@ -1,4 +1,4 @@
 public interface IPlaceable
 {
-    public Tile TileToPlace(Vector2 pos);
+    public TilePref TilePrefToPlace(Vector2 pos);
 }
